@@ -1,0 +1,14 @@
+
+<div ng-app='ratonAdminApp'>
+
+    <div ng-controller="adminMainCtrl as main">
+
+        <pre>{{ main.item }}</pre>
+
+        <pre style="color:darkred">{{ main.error }}</pre>
+
+        <input ng-model="main.searchItem"/> <button ng-click="main.searchPost()">Cerca post</button>
+
+    </div>
+
+</div>
