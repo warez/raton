@@ -3,12 +3,26 @@
 
     <div ng-controller="adminMainCtrl as main">
 
-        <pre>{{ main.item }}</pre>
+        Return: <pre>{{ main.ret }}</pre>
 
-        <pre style="color:darkred">{{ main.error }}</pre>
+        Errore: <pre style="color:darkred">{{ main.error }}</pre>
 
-        <input ng-model="main.searchItem"/> <button ng-click="main.searchPost()">Cerca post</button>
+        <hr>
 
+        Resource: <input ng-model="main.resource"/>
+
+        <hr>
+
+        <input ng-model="main.itemId"/> <button ng-click="main.search()">Cerca item</button> <button ng-click="main.delete()">Cancella item</button>
+
+        <hr>
+
+        <textarea rows="10" cols="50" ng-model = "main.itemBodyJson"></textarea> <br>
+
+        <button ng-click="main.create()">Crea oggetto</button>
+        <button ng-click="main.update()">Aggiorna oggetto</button>
+
+        <hr>
     </div>
 
 </div>

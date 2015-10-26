@@ -1,16 +1,25 @@
 var phonecatApp = angular.module('ratonAdminApp', ["ngResource"]);
 
+phonecatApp.config(['$resourceProvider', function($resourceProvider) {
+    // Don't strip trailing slashes from calculated URLs
+    //$resourceProvider.defaults.stripTrailingSlashes = false;
+}]);
+
 phonecatApp.factory('ItemResource', ['$resource',
 
     function ($resource) {
 
         var resource = WP_API_Settings.root + "?rest_route=/raton/v1_0/";
 
-        return $resource( resource + 'item/:itemId', {}, {
+        return $resource( resource + ':func/:param', {}, {
 
-            getAll: {method: 'GET', params: {itemId: 'all'}, isArray: true},
+            delete: {method: 'DELETE', params: {}, isArray: false},
 
-            getItem: {method: 'GET', params: {}, isArray: false}
+            get: {method: 'GET', params: {}, isArray: false},
+
+            update: {method: 'PUT', params: {}, isArray: false},
+
+            create: {method: 'POST', params: {}, isArray: false},
 
         });
     }
@@ -23,14 +32,85 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
     $http.defaults.headers.common["X-WP-Nonce"] = WP_API_Settings.nonce;
 
     this.error = {};
-    this.searchItem = "";
-    this.item = {};
-    this.items = [];
+    this.ret = {};
 
-    this.searchPost = function () {
+    this.resource = "";
+    this.itemBodyJson = "{}";
+    this.itemId = 0;
 
-        ItemResource.getItem( { itemId : ctrl.searchItem } ).$promise.then(function(data) {
-            ctrl.item = data;
+    function clear() {
+        ctrl.error = "";
+        ctrl.ret = "";
+    }
+
+    function printResponse (data) {
+
+        var ret = "";
+
+        for(var i = 0; i<17000; i++ ) {
+            ret += data[i];
+        }
+
+        ctrl.ret = ret;
+    }
+
+    this.search = function () {
+
+        clear();
+
+        ItemResource.get( { func: ctrl.resource, param : ctrl.itemId } ).$promise.then(function(data) {
+
+            printResponse(data);
+
+        }, function(error) {
+
+            ctrl.error = error;
+
+        });
+
+    };
+
+    this.create = function () {
+
+        clear();
+
+        var obj = angular.fromJson(ctrl.itemBodyJson);
+
+        ItemResource.create( { func: ctrl.resource }, obj ).$promise.then(function(data) {
+
+            printResponse(data);
+
+        }, function(error) {
+
+            ctrl.error = error;
+
+        });
+
+    };
+
+    this.update = function () {
+
+        clear();
+
+        var obj = angular.fromJson(ctrl.itemBodyJson);
+
+        ItemResource.update( { func: ctrl.resource }, obj ).$promise.then(function(data) {
+
+            printResponse(data);
+
+        }, function(error) {
+
+            ctrl.error = error;
+        });
+
+    };
+
+    this.delete = function () {
+
+        clear();
+
+        ItemResource.delete( { func: ctrl.resource, param : ctrl.itemId } ).$promise.then(function(data) {
+            printResponse(data);
         }, function(error) {
             ctrl.error = error;
         });

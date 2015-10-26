@@ -22,8 +22,9 @@ $raton_version = '1_0';
 $raton_dir = array(
     "MAIN" => plugin_dir_path(__FILE__) . "php/",
     "DB" => plugin_dir_path(__FILE__) . "php/db_update/",
+    "DAO" => plugin_dir_path(__FILE__) . "php/core/dao/",
     "SERVICE" => plugin_dir_path(__FILE__) . "php/rest_service/",
-    "MODEL" => plugin_dir_path(__FILE__) . "php/model/",
+    "MODEL" => plugin_dir_path(__FILE__) . "php/core/model/",
     "CONTROLLER" => plugin_dir_path(__FILE__) . "php/rest_controller/",
     "CORE" => plugin_dir_path(__FILE__) . "php/core/",
     "JS" => plugin_dir_path(__FILE__) . "js/"
@@ -82,9 +83,16 @@ function raton_update_db_check_hook() {
 
 function register_api_hook() {
     global $raton_version,  $raton_dir;
-    require_once($raton_dir["CONTROLLER"] . "ItemRestController.php");
 
-    (new ItemRestController($raton_version)) -> register_routes();
+    require_once($raton_dir["CONTROLLER"] . "ItemRestController.php");
+    require_once($raton_dir["CONTROLLER"] . "CategoryRestController.php");
+
+
+    $itemRestCtrl = new ItemRestController($raton_version);
+    $itemRestCtrl -> register_routes();
+
+    $catRestCtrl = new CategoryRestController($raton_version);
+    $catRestCtrl -> register_routes();
 }
 
 function deregisterScriptAndCSS() {
