@@ -45,6 +45,11 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
 
     function printResponse (data) {
 
+        if(!data[0]) {
+            ctrl.ret = data;
+            return;
+        }
+
         var ret = "";
 
         for(var i = 0; i<17000; i++ ) {
@@ -94,7 +99,7 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
 
         var obj = angular.fromJson(ctrl.itemBodyJson);
 
-        ItemResource.update( { func: ctrl.resource }, obj ).$promise.then(function(data) {
+        ItemResource.update( { func: ctrl.resource, param : ctrl.itemId  }, obj ).$promise.then(function(data) {
 
             printResponse(data);
 

@@ -14,6 +14,21 @@ abstract class BaseRestService
             throw new Exception( 'Dao is null in ' . get_class() );
     }
 
+    function getProp($key, $obj) {
+        if($obj == null || $key == null)
+            return null;
+
+        if(!is_array($obj))
+            $array = get_object_vars($obj);
+        else
+            $array = $obj;
+
+        if(array_key_exists($key, $array))
+            return $array[$key];
+
+        return null;
+    }
+
     function prepareCollectionForResponse($items, $request)
     {
 
@@ -83,6 +98,8 @@ abstract class BaseRestService
 
         try {
 
+            ob_start();
+
             $jsonItem = $request->get_json_params();
             $item = $this->prepareForDb($jsonItem);
 
@@ -96,9 +113,11 @@ abstract class BaseRestService
             return $itemOrError;
 
         } catch (Exception $e) {
-
+            die();
             return new WP_Error( "Create error" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
+        } finally {
+            ob_end_clean();
         }
     }
 
@@ -112,14 +131,17 @@ abstract class BaseRestService
 
         try {
 
-            $item = $this->prepareForDb($request);
+            $jsonItem = $request->get_json_params();
+            $item = $this->prepareForDb($jsonItem);
+
             $format = $this->getFormat();
 
             $boolOrError = $this->dao->update($item, $format);
             if(get_class($boolOrError) == "WP_Error")
                 return $boolOrError;
 
-            return $boolOrError;
+            $itemOrError = $this->prepareForResponse($boolOrError, $request);
+            return $itemOrError;
 
         } catch (Exception $e) {
 
@@ -142,7 +164,14 @@ abstract class BaseRestService
             $id = $this->getIdFromRequest($request);
 
             $ret = $this->dao->delete($id);
-            return $ret;
+
+            if(is_object($ret) && get_class($ret) == "WP_Error")
+                return $ret;
+
+            if(is_bool($ret) && !$ret)
+                throw new Exception("No item deleted");
+
+            return new WP_REST_Response( array() , 200 );
 
         } catch (Exception $e) {
 

@@ -1,11 +1,9 @@
 <?php
 
-require_once($raton_dir["MODEL"] . "BaseVO.php");
-
-class Category extends BaseVO{
+class Category {
 
     public $id, $title, $description,
-        $idParentCategory, $isMainCategory;
+        $id_parent_category, $is_main_category;
 
     static private $format = array(
         "id" => "%d",

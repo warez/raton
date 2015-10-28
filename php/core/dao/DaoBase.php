@@ -16,10 +16,9 @@ abstract class DaoBase {
 
         global $wpdb;
 
-        if( ! is_array($data) )
-            $data = (array) $data;
-
         try {
+
+            ob_start();
 
             $ret = $wpdb->insert(
                 $this->tableName,
@@ -40,8 +39,10 @@ abstract class DaoBase {
 
         } catch(Exception $e) {
 
-            throw new Exception($e->getMessage());
+            return new WP_Error( "Core error" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
+        } finally {
+            ob_clean();
         }
 
     }
@@ -51,6 +52,9 @@ abstract class DaoBase {
         global $wpdb;
 
         try {
+
+            ob_start();
+
             $query = $wpdb->prepare(
                 " SELECT * FROM " . $this->tableName .
                 " WHERE " . $this->idName . " = %d ", $id);
@@ -62,42 +66,45 @@ abstract class DaoBase {
             }
 
             if (count($result) != 1) {
-                throw new Wexception('No unique result for id: ' . $id . " in table: " . $this->tableName);
+                throw new Exception('No unique result for id: ' . $id . " in table: " . $this->tableName);
             }
 
             return $result;
 
         } catch(Exception $e) {
 
-            throw new Exception($e->getMessage());
+            return new WP_Error( "Core error" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
+        } finally {
+            ob_clean();
         }
 
     }
 
     function delete( $idListOrId = array() ) {
 
-        global $wpdb;
-
-        if(is_array($idListOrId) ) {
-
-            if(count($idListOrId) == 0)
-                return;
-
-            $ids = join(',', $idListOrId);
-            $cond = $this->idName . " in " . join(',', $idListOrId);
-            $num = count($idListOrId);
-
-        } else {
-
-            $ids = $idListOrId;
-            $cond = $this->idName . " = " . $idListOrId;
-            $num = 1;
-        }
-
         try {
 
-            $query = " DELETE * FROM " . $this->tableName . " WHERE " . $cond;
+            global $wpdb;
+            ob_start();
+
+            if(is_array($idListOrId) ) {
+
+                if(count($idListOrId) == 0)
+                    return;
+
+                $ids = join(',', $idListOrId);
+                $cond = $this->idName . " in " . join(',', $idListOrId);
+                $num = count($idListOrId);
+
+            } else {
+
+                $ids = $idListOrId;
+                $cond = $this->idName . " = " . $idListOrId;
+                $num = 1;
+            }
+
+            $query = " DELETE FROM " . $this->tableName . " WHERE " . $cond;
             $retCount = $wpdb->query($query);
 
             if($retCount != $num) {
@@ -112,6 +119,8 @@ abstract class DaoBase {
 
             throw new Exception($e->getMessage());
 
+        } finally {
+            ob_end_clean();
         }
 
     }
@@ -121,9 +130,6 @@ abstract class DaoBase {
         global $wpdb;
 
         try {
-
-            if ( !is_array($data) )
-                $data = (array) $data;
 
             $ret = $wpdb->update(
                 $this->tableName,
@@ -140,12 +146,14 @@ abstract class DaoBase {
             }
 
             $id = $data[ $this->idName ];
-            return get($id);
+            return $this->get($id);
 
         } catch(Exception $e) {
 
-            throw new Exception($e->getMessage());
+            return new WP_Error( "Core error" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
+        } finally {
+            ob_clean();
         }
 
     }

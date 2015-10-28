@@ -1,8 +1,6 @@
 <?php
 
-require_once($raton_dir["MODEL"] . "BaseVO.php");
-
-class Item extends BaseVO{
+class Item {
 
     public $id, $title, $description,
         $image, $insertDate, $idCategory;
