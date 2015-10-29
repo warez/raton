@@ -14,6 +14,18 @@ abstract class BaseRestService
             throw new Exception( 'Dao is null in ' . get_class() );
     }
 
+    function setProp($key, $obj, $value) {
+        if($obj == null || $key == null)
+            return null;
+
+        if(!is_array($obj))
+            $obj -> { $key } = $value;
+        else
+            $array [ $key ] = $value;
+
+        return null;
+    }
+
     function getProp($key, $obj) {
         if($obj == null || $key == null)
             return null;
