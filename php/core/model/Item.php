@@ -8,6 +8,8 @@ class Item {
     static private $format = array(
         "id" => "%d",
         "title" => "%s",
+        "description" => "%s",
+        "image" => "%s",
         "insert_date" => "%s",
         "id_category" => "%d"
     );
@@ -32,8 +34,12 @@ class Item {
             $this->idCategory = $val["idCategory"];
     }
 
-    static function getFormat() {
-        return Item::$format;
+    static function getFormat($data) {
+        $format = array();
+        foreach ( $data as $d => $a) {
+            $format[$d] = Item::$format[$d];
+        }
+        return $format;
     }
 
 }

@@ -30,7 +30,11 @@ class Category {
             $this->is_main_category = $val["is_main_category"];
     }
 
-    static function getFormat() {
-        return Category::$format;
+    static function getFormat($data) {
+        $format = array();
+        foreach ( $data as $d => $a) {
+            $format[$d] = Category::$format[$d];
+        }
+        return $format;
     }
 }

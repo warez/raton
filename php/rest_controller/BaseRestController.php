@@ -11,12 +11,6 @@ class BaseRestController extends WP_REST_Controller {
         $this->namespace = 'raton/v' . $this->version;
     }
 
-    function get_item_schema() {
-
-        return $this->service->getFormat();
-
-    }
-
     /**
      * Register the routes for the objects of the controller.
      */

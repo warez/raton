@@ -43,8 +43,8 @@ class CategoryRestService extends BaseRestService {
         return $this->prepareForDb($category);
     }
 
-    function getFormat() {
-        return Category::getFormat();
+    function getFormat($data) {
+        return Category::getFormat($data);
     }
 
 }

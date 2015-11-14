@@ -19,15 +19,32 @@ class ItemRestService extends BaseRestService {
     }
 
     function prepareForDb($item) {
+
+        $id = parent::getProp("id", $item);
+        if($id != null) {
+            parent::setProp("id", $item, $id);
+        }
+
+        $id_parent_category = parent::getProp("id_parent_category", $item);
+        if($id_parent_category != null) {
+            parent::setProp("id_parent_category", $item, $id_parent_category);
+        }
+
+        $is_main_category = parent::getProp("is_main_category", $item);
+        if($is_main_category != null) {
+            parent::setProp("is_main_category", $item, $is_main_category);
+        }
+
         return $item;
     }
 
     function prepareForResponse($item, $request) {
-        return $item;
+
+        return $this->prepareForDb($item);
     }
 
-    function getFormat() {
-        return Item::getFormat();
+    function getFormat($data) {
+        return Item::getFormat($data);
     }
 
 }

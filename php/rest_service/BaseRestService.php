@@ -70,7 +70,7 @@ abstract class BaseRestService
 
     }
 
-    function getFormat() {
+    function getFormat($data) {
         return new WP_Error( get_class() . '::getFormat not implemented', __( 'message', 'text-domain'), array( 'status' => 500 ) );
     }
 
@@ -115,7 +115,7 @@ abstract class BaseRestService
             $jsonItem = $request->get_json_params();
             $item = $this->prepareForDb($jsonItem);
 
-            $format = $this->getFormat();
+            $format = $this->getFormat($item);
 
             $itemOrError = $this->dao->create($item, $format);
             if (get_class($itemOrError) == "WP_Error")
@@ -146,7 +146,7 @@ abstract class BaseRestService
             $jsonItem = $request->get_json_params();
             $item = $this->prepareForDb($jsonItem);
 
-            $format = $this->getFormat();
+            $format = $this->getFormat($item);
 
             $boolOrError = $this->dao->update($item, $format);
             if(get_class($boolOrError) == "WP_Error")
