@@ -47,4 +47,26 @@ class CategoryRestService extends BaseRestService {
         return Category::getFormat($data);
     }
 
+    function getCategoryTree($request) {
+
+        try {
+
+            $from = $request->get_param("from");
+            if($from == null || !is_numeric($from))
+                $from = -1;
+
+            $ret = $this->dao->getCategoryTree($from);
+
+            if(is_object($ret) && get_class($ret) == "WP_Error")
+                return $ret;
+
+            return $ret;
+
+        } catch (Exception $e) {
+
+            return new WP_Error( "Delete error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        }
+
+    }
 }

@@ -11,7 +11,7 @@ phonecatApp.factory('ItemResource', ['$resource',
 
         var resource = WP_API_Settings.root + "?rest_route=/raton/v1_0/";
 
-        return $resource( resource + ':func/:param', {}, {
+        return $resource( resource + ':res/:func/:param', {}, {
 
             delete: {method: 'DELETE', params: {}, isArray: false},
 
@@ -35,6 +35,8 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
     this.ret = {};
 
     this.resource = "";
+    this.func = "";
+
     this.itemBodyJson = "{}";
     this.itemId = 0;
 
@@ -63,7 +65,7 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
 
         clear();
 
-        ItemResource.get( { func: ctrl.resource, param : ctrl.itemId } ).$promise.then(function(data) {
+        ItemResource.get( { res: ctrl.resource, func: ctrl.func, param : ctrl.itemId } ).$promise.then(function(data) {
 
             printResponse(data);
 

@@ -13,14 +13,18 @@
 
         <hr>
 
-        <input ng-model="main.itemId"/> <button ng-click="main.search()">Cerca item</button> <button ng-click="main.delete()">Cancella item</button>
+        Function: <input ng-model="main.func"/>
+
+        <hr>
+
+        <input ng-model="main.itemId"/> <button ng-click="main.search()">GET</button> <button ng-click="main.delete()">DELETE</button>
 
         <hr>
 
         <textarea rows="10" cols="50" ng-model = "main.itemBodyJson"></textarea> <br>
 
-        <button ng-click="main.create()">Crea oggetto</button>
-        <button ng-click="main.update()">Aggiorna oggetto</button>
+        <button ng-click="main.create()">CREATE</button>
+        <button ng-click="main.update()">UPDATE</button>
 
         <hr>
     </div>

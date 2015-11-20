@@ -16,6 +16,25 @@ class CategoryRestController extends BaseRestController {
         $this->base = "category";
     }
 
+    public function register_routes() {
+
+        parent::register_routes();
+
+        register_rest_route( $this->namespace, '/' . $this->base . '/tree/(?P<from>[-]?[\d]+)', array(
+            array(
+                'methods'         => WP_REST_Server::READABLE,
+                'callback'        => array( $this->service, 'getCategoryTree' ),
+                'permission_callback' => array( $this, 'get_item_permissions_check' ),
+                'args'            => array(
+                    'context'          => array(
+                        'default'      => 'view',
+                    )
+                )
+            ),
+        ) );
+
+    }
+
     public function get_item_schema() {
 
         $schema = array(
