@@ -12,6 +12,37 @@ abstract class DaoBase {
         $this -> idName = $idName;
     }
 
+    function testIdPresent($data) {
+
+        if(!array_key_exists($this->idName,$data) || $data[$this->idName] == null)
+            throw new Exception($this->tableName . " " . $this->idName . " is null!");
+
+        $id = $data[$this->idName];
+        $item = $this->get($id);
+
+        if(is_object($item) && get_class($item) == "WP_Error")
+            throw new Exception($this->tableName . " with id: " . $this->idName . " not exist.");
+
+        return null;
+    }
+
+
+    function testCategoryPresent($data) {
+
+        if(!array_key_exists("id_category",$data) || $data["id_category"] == null)
+            throw new Exception("Category is null!");
+
+        $idCategory = $data["id_category"];
+        $categoryDao = new CategoryDao();
+        $cat = $categoryDao->get($idCategory);
+
+        if(is_object($cat) && get_class($cat) == "WP_Error")
+            throw new Exception("Category with id: " . $idCategory . " not exist.");
+
+        return;
+
+    }
+
     function create($data, $format) {
 
         global $wpdb;

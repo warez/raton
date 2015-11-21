@@ -86,6 +86,7 @@ function register_api_hook() {
 
     require_once($raton_dir["CONTROLLER"] . "ItemRestController.php");
     require_once($raton_dir["CONTROLLER"] . "CategoryRestController.php");
+    require_once($raton_dir["CONTROLLER"] . "FilterTypeRestController.php");
 
 
     $itemRestCtrl = new ItemRestController($raton_version);
@@ -93,6 +94,9 @@ function register_api_hook() {
 
     $catRestCtrl = new CategoryRestController($raton_version);
     $catRestCtrl -> register_routes();
+
+    $filterTypeCtrl = new FilterTypeRestController($raton_version);
+    $filterTypeCtrl -> register_routes();
 }
 
 function deregisterScriptAndCSS() {
