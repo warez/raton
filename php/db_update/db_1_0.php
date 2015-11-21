@@ -80,6 +80,8 @@ PRIMARY KEY (id)
 
 "ALTER TABLE " . $wpdb -> prefix . "items ADD CONSTRAINT FK_ITEM_CATEGORY FOREIGN KEY (id_category) REFERENCES " . $wpdb -> prefix . "categories (id);",
 
+"ALTER TABLE " . $wpdb -> prefix . "search_filters ADD CONSTRAINT FK_FILTER_CATEGORY FOREIGN KEY (id_category) REFERENCES " . $wpdb -> prefix . "categories (id);",
+
 "ALTER TABLE " . $wpdb -> prefix . "search_filters ADD CONSTRAINT FK_FILTER_FILTERTYPE FOREIGN KEY (id_type) REFERENCES " . $wpdb -> prefix . "search_filters_types (id);",
 
 "ALTER TABLE " . $wpdb -> prefix . "reviews ADD CONSTRAINT FK_REVIEW_ITEM FOREIGN KEY (id_item) REFERENCES " . $wpdb -> prefix . "items (id);",
