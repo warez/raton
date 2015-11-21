@@ -13,6 +13,36 @@ class CategoryDao extends DaoBase {
         parent::__construct("categories", "id");
     }
 
+    function testParentCategory($idListOrId) {
+
+        global $wpdb;
+
+        if(is_array($idListOrId) ) {
+
+            if(count($idListOrId) == 0)
+                throw new Exception("No id for delete...");
+
+            $ids = join(',', $idListOrId);
+            $cond = "id_parent_category in " . join(',', $idListOrId);
+
+        } else {
+
+            $ids = $idListOrId;
+            $cond = "id_parent_category = " . $idListOrId;
+        }
+
+        $query = " SELECT count(id) FROM " . $this->tableName . " WHERE " . $cond;
+        $retCount = $wpdb->get_var($query);
+
+        if($retCount > 0) {
+
+            throw new Exception('On of category with ids: ' . $ids . " are parent. Categories not deleted.");
+
+        }
+
+        return;
+    }
+
     function testParent($data) {
 
         if(!array_key_exists("id_parent_category",$data) || $data["id_parent_category"] == null)
@@ -31,12 +61,17 @@ class CategoryDao extends DaoBase {
 
     }
 
-    private function getAllCategory() {
+    private function getAllCategory($parentId = null) {
 
         global $wpdb;
 
+        $where = "";
+
+        if($parentId != null)
+            $where = " where id_parent_category = " . $parentId;
+
         $query =  " SELECT * FROM " . $this->tableName .
-            " ORDER BY id ASC";
+            " " . $where . " ORDER BY id ASC";
 
         $result = $wpdb->get_results($query, OBJECT);
         $ret = array();
@@ -139,6 +174,21 @@ class CategoryDao extends DaoBase {
 
             $this->testParent($data);
             return parent::create($data,$format);
+
+        } catch(Exception $e) {
+
+            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        }
+    }
+
+    function delete($idListOrId = array())
+    {
+
+        try {
+
+            $this->testParentCategory($idListOrId);
+            return parent::delete($idListOrId);
 
         } catch(Exception $e) {
 

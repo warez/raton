@@ -11,9 +11,9 @@ phonecatApp.factory('ItemResource', ['$resource',
 
         var resource = WP_API_Settings.root + "?rest_route=/raton/v1_0/";
 
-        return $resource( resource + ':res/:func/:param', {}, {
+        return $resource( resource + ':res:func/:param', {}, {
 
-            delete: {method: 'DELETE', params: {}, isArray: false},
+            delete: {method: 'DELETE', params: {}, isArray: true},
 
             get: {method: 'GET', params: {}, isArray: false},
 
