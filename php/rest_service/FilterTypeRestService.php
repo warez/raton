@@ -18,29 +18,29 @@ class FilterTypeRestService extends BaseRestService {
         parent :: __construct($restController, new FilterTypeDao());
     }
 
-    function prepareForDb($filterType) {
+    function prepareForDb($filter) {
 
-        $id = parent::getProp("id", $filterType);
+        $id = parent::getProp("id", $filter);
         if($id != null) {
-            parent::setProp("id", $filterType, $id);
+            parent::setProp("id", $filter, $id);
         }
 
-        $title = parent::getProp("title", $filterType);
+        $title = parent::getProp("title", $filter);
         if($title != null) {
-            parent::setProp("title", $filterType, $title);
+            parent::setProp("title", $filter, $title);
         }
 
-        $filter_args = parent::getProp("filter_args", $filterType);
+        $filter_args = parent::getProp("filter_args", $filter);
         if($filter_args != null) {
-            parent::setProp("filter_args", $filterType, $filter_args);
+            parent::setProp("filter_args", $filter, $filter_args);
         }
 
-        $metaType = parent::getProp("meta_type", $filterType);
+        $metaType = parent::getProp("meta_type", $filter);
         if($filter_args != null) {
-            parent::setProp("meta_type", $filterType, $metaType);
+            parent::setProp("meta_type", $filter, $metaType);
         }
 
-        return $filterType;
+        return $filter;
     }
 
     function searchFilterTypeByTitle($request) {
@@ -55,9 +55,9 @@ class FilterTypeRestService extends BaseRestService {
             $page = $request->get_param("page");
 
             if($pageSize == null || !is_numeric($pageSize))
-                $pageSize = 10;
+                $pageSize = parent::$DEFAULT_PAGE_SIZE;
             if($page == null || !is_numeric($page))
-                $page = 0;
+                $page = parent::$DEFAULT_PAGE;
 
             $ret = $this->dao->searchFilterTypeByTitle($title, $pageSize, $page);
 

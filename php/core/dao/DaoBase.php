@@ -21,7 +21,7 @@ abstract class DaoBase {
         $item = $this->get($id);
 
         if(is_object($item) && get_class($item) == "WP_Error")
-            throw new Exception($this->tableName . " with id: " . $this->idName . " not exist.");
+            throw new Exception("Item with id $id not exist.");
 
         return null;
     }
@@ -58,11 +58,11 @@ abstract class DaoBase {
             );
 
             if ($ret == false) {
-                throw new Exception("Insert error for table: " . $this->tableName);
+                throw new Exception("Insert error");
             }
 
             if (count($ret) != 1) {
-                throw new Exception("Insert error for table: " . $this->tableName);
+                throw new Exception("Insert error");
             }
 
             $id = $wpdb->insert_id;
@@ -93,11 +93,11 @@ abstract class DaoBase {
             $result = $wpdb->get_row($query, OBJECT);
 
             if ($result == null) {
-                throw new Exception('Null result found for id: ' . $id . " in table: " . $this->tableName);
+                throw new Exception('Null result found for id: ' . $id);
             }
 
             if (count($result) != 1) {
-                throw new Exception('No unique result for id: ' . $id . " in table: " . $this->tableName);
+                throw new Exception('No unique result for id: ' . $id);
             }
 
             return $result;
@@ -140,7 +140,7 @@ abstract class DaoBase {
 
             if($retCount != $num) {
 
-                throw new Exception('Delete error for item number ids: ' . $ids . " in table: " . $this->tableName);
+                throw new Exception('Delete error for item number ids: ' . $ids);
 
             }
 
@@ -172,7 +172,7 @@ abstract class DaoBase {
 
             if($ret == false) {
 
-                throw new Exception('Update error for id: ' . $data[ $this -> idName ] . " in table: " . $this->tableName);
+                throw new Exception('Update error for id: ' . $data[ $this -> idName ]);
 
             }
 

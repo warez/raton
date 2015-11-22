@@ -2,6 +2,10 @@
 
 abstract class BaseRestService
 {
+
+    public static $DEFAULT_PAGE_SIZE = 10;
+    public static $DEFAULT_PAGE = 0;
+
     protected $dao = null;
     protected $restController = null;
 
