@@ -9,20 +9,16 @@
 
         <hr>
 
-        Resource: <input ng-model="main.resource"/>
+        Query: <input ng-model="main.query"/>
 
         <hr>
-
-        Function: <input ng-model="main.func"/>
-
-        <hr>
-
-        <input ng-model="main.itemId"/> <button ng-click="main.search()">GET</button> <button ng-click="main.delete()">DELETE</button>
 
         <hr>
 
         <textarea rows="10" cols="50" ng-model = "main.itemBodyJson"></textarea> <br>
 
+        <button ng-click="main.search()">GET</button>
+        <button ng-click="main.delete()">DELETE</button>
         <button ng-click="main.create()">CREATE</button>
         <button ng-click="main.update()">UPDATE</button>
 

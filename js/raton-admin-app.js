@@ -5,13 +5,28 @@ phonecatApp.config(['$resourceProvider', function($resourceProvider) {
     //$resourceProvider.defaults.stripTrailingSlashes = false;
 }]);
 
-phonecatApp.factory('ItemResource', ['$resource',
+phonecatApp.controller('adminMainCtrl', function ($resource, $http) {
 
-    function ($resource) {
+    var ctrl = this;
+    $http.defaults.headers.common["X-WP-Nonce"] = WP_API_Settings.nonce;
 
-        var resource = WP_API_Settings.root + "?rest_route=/raton/v1_0/";
+    this.error = {};
+    this.ret = {};
 
-        return $resource( resource + ':res:func/:param', {}, {
+    this.resource = "";
+
+    this.itemBodyJson = "{}";
+    this.itemId = 0;
+
+    function clear() {
+        ctrl.error = "";
+        ctrl.ret = "";
+    }
+
+    function getResource() {
+        var resource = WP_API_Settings.root + "?rest_route=/raton/v1_0/" + ctrl.query;
+
+        return $resource( resource, {}, {
 
             delete: {method: 'DELETE', params: {}, isArray: true},
 
@@ -22,27 +37,8 @@ phonecatApp.factory('ItemResource', ['$resource',
             create: {method: 'POST', params: {}, isArray: false},
 
         });
-    }
 
-]);
-
-phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
-
-    var ctrl = this;
-    $http.defaults.headers.common["X-WP-Nonce"] = WP_API_Settings.nonce;
-
-    this.error = {};
-    this.ret = {};
-
-    this.resource = "";
-    this.func = "";
-
-    this.itemBodyJson = "{}";
-    this.itemId = 0;
-
-    function clear() {
-        ctrl.error = "";
-        ctrl.ret = "";
+        return resource;
     }
 
     function printResponse (data) {
@@ -65,7 +61,7 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
 
         clear();
 
-        ItemResource.get( { res: ctrl.resource, func: ctrl.func, param : ctrl.itemId } ).$promise.then(function(data) {
+        getResource().get({}).$promise.then(function(data) {
 
             printResponse(data);
 
@@ -83,7 +79,7 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
 
         var obj = angular.fromJson(ctrl.itemBodyJson);
 
-        ItemResource.create( { func: ctrl.resource }, obj ).$promise.then(function(data) {
+        getResource().create( {}, obj ).$promise.then(function(data) {
 
             printResponse(data);
 
@@ -101,7 +97,7 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
 
         var obj = angular.fromJson(ctrl.itemBodyJson);
 
-        ItemResource.update( { func: ctrl.resource, param : ctrl.itemId  }, obj ).$promise.then(function(data) {
+        getResource().update( {}, obj ).$promise.then(function(data) {
 
             printResponse(data);
 
@@ -116,8 +112,10 @@ phonecatApp.controller('adminMainCtrl', function (ItemResource, $http) {
 
         clear();
 
-        ItemResource.delete( { func: ctrl.resource, param : ctrl.itemId } ).$promise.then(function(data) {
+        getResource().delete( {} ).$promise.then(function(data) {
+
             printResponse(data);
+
         }, function(error) {
             ctrl.error = error;
         });

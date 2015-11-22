@@ -51,7 +51,15 @@ class FilterTypeRestService extends BaseRestService {
             if($title == null || strlen($title)  < 3)
                 throw new Exception("Search term is null or size is less than 3");
 
-            $ret = $this->dao->searchFilterTypeByTitle($title);
+            $pageSize = $request->get_param("pageSize");
+            $page = $request->get_param("page");
+
+            if($pageSize == null || !is_numeric($pageSize))
+                $pageSize = 10;
+            if($page == null || !is_numeric($page))
+                $page = 0;
+
+            $ret = $this->dao->searchFilterTypeByTitle($title, $pageSize, $page);
 
             if(is_object($ret) && get_class($ret) == "WP_Error")
                 return $ret;

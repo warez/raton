@@ -71,7 +71,7 @@ class CategoryDao extends DaoBase {
             $where = " where id_parent_category = " . $parentId;
 
         $query =  " SELECT * FROM " . $this->tableName .
-            " " . $where . " ORDER BY id ASC";
+            " " . $where . " ORDER BY id DESC";
 
         $result = $wpdb->get_results($query, OBJECT);
         $ret = array();

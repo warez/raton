@@ -27,16 +27,44 @@ class FilterTypeDao extends DaoBase {
 
     }
 
-    function searchFilterTypeByTitle($title) {
+    function searchFilterTypeByTitle($title, $pageSize, $page) {
 
-        global $wpdb;
+        try {
 
-        $query =  " SELECT * FROM " . $this->tableName .
-            "  where title like '%" . $title . "%' ORDER BY id ASC";
+            global $wpdb, $raton_dir;
 
-        $result = $wpdb->get_results($query, OBJECT);
+            require_once($raton_dir["MODEL"] . "PageInfo.php");
+            require_once($raton_dir["MODEL"] . "FilterTypeResult.php");
 
-        return $result;
+            ob_start();
+
+            $where = " where title like '%" . $title . "%' ";
+
+            $queryCount = " SELECT count(*) FROM " . $this->tableName . $where;
+            $retCount = $wpdb->get_var($queryCount);
+            $retCount = intval($retCount);
+
+            $start = $page == 0 ? 0 : $pageSize * $page;
+            $end = $pageSize;
+            $limit = $pageSize == -1 ? "" : " LIMIT $start,$end ";
+
+            $query = " SELECT * FROM " . $this->tableName .
+                " $where ORDER BY id DESC $limit";
+
+            $result = $wpdb->get_results($query, OBJECT);
+
+            $pageInfo = new PageInfo($pageSize, $page , $retCount);
+            $ret = new FilterTypeResult($result, $pageInfo);
+
+            return $ret;
+
+        } catch(Exception $e) {
+
+            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        } finally {
+            ob_clean();
+        }
 
     }
 
