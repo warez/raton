@@ -2,9 +2,11 @@
 
 global $raton_dir;
 require_once($raton_dir["DAO"] . "DaoBase.php");
+require_once($raton_dir["DAO"] . "ItemDao.php");
 require_once($raton_dir["MODEL"] . "CategoryForTree.php");
 require_once($raton_dir["MODEL"] . "Category.php");
 
+//16.00 antonella mula armanda biasci
 
 class CategoryDao extends DaoBase {
 
@@ -187,7 +189,11 @@ class CategoryDao extends DaoBase {
 
         try {
 
+            $itemDao = new ItemDao();
+
             $this->testParentCategory($idListOrId);
+            $itemDao->testItemPresentInCategory($idListOrId);
+
             return parent::delete($idListOrId);
 
         } catch(Exception $e) {
