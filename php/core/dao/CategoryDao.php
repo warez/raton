@@ -3,6 +3,7 @@
 global $raton_dir;
 require_once($raton_dir["DAO"] . "DaoBase.php");
 require_once($raton_dir["DAO"] . "ItemDao.php");
+require_once($raton_dir["DAO"] . "VoteTypeDao.php");
 require_once($raton_dir["MODEL"] . "CategoryForTree.php");
 require_once($raton_dir["MODEL"] . "Category.php");
 
@@ -38,7 +39,7 @@ class CategoryDao extends DaoBase {
 
         if($retCount > 0) {
 
-            throw new Exception('On of category with ids: ' . $ids . " are parent. Categories not deleted.");
+            throw new Exception('One of category with ids: ' . $ids . " are parent. Categories not deleted.");
 
         }
 
@@ -190,9 +191,11 @@ class CategoryDao extends DaoBase {
         try {
 
             $itemDao = new ItemDao();
+            $voteType = new VoteTypeDao();
 
             $this->testParentCategory($idListOrId);
-            $itemDao->testItemPresentInCategory($idListOrId);
+            $itemDao->testObjectPresentInCategory($idListOrId);
+            $voteType->testObjectPresentInCategory($idListOrId);
 
             return parent::delete($idListOrId);
 

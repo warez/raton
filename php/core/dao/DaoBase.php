@@ -26,6 +26,35 @@ abstract class DaoBase {
         return null;
     }
 
+    function testObjectPresentInCategory($idListOrId) {
+
+        global $wpdb;
+
+        if(is_array($idListOrId) ) {
+
+            if(count($idListOrId) == 0)
+                throw new Exception("No id for delete...");
+
+            $ids = join(',', $idListOrId);
+            $cond = "id_category in " . join(',', $idListOrId);
+
+        } else {
+
+            $ids = $idListOrId;
+            $cond = "id_category = " . $idListOrId;
+        }
+
+        $query = " SELECT count(id) FROM " . $this->tableName . " WHERE " . $cond;
+        $retCount = $wpdb->get_var($query);
+
+        if($retCount > 0) {
+
+            throw new Exception('Object exist in one of category with ids: ' . $ids . ". Categories not deleted.");
+
+        }
+
+        return;
+    }
 
     function testCategoryPresent($data) {
 
