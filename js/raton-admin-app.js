@@ -32,6 +32,8 @@ phonecatApp.controller('adminMainCtrl', function ($resource, $http) {
 
             get: {method: 'GET', params: {}, isArray: false},
 
+            getArray: {method: 'GET', params: {}, isArray: true},
+
             update: {method: 'PUT', params: {}, isArray: false},
 
             create: {method: 'POST', params: {}, isArray: false},
@@ -62,6 +64,22 @@ phonecatApp.controller('adminMainCtrl', function ($resource, $http) {
         clear();
 
         getResource().get({}).$promise.then(function(data) {
+
+            printResponse(data);
+
+        }, function(error) {
+
+            ctrl.error = error;
+
+        });
+
+    };
+
+    this.searchArray = function () {
+
+        clear();
+
+        getResource().getArray({}).$promise.then(function(data) {
 
             printResponse(data);
 

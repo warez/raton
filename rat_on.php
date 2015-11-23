@@ -88,6 +88,7 @@ function register_api_hook() {
     require_once($raton_dir["CONTROLLER"] . "CategoryRestController.php");
     require_once($raton_dir["CONTROLLER"] . "FilterTypeRestController.php");
     require_once($raton_dir["CONTROLLER"] . "FilterRestController.php");
+    require_once($raton_dir["CONTROLLER"] . "VoteTypeRestController.php");
 
 
     $itemRestCtrl = new ItemRestController($raton_version);
@@ -101,6 +102,9 @@ function register_api_hook() {
 
     $filterCtrl = new FilterRestController($raton_version);
     $filterCtrl -> register_routes();
+
+    $voteTypeCtrl = new VoteTypeRestController($raton_version);
+    $voteTypeCtrl -> register_routes();
 }
 
 function deregisterScriptAndCSS() {
