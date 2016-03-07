@@ -1,0 +1,53 @@
+<div style="margin-left: 30px">
+
+    <div class="panel panel-default">
+        <div class="panel-heading" style="padding: 5px">
+
+            <span style="width: 30px">
+                <span class="glyphicon" ng-click="toggleContent()" ng-class="getClass()"></span>
+            </span>
+
+            <span class="" style="width: 150px">
+                <span ng-if="data.title">{{data.title}}</span>
+            </span>
+
+            <span style="margin-left: 10px" class="btn-group pull-right" role="group" ng-if="enableMove == true">
+                <button ng-disabled="!showMoveUp()" class="btn btn-default  btn-xs" ng-click="onMove({d:data, op: 'up'})">
+                    <i class="glyphicon glyphicon-arrow-up"></i>
+                </button>
+                <button ng-disabled="!showMoveDown()" class="btn btn-default btn-xs" ng-click="onMove({d:data, op: 'down'})">
+                    <i class="glyphicon glyphicon-arrow-down"></i>
+                </button>
+            </span>
+
+            <span ng-if="data.parent" class="pull-right">
+                <button type="button" ng-click="onEdit({d:data})" class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                </button>
+                <button type="button" ng-click="onDelete({d:data})" class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+                <button type="button" ng-click="onDeleteChildren({d:data})" class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
+            </span>
+
+            <span class="pull-right">
+                <button class="btn btn-default btn-xs" ng-click="onAdd({d:data,newNode:newNodeName})">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
+            </span>
+
+        </div>
+
+        <div class="panel-body" ng-if="data.id != 'ROOT'">
+            <div>
+                <span>Descrizione: </span><span>{{data.description}}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-show="isContentVisible" ng-transclude></div>
+
+</div>

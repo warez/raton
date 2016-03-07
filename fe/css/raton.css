@@ -1,0 +1,17 @@
+.addCategoryInput {
+    font-size: 13px;
+    line-height: 13px;
+    padding: 2px 2px;
+    height: 23px;
+}
+
+div#preloader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    background: rgba(51, 51, 51,0.8) url('http://files.mimoymima.com/images/loading.gif') no-repeat center center;
+    visibility: hidden;
+}
