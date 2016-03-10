@@ -1,4 +1,4 @@
-var app = angular.module("JRatonApp", ["treecp","ngResource","ngRoute","ui.bootstrap"]);
+var app = angular.module("JRatonApp", ["treecp","ngResource","ngRoute","ui.bootstrap", "ngStorage"]);
 
 app.config(['$resourceProvider','$httpProvider', function($resourceProvider, $httpProvider) {
     // Don't strip trailing slashes from calculated URLs
@@ -18,11 +18,16 @@ app.config(['$routeProvider', 'WPPathServiceProvider',
                 controller: 'CategoryController',
                 controllerAs: 'ctrl'
             }).
+            when('/category/:idCategory/items', {
+                templateUrl: WPPathService.getPartialUrl() + "/item-view.html",
+                controller: 'ItemController',
+                controllerAs: 'ctrl'
+            }).
             otherwise({
                 redirectTo: WPPathService.getPartialUrl() + "/adminPage.html"
             });
     }]);
 
 document.addEventListener('DOMContentLoaded', function () {
-    angular.bootstrap(document, ["treecp", "ngResource", "ngRoute", "JRatonApp","ui.bootstrap"]);
+    angular.bootstrap(document, ["treecp", "ngStorage", "ngResource", "ngRoute", "JRatonApp","ui.bootstrap"]);
 });

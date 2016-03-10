@@ -16,30 +16,18 @@ class CategoryDao extends DaoBase {
         parent::__construct("categories", "id");
     }
 
-    function testParentCategory($idListOrId) {
+    function testParentCategory($id) {
 
         global $wpdb;
 
-        if(is_array($idListOrId) ) {
-
-            if(count($idListOrId) == 0)
-                throw new Exception("No id for delete...");
-
-            $ids = join(',', $idListOrId);
-            $cond = "id_parent_category in " . join(',', $idListOrId);
-
-        } else {
-
-            $ids = $idListOrId;
-            $cond = "id_parent_category = " . $idListOrId;
-        }
+        $cond = "id_parent_category = " . $id;
 
         $query = " SELECT count(id) FROM " . $this->tableName . " WHERE " . $cond;
         $retCount = $wpdb->get_var($query);
 
         if($retCount > 0) {
 
-            throw new Exception('One of category with ids: ' . $ids . " are parent. Categories not deleted.");
+            throw new Exception('One of category with id: ' . $id . " are parent. Categories not deleted.");
 
         }
 
@@ -181,7 +169,7 @@ class CategoryDao extends DaoBase {
         }
     }
 
-    function delete($idListOrId = array())
+    function delete($id)
     {
 
         try {
@@ -189,11 +177,11 @@ class CategoryDao extends DaoBase {
             $itemDao = new ItemDao();
             $voteType = new VoteTypeDao();
 
-            $this->testParentCategory($idListOrId);
-            $itemDao->testObjectPresentInCategory($idListOrId);
-            $voteType->testObjectPresentInCategory($idListOrId);
+            $this->testParentCategory($id);
+            $itemDao->testObjectPresentInCategory($id);
+            $voteType->testObjectPresentInCategory($id);
 
-            return parent::delete($idListOrId);
+            return parent::delete($id);
 
         } catch(Exception $e) {
 

@@ -21,19 +21,26 @@
             </span>
 
             <span ng-if="data.parent" class="pull-right">
-                <button type="button" ng-click="onEdit({d:data})" class="btn btn-default btn-xs">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                </button>
-                <button type="button" ng-click="onDelete({d:data})" class="btn btn-default btn-xs">
-                    <i class="glyphicon glyphicon-remove"></i>
-                </button>
-                <button type="button" ng-click="onDeleteChildren({d:data})" class="btn btn-default btn-xs">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </button>
+                <span style="margin-right: 10px">
+                    <button title="Modifica" type="button" ng-click="onEdit({d:data})" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                    <button title="Elimina" type="button" ng-click="onDelete({d:data})" ng-disabled="data.children.length > 0" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                </span>
+                <span style="margin-right: 10px">
+                    <button title="Vedi articoli" type="button" ng-click="onShowItem({d:data})" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-tasks"></i>
+                    </button>
+                    <button title="Vedi filtri" type="button" ng-click="onShowFilter({d:data})" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-filter"></i>
+                    </button>
+                </span>
             </span>
 
             <span class="pull-right">
-                <button class="btn btn-default btn-xs" ng-click="onAdd({d:data,newNode:newNodeName})">
+                <button title="Aggiungi ctegoria figlia" class="btn btn-default btn-xs" ng-click="onAdd({d:data,newNode:newNodeName})">
                     <i class="glyphicon glyphicon-plus-sign"></i>
                 </button>
             </span>

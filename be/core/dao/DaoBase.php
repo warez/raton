@@ -26,30 +26,18 @@ abstract class DaoBase {
         return null;
     }
 
-    function testObjectPresentInCategory($idListOrId) {
+    function testObjectPresentInCategory($id) {
 
         global $wpdb;
 
-        if(is_array($idListOrId) ) {
-
-            if(count($idListOrId) == 0)
-                throw new Exception("No id for delete...");
-
-            $ids = join(',', $idListOrId);
-            $cond = "id_category in " . join(',', $idListOrId);
-
-        } else {
-
-            $ids = $idListOrId;
-            $cond = "id_category = " . $idListOrId;
-        }
+        $cond = "id_category = " . $id;
 
         $query = " SELECT count(id) FROM " . $this->tableName . " WHERE " . $cond;
         $retCount = $wpdb->get_var($query);
 
         if($retCount > 0) {
 
-            throw new Exception('Object exist in one of category with ids: ' . $ids . ". Categories not deleted.");
+            throw new Exception('Object exist in one of category with id: ' . $id . ". Categories not deleted.");
 
         }
 
@@ -141,39 +129,24 @@ abstract class DaoBase {
 
     }
 
-    function delete( $idListOrId = array() ) {
+    function delete( $id ) {
 
         try {
 
             global $wpdb;
             ob_start();
 
-            if(is_array($idListOrId) ) {
-
-                if(count($idListOrId) == 0)
-                    return;
-
-                $ids = join(',', $idListOrId);
-                $cond = $this->idName . " in " . join(',', $idListOrId);
-                $num = count($idListOrId);
-
-            } else {
-
-                $ids = $idListOrId;
-                $cond = $this->idName . " = " . $idListOrId;
-                $num = 1;
-            }
-
+            $cond = $this->idName . " = " . $id;
             $query = " DELETE FROM " . $this->tableName . " WHERE " . $cond;
             $retCount = $wpdb->query($query);
 
-            if($retCount != $num) {
+            if($retCount != 1) {
 
-                throw new Exception('Delete error for item number ids: ' . $ids);
+                throw new Exception('Delete error for item number id: ' . $id);
 
             }
 
-            return true;
+            return new WP_REST_Response();
 
         } catch(Exception $e) {
 

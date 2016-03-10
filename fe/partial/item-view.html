@@ -1,0 +1,76 @@
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Categoria selezionata</div>
+            <div class="panel-body">
+
+                <span style="margin-right: 20px">
+                    <label class="title">Nome:</label>
+                    <label class="val">{{ctrl.selectedCat.title}}</label>
+                </span>
+
+                <span style="margin-right: 20px">
+                    <label class="title">Descrizione:</label>
+                    <label class="val">{{ctrl.selectedCat.description}}</label>
+                </span>
+
+                <span>
+                    <label class="title">Articoli totali:</label>
+                    <label class="val">{{ctrl.itemsData.total_count}}</label>
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Lista articoli</div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <table class="detail-table table table-striped">
+                        <tr>
+                            <th>Articolo</th>
+                            <th>Descrizione</th>
+                            <th>Data creazione</th>
+                            <th></th>
+                        </tr>
+
+                        <tr ng-repeat="item in ctrl.itemsData.items">
+                            <td>{{item.title}}</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.insert_date | date}}</td>
+                            <td>
+
+                                <button title="Modifica" type="button" ng-click="ctrl.onEdit(item)" class="btn btn-default btn-xs">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </button>
+                                <button title="Elimina" type="button" ng-click="ctrl.onDelete(item)" ng-disabled="data.children.length > 0" class="btn btn-default btn-xs">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="text-center">
+                    <uib-pagination total-items="ctrl.itemsData.total_count"
+                                    ng-change="ctrl.pageChanged()"
+                                    ng-model="ctrl.itemsData.page" max-size="10"
+                                    previous-text="&lsaquo;"
+                                    next-text="&rsaquo;"
+                                    last-text="&rsaquo;&rsaquo;"
+                                    first-text="&lsaquo;&lsaquo;"
+                                    class="pagination-sm" boundary-link-numbers="true"
+                                    force-ellipses="true" rotate="false"></uib-pagination>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

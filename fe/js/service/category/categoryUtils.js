@@ -25,6 +25,8 @@ angular.module("JRatonApp").service("CategoryUtils", [
 
     return {
 
+
+
         buildTree: function(data) {
 
             var root = null;

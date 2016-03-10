@@ -1,8 +1,31 @@
-angular.module("JRatonApp").controller("CategoryController", ['$scope', 'LoaderService', 'WPPathService', 'CategoryUtils', 'CategoryService', '$uibModal', 'CONF',
+angular.module("JRatonApp").controller("CategoryController", ['$scope', '$location', 'LoaderService', 'WPPathService',
+    'CategoryUtils', 'CategoryService', '$uibModal', '$sessionStorage', 'CONF',
 
-    function ($scope, LoaderService, WPPathService, CategoryUtils, CategoryService, $uibModal, CONF) {
+    function ($scope, $location, LoaderService, WPPathService, CategoryUtils, CategoryService, $uibModal, $sessionStorage, CONF) {
 
         var ctrl = this;
+
+        var copy = function(cat) {
+            return {
+                id: cat.id,
+                title: cat.title,
+                description: cat.description
+            };
+        }
+
+        ctrl.onShowItem = function(cat) {
+            var catCopy = copy(cat);
+
+            $sessionStorage["category"] = catCopy;
+            $location.path('/category/' + catCopy.id + "/items");
+        };
+
+        ctrl.onShowFilter = function(cat) {
+            var catCopy = copy(cat);
+
+            $sessionStorage["category"] = catCopy;
+            $location.path('/category/' + catCopy.id + "/filter");
+        };
 
         ctrl.onDelete = function (cat) {
 
@@ -34,6 +57,9 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', 'LoaderS
                 controller: "EditCategoryCtrl",
                 size: 'sm',
                 resolve: {
+                    title: function() {
+                        return "Modifica categoria";
+                    },
                     category: function () {
                         return cat;
                     }
@@ -68,6 +94,9 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', 'LoaderS
                 controller: "CreateCategoryCtrl",
                 size: 'sm',
                 resolve: {
+                    title: function() {
+                        return "Crea nuova categoria";
+                    },
                     parent: function () {
                         return parent;
                     }
@@ -92,7 +121,7 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', 'LoaderS
             });
         };
 
-        this.treeData = {};
+        ctrl.errorMessage = "";
 
         var buildTreeFromCategoryTree = function (data) {
 
@@ -118,6 +147,7 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', 'LoaderS
         description: ""
     };
 
+    $scope.title = "Crea nuova categoria";
     $scope.ok = function () {
 
         if (!CategoryService.testNewCategory($scope.data))
@@ -135,6 +165,7 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', 'LoaderS
 
     $scope.data = category;
 
+    $scope.title = "Modifica categoria";
     $scope.ok = function () {
 
         if (!CategoryService.testEditCategory($scope.data))

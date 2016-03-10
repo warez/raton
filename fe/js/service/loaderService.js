@@ -2,7 +2,7 @@ angular.module("JRatonApp").directive("loader", function() {
     return {
         restrict: "EA",
         scope: {},
-        template: "<div id='preloader' started='no'></div>"
+        template: "<div style='display: none' id='preloader' started='no'></div>"
     }
 }).service("LoaderService", function() {
 

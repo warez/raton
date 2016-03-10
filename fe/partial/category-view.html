@@ -1,11 +1,13 @@
 <div>
+
     <div sf-treepeat="node in children of ctrl.treeData">
 
         <category-component data="node"
                             template="categoryCmp.html"
                             on-add="ctrl.onAdd(d,newNode)"
                             on-delete="ctrl.onDelete(d)"
-                            on-delete-children="ctrl.onDeleteChildren(d)"
+                            on-show-item="ctrl.onShowItem(d)"
+                            on-show-filter="ctrl.onShowFilter(d)"
                             enable-move="true"
                             on-move="ctrl.onMove(d,op)"
                             on-edit="ctrl.onEdit(d)"

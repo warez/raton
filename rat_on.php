@@ -124,21 +124,26 @@ function registerScriptAndCSS() {
 
     wp_register_script( 'angular', plugins_url( '/fe/js/library/angular/angular.js', __FILE__ ), array( 'jquery', 'jquery-ui-core' ), $raton_version, true );
     wp_register_script( 'angular-resource', plugins_url( '/fe/js/library/angular/angular-resource.js', __FILE__ ), array( 'angular'), $raton_version, true );
+    wp_register_script( 'angular-animate', plugins_url( '/fe/js/library/angular/angular-animate.js', __FILE__ ), array( 'angular'), $raton_version, true );
+    wp_register_script( 'angular-storage', plugins_url( '/fe/js/library/angular/angular-storage.js', __FILE__ ), array( 'angular'), $raton_version, true );
     wp_register_script( 'angular-route', plugins_url( '/fe/js/library/angular/angular-route.js', __FILE__ ), array( 'angular'), $raton_version, true );
     wp_register_script( 'tree-repeat', plugins_url( '/fe/js/library/tree-repeat.js', __FILE__ ), array( 'angular'), $raton_version, true );
     wp_register_script( 'angular-ui', plugins_url( '/fe/js/library/bootstrap/ui-bootstrap-tpls-1.2.4.js', __FILE__ ), array( 'jquery','angular'), $raton_version, true );
 
-    wp_register_script( 'categoryCtrl', plugins_url( '/fe/js/controller/categoryCtrl.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'categoryCmp', plugins_url( '/fe/js/directive/categoryCmp.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'confService', plugins_url( '/fe/js/service/confService.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'loaderService', plugins_url( '/fe/js/service/loaderService.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'categoryResource', plugins_url( '/fe/js/service/category/categoryResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'categoryService', plugins_url( '/fe/js/service/category/categoryService.js', __FILE__ ), array( 'angular','raton-app','categoryResource'), $raton_version, true );
     wp_register_script( 'categoryUtils', plugins_url( '/fe/js/service/category/categoryUtils.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
+    wp_register_script( 'itemResource', plugins_url( '/fe/js/service/item/itemResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
+    wp_register_script( 'itemService', plugins_url( '/fe/js/service/item/itemService.js', __FILE__ ), array( 'angular','raton-app','itemResource'), $raton_version, true );
 
+    wp_register_script( 'categoryCtrl', plugins_url( '/fe/js/controller/categoryCtrl.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
+    wp_register_script( 'itemCtrl', plugins_url( '/fe/js/controller/itemCtrl.js', __FILE__ ), array( 'angular','raton-app','itemService'), $raton_version, true );
 
     wp_register_script( 'raton-app', plugins_url( '/fe/js/raton-admin-app.js', __FILE__ ),
-        array( 'wp-api', 'jquery', 'jquery-ui-core', 'angular', 'angular-resource' , 'angular-ui', 'tree-repeat'), $raton_version, true );
+        array( 'wp-api', 'jquery', 'jquery-ui-core', 'angular', 'angular-resource' , 'angular-animate', 'angular-ui', 'tree-repeat'), $raton_version, true );
 
     wp_register_style("bootstrap",plugins_url( '/fe/css/bootstrap.css', __FILE__ ),array(),$raton_version,"all");
     wp_register_style("bootstrap-theme",plugins_url( '/fe/css/bootstrap-theme.css', __FILE__ ),array('bootstrap'),$raton_version,"all");
@@ -181,19 +186,24 @@ function ratonEnqueueScript() {
 
     wp_enqueue_script( 'angular' );
     wp_enqueue_script( 'angular-resource' );
+    wp_enqueue_script( 'angular-storage' );
+    wp_enqueue_script( 'angular-animate' );
     wp_enqueue_script( 'angular-route' );
     wp_enqueue_script( 'angular-ui' );
     wp_enqueue_script( 'tree-repeat' );
 
-    wp_enqueue_script( 'categoryCtrl' );
     wp_enqueue_script( 'categoryCmp' );
     wp_enqueue_script( 'confService' );
     wp_enqueue_script( 'loaderService' );
 
     wp_enqueue_script( 'categoryResource' );
     wp_enqueue_script( 'categoryService' );
+    wp_enqueue_script( 'itemResource' );
+    wp_enqueue_script( 'itemService' );
     wp_enqueue_script( 'categoryUtils' );
 
+    wp_enqueue_script( 'categoryCtrl' );
+    wp_enqueue_script( 'itemCtrl' );
     wp_enqueue_script( 'raton-app' );
 }
 
