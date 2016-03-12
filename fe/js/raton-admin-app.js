@@ -18,10 +18,29 @@ app.config(['$routeProvider', 'WPPathServiceProvider',
                 controller: 'CategoryController',
                 controllerAs: 'ctrl'
             }).
+            when('/items', {
+                templateUrl: WPPathService.getPartialUrl() + "/item-view.html",
+                controller: 'ItemController',
+                controllerAs: 'ctrl',
+                resolve: {
+                    itemViewOpt: function() {
+                        return {
+                            fromCategory: false
+                        };
+                    }
+                }
+            }).
             when('/category/:idCategory/items', {
                 templateUrl: WPPathService.getPartialUrl() + "/item-view.html",
                 controller: 'ItemController',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                resolve: {
+                    itemViewOpt: function() {
+                        return {
+                            fromCategory: true
+                        }
+                    }
+                }
             }).
             otherwise({
                 redirectTo: WPPathService.getPartialUrl() + "/adminPage.html"

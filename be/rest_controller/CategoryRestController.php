@@ -35,39 +35,4 @@ class CategoryRestController extends BaseRestController {
 
     }
 
-    public function get_item_schema() {
-
-        $schema = array(
-            'title'      => 'category',
-            'type'       => 'object',
-            'properties' => array(
-
-                'description' => array(
-                    'description' => 'The category description.',
-                    'type'        => 'string',
-                    'context'     => array( 'view', 'edit' )
-                ),
-                'title'       => array(
-                    'description' => 'The category title.',
-                    'type'        => 'string',
-                    'context'     => array( 'view', 'edit' ),
-                    'required'    => true,
-                ),
-                'id_parent_category' => array(
-                    'description' => 'Parent category id.',
-                    'type'        => 'integer',
-                    'context'     => array( 'view', 'edit' ),
-                    'readonly'    => true,
-                ),
-                'id'          => array(
-                    'description' => 'Unique identifier for the category.',
-                    'type'        => 'integer',
-                    'context'     => array( 'view'),
-                    'readonly'    => true,
-                )
-            ),
-        );
-        return $this->add_additional_fields_schema( $schema );
-    }
-
 }

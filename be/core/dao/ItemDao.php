@@ -85,7 +85,7 @@ class ItemDao extends DaoBase {
             parent::testIdPresent($data);
 
             $item = parent::get($id);
-            $categoryType->testParentCategory($item["id_category"]);
+            $categoryType->testParentCategory($item->id_category);
 
             return parent::delete($id);
 

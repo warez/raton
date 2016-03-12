@@ -11,7 +11,9 @@ class Item {
         "description" => "%s",
         "image" => "%s",
         "insert_date" => "%s",
-        "id_category" => "%d"
+        "id_category" => "%d",
+        "approved" => "%s",
+        "request_approve" => "%s"
     );
 
     function __construct(array $val) {

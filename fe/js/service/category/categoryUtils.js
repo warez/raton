@@ -83,6 +83,14 @@ angular.module("JRatonApp").service("CategoryUtils", [
 
         },
 
+        copyCategory: function(source) {
+            var dest = {};
+            dest.id = source.id;
+            dest.title = source.title;
+            dest.description = source.description;
+            return dest;
+        },
+
         onEdit: function (data, ret) {
             data.id = ret.id;
             data.title = ret.title;

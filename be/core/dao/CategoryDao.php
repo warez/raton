@@ -45,7 +45,7 @@ class CategoryDao extends DaoBase {
         if(is_object($parent) && get_class($parent) == "WP_Error")
             throw new Exception("Parent category with id: " . $idParent . " not exist.");
 
-        if($data["id_parent_category"] == $data["id"])
+        if(array_key_exists("id", $data) && $data["id_parent_category"] == $data["id"])
             throw new Exception("Parent category id and entity id is equals.");
 
         return;

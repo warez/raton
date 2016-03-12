@@ -1,20 +1,12 @@
 angular.module("JRatonApp").controller("CategoryController", ['$scope', '$location', 'LoaderService', 'WPPathService',
-    'CategoryUtils', 'CategoryService', '$uibModal', '$sessionStorage', 'CONF',
+    'CategoryUtils', 'CategoryService', '$uibModal', '$sessionStorage', 'ModalService', 'CONF',
 
-    function ($scope, $location, LoaderService, WPPathService, CategoryUtils, CategoryService, $uibModal, $sessionStorage, CONF) {
+    function ($scope, $location, LoaderService, WPPathService, CategoryUtils, CategoryService, $uibModal, $sessionStorage, ModalService, CONF) {
 
         var ctrl = this;
 
-        var copy = function(cat) {
-            return {
-                id: cat.id,
-                title: cat.title,
-                description: cat.description
-            };
-        }
-
         ctrl.onShowItem = function(cat) {
-            var catCopy = copy(cat);
+            var catCopy = CategoryUtils.copyCategory(cat);
 
             $sessionStorage["category"] = catCopy;
             $location.path('/category/' + catCopy.id + "/items");
@@ -33,19 +25,35 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', '$locati
                 return; //TODO
             }
 
-            LoaderService.start();
-            CategoryService.delete(cat).$promise.then(function (category) {
+            var doDelete = function() {
 
-                LoaderService.stop();
-                CategoryUtils.onDelete(cat);
+                LoaderService.start();
+                CategoryService.delete(cat).$promise.then(function (category) {
 
-            }, function (error) {
+                    LoaderService.stop();
+                    CategoryUtils.onDelete(cat);
+                    //TODO
 
-                //TODO
-                LoaderService.stop();
+                }, function (error) {
 
+                    //TODO
+                    LoaderService.stop();
+
+                });
+            };
+
+            var modalOptions = {
+                closeButtonText: 'Annulla',
+                actionButtonText: "Cancella!",
+                headerText: "Attenzione",
+                bodyText: "Sei sicuro di voler cancellare la categoria?"
+            };
+
+            ModalService.showModal({}, modalOptions).then(function () {
+                doDelete();
             });
-        }
+
+        };
 
         ctrl.onMove = CategoryUtils.onMove;
 
@@ -57,22 +65,20 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', '$locati
                 controller: "EditCategoryCtrl",
                 size: 'sm',
                 resolve: {
-                    title: function() {
-                        return "Modifica categoria";
-                    },
                     category: function () {
-                        return cat;
+                        return CategoryUtils.copyCategory(cat);
                     }
                 }
             });
 
-            modalInstance.result.then(function (category) {
+            modalInstance.result.then(function (categoryMod) {
 
                 LoaderService.start();
 
-                CategoryService.update( category).$promise.then(function (ret) {
-                    CategoryUtils.onEdit(category, ret);
+                CategoryService.update( categoryMod).$promise.then(function (ret) {
+                    CategoryUtils.onEdit(cat, ret);
                     LoaderService.stop();
+                    //TODO
 
                 }, function (error) {
 
@@ -94,9 +100,6 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', '$locati
                 controller: "CreateCategoryCtrl",
                 size: 'sm',
                 resolve: {
-                    title: function() {
-                        return "Crea nuova categoria";
-                    },
                     parent: function () {
                         return parent;
                     }
@@ -161,15 +164,17 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', '$locati
         $uibModalInstance.dismiss('cancel');
     };
 
-}).controller('EditCategoryCtrl', function ($scope, $uibModalInstance, CategoryService, category) {
+}).controller('EditCategoryCtrl', function ($scope, $uibModalInstance, CategoryUtils, CategoryService, category) {
 
     $scope.data = category;
 
     $scope.title = "Modifica categoria";
     $scope.ok = function () {
 
-        if (!CategoryService.testEditCategory($scope.data))
+        if (!CategoryService.testEditCategory($scope.data)) {
+            //TODO
             return;
+        }
 
         var catDB = CategoryService.prepareDBCategory($scope.data, category.parent);
         $uibModalInstance.close(catDB);

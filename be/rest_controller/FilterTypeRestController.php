@@ -35,39 +35,4 @@ class FilterTypeRestController extends BaseRestController {
 
     }
 
-    public function get_item_schema() {
-
-        $schema = array(
-            'title'      => 'filterType',
-            'type'       => 'object',
-            'properties' => array(
-
-                'title'       => array(
-                    'description' => 'The filter type title.',
-                    'type'        => 'string',
-                    'context'     => array( 'view', 'edit' ),
-                    'required'    => true,
-                ),
-                'filter_args' => array(
-                    'description' => 'Filter args in json format.',
-                    'type'        => 'string',
-                    'context'     => array( 'view', 'edit' ),
-                    'readonly'    => true,
-                ),
-                'meta_type'  => array(
-                    'description' => 'Filter type meta type.',
-                    'type'        => 'string',
-                    'context'     => array( 'view', 'edit' ),
-                ),
-                'id'          => array(
-                    'description' => 'Unique identifier for the item.',
-                    'type'        => 'integer',
-                    'context'     => array( 'view'),
-                    'readonly'    => true,
-                )
-            ),
-        );
-        return $this->add_additional_fields_schema( $schema );
-    }
-
 }

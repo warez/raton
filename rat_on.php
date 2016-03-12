@@ -122,6 +122,7 @@ function registerScriptAndCSS() {
 
     global $raton_version, $raton_dir;
 
+    wp_register_script( 'bootstrap', plugins_url( '/fe/js/library/bootstrap/bootstrap.js', __FILE__ ), array( 'jquery'), $raton_version, true );
     wp_register_script( 'angular', plugins_url( '/fe/js/library/angular/angular.js', __FILE__ ), array( 'jquery', 'jquery-ui-core' ), $raton_version, true );
     wp_register_script( 'angular-resource', plugins_url( '/fe/js/library/angular/angular-resource.js', __FILE__ ), array( 'angular'), $raton_version, true );
     wp_register_script( 'angular-animate', plugins_url( '/fe/js/library/angular/angular-animate.js', __FILE__ ), array( 'angular'), $raton_version, true );
@@ -184,6 +185,7 @@ function ratonEnqueueScript() {
             'RATON_FE_URL' => plugins_url( '/fe', __FILE__ ),
             'nonce' => wp_create_nonce( 'wp_rest' ) ));
 
+    wp_enqueue_script( 'bootstrap' );
     wp_enqueue_script( 'angular' );
     wp_enqueue_script( 'angular-resource' );
     wp_enqueue_script( 'angular-storage' );

@@ -19,6 +19,26 @@ div#preloader {
     margin-top: 100px;
 }
 
+.wp-admin select {
+    width: 170px;
+}
+
+.select-button {
+    padding: 3px 3px 3px 4px;
+    width: 170px;
+    text-align: left;
+    height: 30px;
+}
+
+.select-button .text {
+    float: left;
+}
+
+.select-button .caret {
+    margin-top: 7px;
+    float: right;
+}
+
 .main-div {
     margin-right: 10px;
     margin-left: 10px;

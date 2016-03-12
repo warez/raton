@@ -60,4 +60,28 @@ angular.module("JRatonApp").directive("categoryComponent", function(WPPathServic
 
     }
   };
+}).directive("bootstrapSelect", function(WPPathService, $parse) {
+  return {
+    restrict: "E",
+    scope: {
+      items: "=",
+      val: "="
+    },
+    templateUrl: function () {
+      return WPPathService.getPartialUrl() + "/bootstrap-select.html";
+    },
+    controller: function($scope, $element, $attrs) {
+
+      var ctrl = this;
+
+      this.selectedIndex = 0;
+      this.select = function(index) {
+        ctrl.selectedIndex = index;
+        ctrl.val = ctrl.items[index].value;
+      };
+    },
+    controllerAs: 'ctrl',
+    bindToController: true
+
+  }
 });
