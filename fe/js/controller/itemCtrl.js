@@ -115,7 +115,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
                 LoaderService.start();
 
-                ItemService.update(item).$promise.then(function (ret) {
+                ItemService.update(newItem).$promise.then(function (ret) {
                     angular.copy(ret, item);
                     LoaderService.stop();
                     //TODO
