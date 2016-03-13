@@ -79,6 +79,18 @@ angular.module("JRatonApp").directive("categoryComponent", function(WPPathServic
         ctrl.selectedIndex = index;
         ctrl.val = ctrl.items[index].value;
       };
+
+      $scope.$watch('ctrl.val', function(newValue, oldValue) {
+        if (newValue) {
+          for(var i = 0; i < ctrl.items.length; i++) {
+            if(ctrl.items[i].value == newValue) {
+              ctrl.select(i);
+              break;
+            }
+          }
+        }
+      }, false);
+
     },
     controllerAs: 'ctrl',
     bindToController: true

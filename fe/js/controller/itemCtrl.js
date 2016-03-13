@@ -43,6 +43,17 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
             ctrl.filter.from = ctrl.selectedCat.id;
         }
 
+        ctrl.clear = function() {
+
+            ctrl.itemsData.items = [];
+
+            ctrl.filter.title = "";
+            ctrl.filter.description = "";
+            ctrl.filter.request_approve_type = "a";
+            ctrl.filter.approved_type = "a";
+            ctrl.filter.page = 1;
+        };
+
         ctrl.search = function(page) {
             LoaderService.start();
 

@@ -7,11 +7,30 @@
  */
 
 global $raton_dir;
-require_once($raton_dir["MODEL"] . "Item.php");
 require_once($raton_dir["SERVICE"] . "BaseRestService.php");
 require_once( $raton_dir["DAO"] . "ItemDao.php");
 
 class ItemRestService extends BaseRestService {
+
+    protected $itemFormat = array(
+        "id" => "%d",
+        "title" => "%s",
+        "description" => "%s",
+        "image" => "%s",
+        "insert_date" => "%d",
+        "last_update_date" => "%d",
+        "id_category" => "%d",
+        "approved" => "%s",
+        "request_approve" => "%s"
+    );
+
+    function getFormat($data) {
+        $format = array();
+        foreach ( $data as $d => $a) {
+            $format[$d] = $this->itemFormat[$d];
+        }
+        return $format;
+    }
 
     function __construct($restController)
     {
@@ -96,10 +115,6 @@ class ItemRestService extends BaseRestService {
     function prepareForResponse($item, $request) {
 
         return $this->prepareForDb($item);
-    }
-
-    function getFormat($data) {
-        return Item::getFormat($data);
     }
 
 }

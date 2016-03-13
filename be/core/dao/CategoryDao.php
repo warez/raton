@@ -5,7 +5,6 @@ require_once($raton_dir["DAO"] . "DaoBase.php");
 require_once($raton_dir["DAO"] . "ItemDao.php");
 require_once($raton_dir["DAO"] . "VoteTypeDao.php");
 require_once($raton_dir["MODEL"] . "CategoryForTree.php");
-require_once($raton_dir["MODEL"] . "Category.php");
 
 //16.00 antonella mula armanda biasci
 
@@ -126,7 +125,10 @@ class CategoryDao extends DaoBase {
             if($ret == null || empty($ret))
                 return null;
 
-            $ret[0]->cat = $this->getRootCategory();
+            $rootCat = array();
+            $rootCat["id"] = "ROOT";
+
+            $ret[0]->cat = $rootCat;
             return $ret[0];
 
         } catch(Exception $e) {

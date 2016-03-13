@@ -68,12 +68,12 @@ class ItemDao extends DaoBase {
             }
 
             if(trim($approved_type) != "a") {
-                $whereCond .= " approved = %s ";
+                $whereCond .= " approved = %s and ";
                 $params[] = $approved_type;
             }
 
             if($from != -1) {
-                $whereCond .= " id_category = %d ";
+                $whereCond .= " id_category = %d and ";
                 $params[] = $from;
             }
 
@@ -86,7 +86,7 @@ class ItemDao extends DaoBase {
 
             $queryCount = $wpdb->prepare(" SELECT count(*) FROM " . $this->tableName . $whereCond, $params);
             $retCount = $wpdb->get_var($queryCount);
-            $data = array("items"=> array(), "total_count"=>$retCount , "page"=>$page , "itemPerPage"=>$itemPerPage);
+            $data = array("items"=> array(), "total_count"=>$retCount , "page"=>$page + 1 , "itemPerPage"=>$itemPerPage);
 
             if($retCount == 0) {
                 return new WP_REST_Response($data);

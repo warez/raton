@@ -7,7 +7,6 @@
  */
 
 global $raton_dir;
-require_once($raton_dir["MODEL"] . "Category.php");
 require_once($raton_dir["SERVICE"] . "BaseRestService.php");
 require_once( $raton_dir["DAO"] . "CategoryDao.php");
 
@@ -43,8 +42,19 @@ class CategoryRestService extends BaseRestService {
         return $this->prepareForDb($category);
     }
 
+    private $format = array(
+        "id" => "%d",
+        "title" => "%s",
+        "description" => "%s",
+        "id_parent_category" => "%d"
+    );
+
     function getFormat($data) {
-        return Category::getFormat($data);
+        $format = array();
+        foreach ( $data as $d => $a) {
+            $format[$d] = $this->format[$d];
+        }
+        return $format;
     }
 
     function getCategoryTree($request) {

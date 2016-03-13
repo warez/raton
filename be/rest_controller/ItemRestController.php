@@ -88,7 +88,7 @@ class ItemRestController extends BaseRestController {
                 'type'               => 'integer',
                 'default'            => 10,
                 'minimum'            => 1,
-                'maximum'            => 100,
+                'maximum'            => 50,
                 'sanitize_callback'  => 'absint',
                 'validate_callback'  => 'rest_validate_request_arg',
             )
