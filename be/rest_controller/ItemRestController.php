@@ -20,22 +20,56 @@ class ItemRestController extends BaseRestController {
 
         parent::register_routes();
 
-        $getCategoryItemsParam = $this->get_collection_params();
-        $getCategoryItemsParam["id"] = array(
+        register_rest_route( $this->namespace, '/' . $this->base . '/search', array(
+            array(
+                'methods'         => WP_REST_Server::EDITABLE,
+                'callback'        => array( $this->service, 'search' ),
+                'permission_callback' => array( $this, 'get_item_permissions_check' ),
+                'args'            => $this->getSearchParams()
+            )
+        ) );
+
+    }
+
+    public function getSearchParams() {
+        $ret = $this->get_collection_params();
+
+        $ret["from"] = array(
             'description'        => __( 'category id to retrieve items.' ),
             'type'               => 'integer',
+            'default'            => "-1",
             'sanitize_callback'  => 'absint'
         );
 
-        register_rest_route( $this->namespace, '/' . $this->base . '/fromCategory/(?P<id>[\d]+)', array(
-            array(
-                'methods'         => WP_REST_Server::READABLE,
-                'callback'        => array( $this->service, 'getCategoryItems' ),
-                'permission_callback' => array( $this, 'get_item_permissions_check' ),
-                'args'            => $getCategoryItemsParam
-            ),
-        ) );
+        $ret["title"] = array(
+                'description'        => __( 'Title of item.' ),
+                'type'               => 'string',
+                'default'            => "",
+                'validate_callback'  => 'rest_validate_request_arg'
+        );
 
+        $ret["description"] = array(
+            'description'        => __( 'Description of item.' ),
+            'type'               => 'string',
+            'default'            => "",
+            'validate_callback'  => 'rest_validate_request_arg'
+        );
+
+        $ret["request_approve_type"] = array(
+            'description'        => __( 'Request approve flag of item.' ),
+            'type'               => 'string',
+            'default'            => "a",
+            'validate_callback'  => 'rest_validate_request_arg'
+        );
+
+        $ret["approved_type"] = array(
+            'description'        => __( 'Approve d type of item.' ),
+            'type'               => 'string',
+            'default'            => "a",
+            'validate_callback'  => 'rest_validate_request_arg'
+        );
+
+        return $ret;
     }
 
     public function get_collection_params() {

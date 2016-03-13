@@ -26,25 +26,6 @@ id_parent_category INTEGER NULL DEFAULT -1,
 PRIMARY KEY (id)
 ) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
 
-"CREATE TABLE " . $wpdb -> prefix . "search_filters (
-        id INTEGER NOT NULL AUTO_INCREMENT,
-title CHARACTER VARYING(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
-description CHARACTER VARYING(255) CHARACTER SET utf8 NULL DEFAULT '',
-position INTEGER NOT NULL,
-mandatory BOOLEAN NOT NULL DEFAULT FALSE,
-id_type INTEGER NOT NULL,
-id_category INTEGER NOT NULL,
-PRIMARY KEY (id)
-) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
-
-"CREATE TABLE " . $wpdb -> prefix . "search_filters_types (
-        id INTEGER NOT NULL AUTO_INCREMENT,
-title CHARACTER VARYING(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
-filter_args TEXT CHARACTER SET utf8 NULL DEFAULT '',
-meta_type CHARACTER VARYING(50) CHARACTER SET utf8 NOT NULL,
-PRIMARY KEY (id)
-) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
-
 "CREATE TABLE " . $wpdb -> prefix . "reviews (
         id INTEGER NOT NULL AUTO_INCREMENT,
 review CHARACTER VARYING(2048) CHARACTER SET utf8 NULL DEFAULT '',
@@ -81,10 +62,6 @@ PRIMARY KEY (id)
 "ALTER TABLE " . $wpdb -> prefix . "categories ADD CONSTRAINT FK_CAT_SUBCAT FOREIGN KEY (id_parent_category) REFERENCES " . $wpdb -> prefix . "categories (id);",
 
 "ALTER TABLE " . $wpdb -> prefix . "items ADD CONSTRAINT FK_ITEM_CATEGORY FOREIGN KEY (id_category) REFERENCES " . $wpdb -> prefix . "categories (id);",
-
-"ALTER TABLE " . $wpdb -> prefix . "search_filters ADD CONSTRAINT FK_FILTER_CATEGORY FOREIGN KEY (id_category) REFERENCES " . $wpdb -> prefix . "categories (id);",
-
-"ALTER TABLE " . $wpdb -> prefix . "search_filters ADD CONSTRAINT FK_FILTER_FILTERTYPE FOREIGN KEY (id_type) REFERENCES " . $wpdb -> prefix . "search_filters_types (id);",
 
 "ALTER TABLE " . $wpdb -> prefix . "reviews ADD CONSTRAINT FK_REVIEW_ITEM FOREIGN KEY (id_item) REFERENCES " . $wpdb -> prefix . "items (id);",
 

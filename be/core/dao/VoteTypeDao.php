@@ -2,7 +2,6 @@
 
 global $raton_dir;
 require_once($raton_dir["DAO"] . "DaoBase.php");
-require_once($raton_dir["DAO"] . "FilterTypeDao.php");
 
 class VoteTypeDao extends DaoBase {
 

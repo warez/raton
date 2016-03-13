@@ -8,7 +8,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
         ctrl.state_approve_items = [
             {label: "Tutti", value: 'a'},
-            {label: "In richiesta di approvazione", value: 'y'},
+            {label: "In attesa", value: 'y'},
             {label: "Già approvati", value: 'n'},
         ];
 
@@ -20,10 +20,9 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
         ctrl.itemViewOpt = itemViewOpt;
         ctrl.selectedCat = itemViewOpt.fromCategory ? $sessionStorage["category"] : undefined;
-        ctrl.itemsData = {
-            page: 1,
-            per_page: 10
-        };
+
+        ctrl.itemsData = {};
+
         ctrl.dateOptions = {
             formatYear: 'yyyy',
             maxDate: new Date(2020, 12, 12),
@@ -35,15 +34,28 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
             title: '',
             description: '',
             request_approve_type: 'a',
-            approved_type: 'a'
+            approved_type: 'a',
+            page: 1,
+            per_page: 10
         };
 
-        ctrl.search = function() {
+        if(itemViewOpt.fromCategory) {
+            ctrl.filter.from = ctrl.selectedCat.id;
+        }
+
+        ctrl.search = function(page) {
             LoaderService.start();
+
+            if(page)
+                ctrl.filter.page = page;
+
             ItemService.search(ctrl.filter).$promise.then(function(data) {
 
                 LoaderService.stop();
-                ctrl.itemsData = data;
+
+                ctrl.itemsData = angular.copy(data);
+                ctrl.filter.page = data.page;
+                ctrl.per_page = data.per_page;
 
             }, function(error) {
                 LoaderService.stop();
@@ -83,7 +95,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
                 ItemService.create(item).$promise.then(function (ret) {
                     LoaderService.stop();
-                    ctrl.load(1);
+                    ctrl.search(1);
                     //TODO
 
                 }, function (error) {
@@ -138,7 +150,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
                 ItemService.delete(item).$promise.then(function(data){
 
                     LoaderService.stop();
-                    ctrl.load(1);
+                    ctrl.search(1);
                     //TODO
 
                 }, function(error) {
@@ -160,26 +172,11 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
         };
 
-        ctrl.load = function(page) {
-            LoaderService.start();
-            ItemService.getFromCategory(ctrl.selectedCat.id,
-                page ? page : ctrl.itemsData.page,
-                ctrl.itemsData.per_page).$promise.then(
-                function(data) {
-                    LoaderService.stop();
-                    ctrl.itemsData = angular.copy(data);
-                }, function(error) {
-                    LoaderService.stop();
-                    //TODO
-                }
-            );
-        };
-
         if(itemViewOpt.fromCategory)
-            ctrl.load();
+            ctrl.search();
 
         ctrl.pageChanged = function() {
-            ctrl.load();
+            ctrl.search();
         }
     }
 

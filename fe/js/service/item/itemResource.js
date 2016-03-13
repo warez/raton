@@ -4,15 +4,15 @@ angular.module("JRatonApp").service("ItemResource", ['$resource', function ($res
 
     return $resource( resource + "/:id", {id:'@id'}, {
 
-        getFromCategory: {url: resource + '/fromCategory/:from' , method: 'GET' , params: {}, isArray: false},
-
         delete: {method: 'DELETE', params: {}, isArray: true},
 
         get: {method: 'GET', params: {}, isArray: false},
 
         update: {method: 'PUT', params: {}, isArray: false},
 
-        create: {method: 'POST', params: {}, isArray: false}
+        create: {method: 'POST', params: {}, isArray: false},
+
+        search: {url: resource + '/search', method: 'POST', params: {}, isArray: false},
 
     });
 

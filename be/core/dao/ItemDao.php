@@ -27,7 +27,14 @@ class ItemDao extends DaoBase {
 
     }
 
-    function getCategoryItems($categoryId, $page = 0, $itemPerPage = 10) {
+    function endsWith($haystack, $needle) {
+        // search forward starting from end minus needle length characters
+        return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+    }
+
+    function search($title, $description,
+                    $request_approve_type, $approved_type, $from,
+                    $page = 0, $itemPerPage = 10) {
 
         global $wpdb;
 
@@ -42,9 +49,42 @@ class ItemDao extends DaoBase {
                 $itemPerPage = 18446744073709551615;
             }
 
+            $whereCond = '';
+            $params = array();
+
+            if(trim($title) != "") {
+                $whereCond .= " title like %s and ";
+                $params[] = "%" . $title . "%";
+            }
+
+            if(trim($description) != "") {
+                $whereCond .= " description like %s and ";
+                $params[] = "%" . $description . "%";
+            }
+
+            if($request_approve_type != "a") {
+                $whereCond .= " request_approve = %s and ";
+                $params[] = $request_approve_type;
+            }
+
+            if(trim($approved_type) != "a") {
+                $whereCond .= " approved = %s ";
+                $params[] = $approved_type;
+            }
+
+            if($from != -1) {
+                $whereCond .= " id_category = %d ";
+                $params[] = $from;
+            }
+
+            if($this->endsWith($whereCond, " and "))
+                $whereCond = substr($whereCond,0, strlen($whereCond) - 4);
+            if(strlen($whereCond) > 0)
+                $whereCond = " where " . $whereCond;
+
             $firstItem = $page * $itemPerPage;
 
-            $queryCount = $wpdb->prepare(" SELECT count(*) FROM " . $this->tableName . " WHERE id_category = %d", $categoryId);
+            $queryCount = $wpdb->prepare(" SELECT count(*) FROM " . $this->tableName . $whereCond, $params);
             $retCount = $wpdb->get_var($queryCount);
             $data = array("items"=> array(), "total_count"=>$retCount , "page"=>$page , "itemPerPage"=>$itemPerPage);
 
@@ -52,9 +92,12 @@ class ItemDao extends DaoBase {
                 return new WP_REST_Response($data);
             }
 
+            $params[] = $firstItem;
+            $params[] = $itemPerPage;
+
             $query = $wpdb->prepare(
                 " SELECT * FROM " . $this->tableName .
-                " WHERE id_category = %d order by id desc LIMIT %d,%d", $categoryId, $firstItem, $itemPerPage);
+                " " . $whereCond . " order by id desc LIMIT %d,%d", $params);
 
             $result = $wpdb->get_results($query, OBJECT);
 
@@ -72,6 +115,7 @@ class ItemDao extends DaoBase {
         } finally {
             ob_clean();
         }
+
     }
 
     function delete($id)
@@ -85,7 +129,7 @@ class ItemDao extends DaoBase {
             parent::testIdPresent($data);
 
             $item = parent::get($id);
-            $categoryType->testParentCategory($item->id_category);
+            //TODO test vote....
 
             return parent::delete($id);
 

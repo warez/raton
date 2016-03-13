@@ -1,6 +1,6 @@
 <div class="row">
 
-    <div ng-if="itemViewOpt.fromCategory" class="col-md-12">
+    <div ng-if="ctrl.itemViewOpt.fromCategory" class="col-md-12">
         <div class="detail-panel panel panel-default">
             <div class="panel-heading">Categoria selezionata</div>
             <div class="panel-body">
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div ng-if="!itemViewOpt.fromCategory" class="col-md-12">
+    <div class="col-md-12">
         <div class="detail-panel panel panel-default">
             <div class="panel-heading">Ricerca articoli</div>
             <div class="panel-body">
@@ -128,7 +128,7 @@
                 <div class="text-center">
                     <uib-pagination total-items="ctrl.itemsData.total_count"
                                     ng-change="ctrl.pageChanged()"
-                                    ng-model="ctrl.itemsData.page" max-size="10"
+                                    ng-model="ctrl.filter.page" max-size="10"
                                     previous-text="&lsaquo;"
                                     next-text="&rsaquo;"
                                     last-text="&rsaquo;&rsaquo;"

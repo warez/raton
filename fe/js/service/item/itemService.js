@@ -1,10 +1,6 @@
 angular.module("JRatonApp").service("ItemService", ['ItemResource',
     function (ItemResource) {
         return {
-            getFromCategory: function (itemId, page, perPage) {
-                return ItemResource.getFromCategory({from:itemId, page: page, per_page: perPage});
-            },
-
             create: function (data) {
                 return ItemResource.create(data);
             },
@@ -15,6 +11,10 @@ angular.module("JRatonApp").service("ItemService", ['ItemResource',
 
             get: function (data) {
                 return ItemResource.get(data);
+            },
+
+            search: function (data) {
+                return ItemResource.search(data);
             },
 
             delete: function (data) {

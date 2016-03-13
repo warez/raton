@@ -33,6 +33,38 @@ class ItemRestService extends BaseRestService {
         return $item;
     }
 
+    function search($request) {
+
+        try {
+
+            $page = $request->get_param("page");
+            $itemPerPage = $request->get_param("per_page");;
+            $title = $request->get_param("title");
+            $description = $request->get_param("description");
+            $request_approve_type = $request->get_param("request_approve_type");
+            $approved_type = $request->get_param("approved_type");
+            $from = $request->get_param("from");
+
+            if($page == null || !is_numeric($page))
+                return new WP_Error( 0, "Page number is null or not a number" , array( 'status' => 500 ) );
+
+            if($itemPerPage == null || !is_numeric($itemPerPage))
+                return new WP_Error( 1, "Item per page number is null or not a number" , array( 'status' => 500 ) );
+
+            $ret = $this->dao->search($title, $description,
+                $request_approve_type, $approved_type, $from,
+                $page, $itemPerPage);
+
+            return $ret;
+
+        } catch (Exception $e) {
+
+            return new WP_Error( "0" , __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        }
+
+    }
+
     function getCategoryItems($request) {
 
         try {

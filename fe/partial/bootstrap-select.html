@@ -5,9 +5,11 @@
     </button>
     <ul class="dropdown-menu">
         <li ng-repeat="item in ctrl.items">
-            <a class="glyphicon"
-               ng-class="{'glyphicon-check':$index == ctrl.selectedIndex, 'glyphicon-unchecked': $index != ctrl.selectedIndex}"
-               ng-click="ctrl.select($index)">{{item.label}}</a>
+            <a ng-click="ctrl.select($index)">
+                <i class="glyphicon"
+                   ng-class="{'glyphicon-check':$index == ctrl.selectedIndex, 'glyphicon-unchecked': $index != ctrl.selectedIndex}"></i>
+                <span>{{item.label}}</span>
+            </a>
         </li>
     </ul>
 </div>
