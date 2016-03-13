@@ -1,5 +1,5 @@
-angular.module("JRatonApp").service("ItemService", ['ItemResource',
-    function (ItemResource) {
+angular.module("JRatonApp").service("ItemService", ['ItemResource','$filter',
+    function (ItemResource, $filter) {
         return {
             create: function (data) {
                 return ItemResource.create(data);
@@ -14,7 +14,16 @@ angular.module("JRatonApp").service("ItemService", ['ItemResource',
             },
 
             search: function (data) {
-                return ItemResource.search(data);
+
+                var dataCopy = angular.copy(data);
+                if(dataCopy.creationTime != null) {
+                    dataCopy.creationTime = $filter('fromDate')(dataCopy.creationTime);
+                }
+                if(dataCopy.updateTime != null) {
+                    dataCopy.updateTime = $filter('fromDate')(dataCopy.updateTime);
+                }
+
+                return ItemResource.search(dataCopy);
             },
 
             delete: function (data) {

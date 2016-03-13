@@ -5,17 +5,30 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
               $sessionStorage, ModalService, itemViewOpt) {
 
         var ctrl = this;
+        ctrl.DATE_TIME_FORMAT="dd/MM/yyyy HH:mm:ss";
+        ctrl.DATE_FORMAT="dd/MM/yyyy";
+
+        ctrl.dateOptions = {
+
+        };
 
         ctrl.state_approve_items = [
             {label: "Tutti", value: 'a'},
             {label: "In attesa", value: 'y'},
-            {label: "Già approvati", value: 'n'},
+            {label: "Già approvati", value: 'n'}
+        ];
+
+        ctrl.time_items = [
+            {label: "", value: "null", isNullElement: true},
+            {label: "Prima del", value: 'before'},
+            {label: "Dopo il", value: 'after'},
+            {label: "Il", value: 'at'}
         ];
 
         ctrl.enable_state_items = [
             {label: "Tutti", value: 'a'},
             {label: "Approvati", value: 'y'},
-            {label: "Non approvati", value: 'n'},
+            {label: "Non approvati", value: 'n'}
         ];
 
         ctrl.itemViewOpt = itemViewOpt;
@@ -35,6 +48,10 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
             description: '',
             request_approve_type: 'a',
             approved_type: 'a',
+            creationTimeCond: "null",
+            creationTime: null,
+            updateTimeCond: "null",
+            updateTime: null,
             page: 1,
             per_page: 10
         };
@@ -51,6 +68,10 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
             ctrl.filter.description = "";
             ctrl.filter.request_approve_type = "a";
             ctrl.filter.approved_type = "a";
+            ctrl.filter.creationTimeCond = "null";
+            ctrl.filter.creationTime = null;
+            ctrl.filter.updateTimeCond = "null";
+            ctrl.filter.updateTime = null;
             ctrl.filter.page = 1;
         };
 
@@ -83,7 +104,9 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
                 return true;
 
             return ctrl.filter.request_approve_type != 'a' ||
-                ctrl.filter.approved_type != 'a';
+                ctrl.filter.approved_type != 'a' ||
+                (ctrl.filter.creationTimeCond != "" && ctrl.filter.creationTime != null) ||
+                (ctrl.filter.updateTimeCond != "" && ctrl.filter.updateTime != null);
         };
 
         ctrl.createItem = function() {

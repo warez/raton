@@ -69,6 +69,28 @@ class ItemRestController extends BaseRestController {
             'validate_callback'  => 'rest_validate_request_arg'
         );
 
+        $ret["creationTimeCond"] = array(
+            'description'        => __( 'Condition to creation time.' ),
+            'type'               => 'string',
+            'default'            => ""
+        );
+
+        $ret["creationTime"] = array(
+            'description'        => __( 'Creation time.' ),
+            'type'               => 'float',
+        );
+
+        $ret["updateTimeCond"] = array(
+            'description'        => __( 'Condition to update time.' ),
+            'type'               => 'string',
+            'default'            => ""
+        );
+
+        $ret["updateTime"] = array(
+            'description'        => __( 'Update time.' ),
+            'type'               => 'float',
+        );
+
         return $ret;
     }
 

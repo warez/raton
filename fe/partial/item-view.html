@@ -33,45 +33,84 @@
             <div class="panel-heading">Ricerca articoli</div>
             <div class="panel-body">
 
-                <div class="row">
-                    <div class="col-md-2">
-                        <label class="title">Nome:</label>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="title">Nome:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="input-sm" ng-model="ctrl.filter.title">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="title">Descrizione:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="input-sm" ng-model="ctrl.filter.description">
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="text" class="input-sm" ng-model="ctrl.filter.title">
+
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-2">
+                            <label class="title">Stato approvazione:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <bootstrap-select items="ctrl.state_approve_items" val="ctrl.filter.request_approve_type"></bootstrap-select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="title">Stato abilitazione:</label>
+                        </div>
+
+                        <div class="col-md-4">
+                            <bootstrap-select items="ctrl.enable_state_items" val="ctrl.filter.approved_type"></bootstrap-select>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="title">Descrizione:</label>
+
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-2">
+                            <label class="title">Creato:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <bootstrap-select items="ctrl.time_items" val="ctrl.filter.creationTimeCond"></bootstrap-select>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group" style="width: 170px;">
+                                <input type="text" class="form-control" uib-datepicker-popup="{{ctrl.DATE_FORMAT}}" ng-model="ctrl.filter.creationTime"
+                                       is-open="ctrl.creationTimeOpen" datepicker-options="ctrl.dateOptions"
+                                       close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="ctrl.creationTimeOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="text" class="input-sm" ng-model="ctrl.filter.description">
+
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-2">
+                            <label class="title">Modificato:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <bootstrap-select items="ctrl.time_items" val="ctrl.filter.updateTimeCond"></bootstrap-select>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group" style="width: 170px;">
+                                <input type="text" class="form-control" uib-datepicker-popup="{{ctrl.DATE_FORMAT}}" ng-model="ctrl.filter.updateTime"
+                                       is-open="ctrl.updateTimeOpen" datepicker-options="ctrl.dateOptions"
+                                       close-text="Close" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="ctrl.updateTimeOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row pull-right" style="margin-right: 300px">
+                        <input type="button" class="btn btn-default btn-sm" value="Cerca articoli"
+                               ng-disabled="!ctrl.isValidSearch()" ng-click="ctrl.search()">
+                        <input type="button" class="btn btn-default btn-sm" value="Pulisci"
+                               ng-click="ctrl.clear()">
                     </div>
                 </div>
-
-                <div class="row" style="margin-top: 5px">
-                    <div class="col-md-2">
-                        <label class="title">Stato approvazione:</label>
-                    </div>
-                    <div class="col-md-2">
-                        <bootstrap-select items="ctrl.state_approve_items" val="ctrl.filter.request_approve_type"></bootstrap-select>
-                    </div>
-
-                    <div class="col-md-2">
-                        <label class="title">Stato abilitazione:</label>
-                    </div>
-
-                    <div class="col-md-2">
-                        <bootstrap-select items="ctrl.enable_state_items" val="ctrl.filter.approved_type"></bootstrap-select>
-                    </div>
-                </div>
-
-                <div class="row pull-right" style="margin-right: 300px">
-                    <input type="button" class="btn btn-default btn-sm" value="Cerca articoli"
-                           ng-disabled="!ctrl.isValidSearch()" ng-click="ctrl.search()">
-                    <input type="button" class="btn btn-default btn-sm" value="Pulisci"
-                           ng-click="ctrl.clear()">
-                </div>
-
             </div>
         </div>
     </div>
@@ -88,6 +127,7 @@
                             <th>Articolo</th>
                             <th>Descrizione</th>
                             <th>Data creazione</th>
+                            <th>Data ultima modifica</th>
                             <th width="220px">In richiesta di approvazione</th>
                             <th width="100px">Approvato</th>
                             <th></th>
@@ -96,7 +136,8 @@
                         <tr ng-repeat="item in ctrl.itemsData.items">
                             <td>{{item.title}}</td>
                             <td>{{item.description}}</td>
-                            <td>{{item.insert_date | date}}</td>
+                            <td>{{item.insert_date | toDate | date : ctrl.DATE_TIME_FORMAT }}</td>
+                            <td>{{item.last_update_date | toDate | date : ctrl.DATE_TIME_FORMAT}}</td>
 
                             <td>
                                 <span ng-if="item.request_approve == 'y'"><i class="glyphicon glyphicon-alert" style="color: orange"></i></span>

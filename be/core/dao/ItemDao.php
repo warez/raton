@@ -17,6 +17,9 @@ class ItemDao extends DaoBase {
             parent::testIdPresent($data);
             parent::testCategoryPresent($data);
 
+            $date = date('YmdHis', time());
+            $data["last_update_date"]= $date;
+
             return parent::update($data,$format);
 
         } catch(Exception $e) {
@@ -34,6 +37,7 @@ class ItemDao extends DaoBase {
 
     function search($title, $description,
                     $request_approve_type, $approved_type, $from,
+                    $creationTimeCond, $creationTime,$updateTimeCond,$updateTime,
                     $page = 0, $itemPerPage = 10) {
 
         global $wpdb;
@@ -75,6 +79,38 @@ class ItemDao extends DaoBase {
             if($from != -1) {
                 $whereCond .= " id_category = %d and ";
                 $params[] = $from;
+            }
+
+            if($creationTimeCond != null && $creationTime != null) {
+                if($creationTimeCond == "before" ) {
+                    $whereCond .= " insert_date <= %f and ";
+                    $params[] = $creationTime;
+                } else if($creationTimeCond == "after" ) {
+                    $whereCond .= " insert_date >= %f and ";
+                    $params[] = $creationTime;
+                } else if($creationTimeCond == "at" ) {
+                    $whereCond .= " insert_date >= %f and insert_date <= %f and ";
+                    $startDay = substr("" . $creationTime, 0, 8) . "000000";
+                    $endDay = substr("" . $creationTime, 0, 8) . "235959";
+                    $params[] = floatval($startDay);
+                    $params[] = floatval($endDay);
+                }
+            }
+
+            if($updateTimeCond != null && $updateTime != null) {
+                if($updateTimeCond == "before" ) {
+                    $whereCond .= " last_update_date <= %f and ";
+                    $params[] = $updateTime;
+                } else if($updateTimeCond == "after" ) {
+                    $whereCond .= " last_update_date >= %f and ";
+                    $params[] = $updateTime;
+                } else if($updateTimeCond == "at" ) {
+                    $whereCond .= " last_update_date >= %f and last_update_date <= %f and ";
+                    $startDay = substr("" . $updateTime, 0, 8) . "000000";
+                    $endDay = substr("" . $updateTime, 0, 8) . "235959";
+                    $params[] = $startDay;
+                    $params[] = $endDay;
+                }
             }
 
             if($this->endsWith($whereCond, " and "))
@@ -146,6 +182,11 @@ class ItemDao extends DaoBase {
         try {
 
             parent::testCategoryPresent($data);
+
+            $date = date('YmdHis', time());
+            $data["insert_date"]= $date;
+            $data["last_update_date"]= $date;
+
             return parent::create($data,$format);
 
         } catch(Exception $e) {

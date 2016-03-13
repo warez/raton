@@ -63,6 +63,10 @@ class ItemRestService extends BaseRestService {
             $request_approve_type = $request->get_param("request_approve_type");
             $approved_type = $request->get_param("approved_type");
             $from = $request->get_param("from");
+            $creationTimeCond = $request->get_param("creationTimeCond");
+            $creationTime = $request->get_param("creationTime");
+            $updateTimeCond = $request->get_param("updateTimeCond");
+            $updateTime = $request->get_param("updateTime");
 
             if($page == null || !is_numeric($page))
                 return new WP_Error( 0, "Page number is null or not a number" , array( 'status' => 500 ) );
@@ -72,6 +76,7 @@ class ItemRestService extends BaseRestService {
 
             $ret = $this->dao->search($title, $description,
                 $request_approve_type, $approved_type, $from,
+                $creationTimeCond, $creationTime,$updateTimeCond,$updateTime,
                 $page, $itemPerPage);
 
             return $ret;

@@ -3,12 +3,13 @@
         <span class="text">{{ctrl.items[ctrl.selectedIndex].label}}</span>
         <span class="caret"></span>
     </button>
+
     <ul class="dropdown-menu">
         <li ng-repeat="item in ctrl.items">
             <a ng-click="ctrl.select($index)">
-                <i class="glyphicon"
+                <i ng-if="!item.isNullElement" class="glyphicon"
                    ng-class="{'glyphicon-check':$index == ctrl.selectedIndex, 'glyphicon-unchecked': $index != ctrl.selectedIndex}"></i>
-                <span>{{item.label}}</span>
+                <span>{{item.isNullElement ? "&nbsp;" : item.label}}</span>
             </a>
         </li>
     </ul>
