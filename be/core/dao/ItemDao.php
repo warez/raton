@@ -24,7 +24,7 @@ class ItemDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "update_item" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
 
@@ -146,7 +146,7 @@ class ItemDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "search_item" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_clean();
@@ -171,7 +171,7 @@ class ItemDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "delete_item" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }
@@ -191,7 +191,7 @@ class ItemDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "create_item" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }

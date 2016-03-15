@@ -22,66 +22,55 @@ class VoteTypeDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "update_vote_type" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
 
     }
 
-    function searchVoteTypeByCategory($idCat, $pageSize = null,
-                                      $page = null) {
+    function search($from) {
+
+        global $wpdb;
 
         try {
 
-            global $wpdb, $raton_dir;
-
-            require_once($raton_dir["MODEL"] . "PageInfo.php");
-            require_once($raton_dir["MODEL"] . "VoteTypeResult.php");
-
             ob_start();
 
-            $limit = "";
-            $order = " position ASC ";
-            $where = " where id_category = $idCat";
+            $whereCond = " where id_category = %d";
+            $params = array();
+            $params[] = $from;
 
-            if($idCat == -1) {
-                $where = "";
-                $order = " id DESC";
+            $queryCount = $wpdb->prepare(" SELECT count(*) FROM " . $this->tableName . $whereCond, $params);
+            $retCount = $wpdb->get_var($queryCount);
+            $data = array("items"=> array(), "total_count"=>$retCount);
 
-                $queryCount = " SELECT count(*) FROM " .
-                    $this->tableName . " $where";
-
-                $retCount = $wpdb->get_var($queryCount);
-                $retCount = intval($retCount);
-
-                $start = $page == 0 ? 0 : $pageSize * $page;
-                $end = $pageSize;
-                $limit = $pageSize == -1 ? "" : " LIMIT $start,$end ";
+            if($retCount == 0) {
+                return new WP_REST_Response($data);
             }
 
-            $query = "SELECT *" .
-                " FROM " . $this->tableName .
-                " $where ORDER BY $order $limit";
+            $query = $wpdb->prepare(
+                " SELECT * FROM " . $this->tableName .
+                " " . $whereCond . " order by position desc", $params);
 
             $result = $wpdb->get_results($query, OBJECT);
 
-            if($idCat != -1)
-                return $result;
+            if ($result == null) {
+                return new WP_REST_Response($data);
+            }
 
-            $pageInfo = new PageInfo($pageSize, $page , $retCount);
-            $ret = new VoteTypeResult($result, $pageInfo);
-
-            return $ret;
+            $data = array("items"=>$result, "total_count"=>$retCount);
+            return new WP_REST_Response($data);
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "search_vote_type" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_clean();
         }
 
     }
+
 
     function create($data, $format)
     {
@@ -94,7 +83,7 @@ class VoteTypeDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "create_vote_type" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }

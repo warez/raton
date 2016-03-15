@@ -74,7 +74,7 @@ class CategoryRestService extends BaseRestService {
 
         } catch (Exception $e) {
 
-            return new WP_Error( "Get tree error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "get_category_tree" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
 

@@ -75,7 +75,7 @@ abstract class BaseRestService
     }
 
     function getFormat($data) {
-        return new WP_Error( get_class() . '::getFormat not implemented', __( 'message', 'text-domain'), array( 'status' => 500 ) );
+        return new WP_Error( "get_format_" + get_class() , get_class() . '::getFormat not implemented', array( 'status' => 500 ) );
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class BaseRestService
 
         } catch (Exception $e) {
 
-            return new WP_Error( "Get error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "get_" + get_class() , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }
@@ -130,7 +130,7 @@ abstract class BaseRestService
 
         } catch (Exception $e) {
             die();
-            return new WP_Error( "Create error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "create_" + get_class(), __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_end_clean();
@@ -161,7 +161,7 @@ abstract class BaseRestService
 
         } catch (Exception $e) {
 
-            return new WP_Error( "Update error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "update_" + get_class() , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
 
@@ -191,7 +191,7 @@ abstract class BaseRestService
 
         } catch (Exception $e) {
 
-            return new WP_Error( "Delete error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "delete_" + get_class() , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }

@@ -13,83 +13,97 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
         ctrl.itemsData = {};
         ctrl.categories = [];
 
-        var cleanCategories = function(data) {
+        ctrl.isValidSearch = function () {
+            return ctrl.filter.categoryId && ctrl.filter.categoryId != "null";
+        };
+
+        var cleanCategories = function (data) {
             var ret = [];
-            for(var i = 0; i< data.length; i++) {
-                if(data[i].id == "ROOT")
+
+            ret.push({label: "", value: "null", isNullElement: true});
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].id == "ROOT")
                     continue;
-                ret.push( {
+                ret.push({
                     value: data[i].id,
-                    label: data[i].title
+                    label: data[i].title,
+                    categoryObj: data[i]
                 });
             }
             return ret;
         };
 
-        var loadCategories = function() {
+        var loadCategories = function () {
 
-            var readTree = function(data) {
+            var readTree = function (data) {
                 LoaderService.stop();
                 var categories = CategoryUtils.levelTree(data);
                 ctrl.categories = cleanCategories(categories);
             };
 
             LoaderService.start();
-            CategoryService.getCategoryTree({from: -1}).$promise.then(readTree, function(error) {
+            CategoryService.getCategoryTree({from: -1}).$promise.then(readTree, function (error) {
                 LoaderService.stop();
                 //TODO
             })
         };
 
         var categoriesFromSession = $sessionStorage["categories"];
-        if(!categoriesFromSession)
+        if (!categoriesFromSession)
             loadCategories();
 
-
-        ctrl.filter = {
-            category: null
+        ctrl.onCategoryChange = function (data) {
+            ctrl.selectedCat = data.categoryObj;
         };
 
-        if(itemViewOpt.fromCategory) {
-            ctrl.filter.category = ctrl.selectedCat.id;
+        ctrl.filter = {
+            categoryId: null
+        };
+
+        if (itemViewOpt.fromCategory) {
+            ctrl.filter.categoryId = ctrl.selectedCat.id;
         }
 
-        ctrl.clear = function() {
+        ctrl.clear = function () {
             ctrl.itemsData.items = [];
         };
 
-        var removeFromItems = function(item) {
+        var removeFromItems = function (item) {
             var index = ctrl.itemsData.indexOf(item);
-            if(index == -1)
+            if (index == -1)
                 return;
 
-            ctrl.itemsData.splice(index,1);
+            ctrl.itemsData.splice(index, 1);
         };
 
-        ctrl.search = function() {
+        ctrl.search = function () {
             LoaderService.start();
 
-            VoteTypeService.search(ctrl.filter).$promise.then(function(data) {
+            VoteTypeService.search({categoryId: ctrl.filter.categoryId}).$promise.then(function (data) {
 
                 LoaderService.stop();
                 ctrl.itemsData = angular.copy(data);
 
-            }, function(error) {
+            }, function (error) {
                 LoaderService.stop();
                 //TODO
             });
         };
 
-        ctrl.createItem = function() {
+        ctrl.createItem = function () {
 
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: WPPathService.getPartialUrl() + "/createVoteTypeTmpl.html",
-                controller: "CreateItemCtrl",
+                controller: "CreateVoteTypeCtrl",
                 size: 'sm',
                 resolve: {
-                    category: function() {
+                    category: function () {
                         return ctrl.selectedCat;
+                    },
+                    itemsCount: function() {
+                        return ctrl.itemsData.total_count;
                     }
                 }
             });
@@ -98,7 +112,7 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
 
                 LoaderService.start();
 
-                ItemService.create(item).$promise.then(function (ret) {
+                VoteTypeService.create(item).$promise.then(function (ret) {
                     LoaderService.stop();
                     ctrl.search(1);
                     //TODO
@@ -114,16 +128,19 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
 
         };
 
-        ctrl.onEdit = function(item) {
+        ctrl.onEdit = function (item) {
 
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: WPPathService.getPartialUrl() + "/createVoteTypeTmpl.html",
-                controller: "EditItemCtrl",
+                controller: "EditVoteTypeCtrl",
                 size: 'sm',
                 resolve: {
                     item: function () {
-                        return ItemService.prepareDBItem(item);
+                        return VoteTypeService.prepareDBItem(item);
+                    },
+                    itemsCount: function() {
+                        return ctrl.itemsData.total_count;
                     }
                 }
             });
@@ -132,7 +149,7 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
 
                 LoaderService.start();
 
-                ItemService.update(newItem).$promise.then(function (ret) {
+                VoteTypeService.update(newItem).$promise.then(function (ret) {
                     angular.copy(ret, item);
                     LoaderService.stop();
                     //TODO
@@ -148,17 +165,17 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
 
         };
 
-        ctrl.onDelete = function(item) {
+        ctrl.onDelete = function (item) {
 
-            var doDelete = function() {
+            var doDelete = function () {
                 LoaderService.start();
-                ItemService.delete(item).$promise.then(function(data){
+                VoteTypeService.delete(item).$promise.then(function (data) {
 
                     LoaderService.stop();
                     removeFromItems(item);
                     //TODO
 
-                }, function(error) {
+                }, function (error) {
                     LoaderService.stop();
                     //TODO
                 })
@@ -177,61 +194,63 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
 
         };
 
-        /*if(itemViewOpt.fromCategory)
-            ctrl.search();*/
+        if (itemViewOpt.fromCategory)
+            ctrl.search();
     }
 
 ])
 
-    .controller('EditItemCtrl', function ($scope, $uibModalInstance, ItemService, item) {
+    .controller('EditVoteTypeCtrl', function ($scope, $uibModalInstance, VoteTypeService, item, itemsCount) {
 
-    $scope.mode = "EDIT";
-    $scope.data = item;
-    $scope.title = "Modifica tipo voto";
-    $scope.requestApproveDisabled = false;
+        $scope.mode = "EDIT";
+        $scope.data = item;
+        $scope.title = "Modifica tipo voto";
+        $scope.itemsCount = parseInt(itemsCount);
 
-    $scope.ok = function () {
+        $scope.ok = function () {
 
-        if (!ItemService.testEditItem($scope.data)) {
-            //TODO
-            return;
-        }
+            if (!VoteTypeService.testEditItem($scope.data)) {
+                //TODO
+                return;
+            }
 
-        var itemDB = ItemService.prepareDBItem($scope.data);
-        $uibModalInstance.close(itemDB);
-    };
+            var itemDB = VoteTypeService.prepareDBItem($scope.data);
+            $uibModalInstance.close(itemDB);
+        };
 
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
 
-})
+    })
 
-    .controller('CreateItemCtrl', function ($scope, $uibModalInstance, ItemService, category) {
+    .controller('CreateVoteTypeCtrl', function ($scope, $uibModalInstance, VoteTypeService, category, itemsCount) {
 
-    $scope.data = {
-        id_category: category.id,
-        request_approve: 'y',
-        approved: 'n'
-    };
+        $scope.data = {
+            id_category: category.id,
+            title: "",
+            description: "",
+            position: undefined,
+            vote_limit: 0
+        };
 
-    $scope.mode = "CREATE";
-    $scope.requestApproveDisabled = true;
-    $scope.title = "Crea tipo voto";
+        $scope.itemsCount = parseInt(itemsCount);
+        $scope.mode = "CREATE";
+        $scope.title = "Crea tipo voto";
 
-    $scope.ok = function () {
+        $scope.ok = function () {
 
-        if (!ItemService.testCreateItem($scope.data)) {
-            //TODO
-            return;
-        }
+            if (!VoteTypeService.testCreateItem($scope.data)) {
+                //TODO
+                return;
+            }
 
-        var itemDB = ItemService.prepareDBItem($scope.data);
-        $uibModalInstance.close(itemDB);
-    };
+            var itemDB = VoteTypeService.prepareDBItem($scope.data);
+            $uibModalInstance.close(itemDB);
+        };
 
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
 
-});;
+    });

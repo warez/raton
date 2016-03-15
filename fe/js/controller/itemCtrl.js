@@ -74,8 +74,8 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
             return ctrl.filter.request_approve_type != 'a' ||
                 ctrl.filter.approved_type != 'a' ||
-                (ctrl.filter.creationTimeCond != "" && ctrl.filter.creationTime != null) ||
-                (ctrl.filter.updateTimeCond != "" && ctrl.filter.updateTime != null);
+                (ctrl.filter.creationTimeCond && ctrl.filter.creationTimeCond != "null" && ctrl.filter.creationTime != null) ||
+                (ctrl.filter.updateTimeCond && ctrl.filter.updateTimeCond != "null" && ctrl.filter.updateTime != null);
         };
 
         ctrl.createItem = function() {

@@ -15,13 +15,8 @@
                     <label class="val">{{ctrl.selectedCat.description}}</label>
                 </span>
 
-                <span>
-                    <label class="title">Articoli presenti:</label>
-                    <label class="val">{{ctrl.itemsData.total_count}}</label>
-                </span>
-
                 <span style="margin-left: 40px">
-                    <input type="button" class="btn btn-default btn-sm" value="Crea articolo"
+                    <input type="button" class="btn btn-primary btn-sm" value="Crea articolo"
                            ng-click="ctrl.createItem()">
                 </span>
             </div>
@@ -120,7 +115,6 @@
         <div class="detail-panel panel panel-default">
             <div class="panel-heading">Lista articoli</div>
             <div class="panel-body">
-
                 <div class="row">
                     <table class="detail-table table table-striped">
                         <tr>
@@ -168,16 +162,26 @@
 
                     </table>
                 </div>
-                <div class="text-center">
-                    <uib-pagination total-items="ctrl.itemsData.total_count"
-                                    ng-change="ctrl.pageChanged()"
-                                    ng-model="ctrl.filter.page" max-size="10"
-                                    previous-text="&lsaquo;"
-                                    next-text="&rsaquo;"
-                                    last-text="&rsaquo;&rsaquo;"
-                                    first-text="&lsaquo;&lsaquo;"
-                                    class="pagination-sm" boundary-link-numbers="true"
-                                    force-ellipses="true" rotate="false"></uib-pagination>
+            </div>
+            <div class="panel-footer">
+
+                <div class="row">
+                    <div class="col-md-4 page-info">
+                        <span><i>Elementi totali: </i> <b>{{ctrl.itemsData.total_count ? ctrl.itemsData.total_count : "n.d."}} </b></span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <uib-pagination total-items="ctrl.itemsData.total_count"
+                                            ng-change="ctrl.pageChanged()"
+                                            ng-model="ctrl.filter.page" max-size="10"
+                                            previous-text="&lsaquo;"
+                                            next-text="&rsaquo;"
+                                            last-text="&rsaquo;&rsaquo;"
+                                            first-text="&lsaquo;&lsaquo;"
+                                            class="pagination-sm" boundary-link-numbers="true"
+                                            force-ellipses="true" rotate="false"></uib-pagination>
+                        </div>
+                    </div>
                 </div>
 
             </div>

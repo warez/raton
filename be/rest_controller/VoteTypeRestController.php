@@ -23,7 +23,7 @@ class VoteTypeRestController extends BaseRestController {
         register_rest_route( $this->namespace, '/' . $this->base . '/search/byCategory/(?P<categoryId>[-]?[\d]+)', array(
             array(
                 'methods'         => WP_REST_Server::READABLE,
-                'callback'        => array( $this->service, 'searchVoteTypeByCategory' ),
+                'callback'        => array( $this->service, 'search' ),
                 'permission_callback' => array( $this, 'get_item_permissions_check' ),
                 'args'            => array(
                     'context'          => array(

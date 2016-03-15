@@ -69,10 +69,10 @@ class ItemRestService extends BaseRestService {
             $updateTime = $request->get_param("updateTime");
 
             if($page == null || !is_numeric($page))
-                return new WP_Error( 0, "Page number is null or not a number" , array( 'status' => 500 ) );
+                return new WP_Error( "search_item_0", "Page number is null or not a number" , array( 'status' => 500 ) );
 
             if($itemPerPage == null || !is_numeric($itemPerPage))
-                return new WP_Error( 1, "Item per page number is null or not a number" , array( 'status' => 500 ) );
+                return new WP_Error( "search_item_1", "Item per page number is null or not a number" , array( 'status' => 500 ) );
 
             $ret = $this->dao->search($title, $description,
                 $request_approve_type, $approved_type, $from,
@@ -83,7 +83,7 @@ class ItemRestService extends BaseRestService {
 
         } catch (Exception $e) {
 
-            return new WP_Error( "0" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "search_item" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
 
@@ -98,20 +98,20 @@ class ItemRestService extends BaseRestService {
             $catId = $request->get_param("id");
 
             if($page == null || !is_numeric($page))
-                return new WP_Error( 0, "Page number is null or not a number" , array( 'status' => 500 ) );
+                return new WP_Error( "get_cat_items_0", "Page number is null or not a number" , array( 'status' => 500 ) );
 
             if($itemPerPage == null || !is_numeric($itemPerPage))
-                return new WP_Error( 1, "Item per page number is null or not a number" , array( 'status' => 500 ) );
+                return new WP_Error( "get_cat_items_1", "Item per page number is null or not a number" , array( 'status' => 500 ) );
 
             if($catId == null || !is_numeric($catId))
-                return new WP_Error( 2, "Category id is null or not a number" , array( 'status' => 500 ) );
+                return new WP_Error( "get_cat_items_2", "Category id is null or not a number" , array( 'status' => 500 ) );
 
             $ret = $this->dao->getCategoryItems($catId, $page, $itemPerPage);
             return $ret;
 
         } catch (Exception $e) {
 
-            return new WP_Error( "0" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "get_cat_items" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
 

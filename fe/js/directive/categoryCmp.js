@@ -66,6 +66,7 @@ angular.module("JRatonApp").directive("categoryComponent", function(WPPathServic
     scope: {
       items: "=",
       val: "=",
+      onSelect: "&"
     },
     templateUrl: function () {
       return WPPathService.getPartialUrl() + "/bootstrap-select.html";
@@ -79,6 +80,9 @@ angular.module("JRatonApp").directive("categoryComponent", function(WPPathServic
 
         ctrl.selectedIndex = index;
         ctrl.val = ctrl.items[index].value;
+
+        if(ctrl.onSelect)
+          ctrl.onSelect({data:ctrl.items[index]});
       };
 
       var doSelect = function(value) {

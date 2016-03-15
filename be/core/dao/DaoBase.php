@@ -87,7 +87,7 @@ abstract class DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Core error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "create_" + $this->tableName , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_clean();
@@ -121,7 +121,7 @@ abstract class DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Core error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "get_" + $this->tableName, __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_clean();
@@ -183,7 +183,7 @@ abstract class DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Core error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "update_" +  $this->tableName , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_clean();

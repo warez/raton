@@ -133,7 +133,7 @@ class CategoryDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "get_cat_tree" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_clean();
@@ -150,7 +150,7 @@ class CategoryDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "update_cat" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
 
@@ -166,7 +166,7 @@ class CategoryDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "create_cat" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }
@@ -187,7 +187,7 @@ class CategoryDao extends DaoBase {
 
         } catch(Exception $e) {
 
-            return new WP_Error( "Business error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "delete_cat" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }

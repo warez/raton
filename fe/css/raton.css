@@ -44,12 +44,25 @@ div#preloader {
     margin-left: 10px;
 }
 
+.pagination {
+    margin: 2px;
+}
+
+.panel-footer {
+    padding: 2px;
+}
+
+.page-info {
+    margin-top: 7px;
+    margin-left: 5px;
+}
+
 .detail-panel {
     margin-bottom: 20px;
 }
 
-.detail-table {
-    border-bottom: 1px solid #337AB7;
+.table {
+    margin-bottom: 2px;
 }
 
 label.title {

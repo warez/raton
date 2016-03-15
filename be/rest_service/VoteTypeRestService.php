@@ -13,6 +13,15 @@ require_once( $raton_dir["DAO"] . "VoteTypeDao.php");
 
 class VoteTypeRestService extends BaseRestService {
 
+    private $format = array(
+        "id" => "%d",
+        "title" => "%s",
+        "description" => "%s",
+        "position" => "%d",
+        "vote_limit" => "%d",
+        "id_category" => "%d"
+    );
+
     function __construct($restController)
     {
         parent :: __construct($restController, new VoteTypeDao());
@@ -53,41 +62,20 @@ class VoteTypeRestService extends BaseRestService {
         return $filter;
     }
 
-    function searchVoteTypeByCategory($request) {
+    function search($request) {
         try {
 
             $catId = $request->get_param("categoryId");
 
-            if($catId == null || !is_numeric($catId))
-                throw new Exception("Category id is null or not numeric");
+            if($catId == null || !is_numeric($catId) || intval($catId) <= 0)
+                return new WP_Error( "get_cat_vote_type_1", "Category id is null, less than 0 or not a number" , array( 'status' => 500 ) );
 
-            $pageSize = null;
-            $page = null;
-
-            if($catId == -1) {
-                $pageSize = $request->get_param("pageSize");
-                $page = $request->get_param("page");
-
-                if ($pageSize == null || !is_numeric($pageSize))
-                    $pageSize = parent::$DEFAULT_PAGE_SIZE;
-                if ($page == null || !is_numeric($page))
-                    $page = parent::$DEFAULT_PAGE;
-            }
-
-            $ret = $this->dao->searchVoteTypeByCategory(
-                intval($catId),
-                intval($pageSize),
-                intval($page)
-            );
-
-            if(is_object($ret) && get_class($ret) == "WP_Error")
-                return $ret;
-
+            $ret = $this->dao->search(intval($catId));
             return $ret;
 
         } catch (Exception $e) {
 
-            return new WP_Error( "Get VoteType by category error" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            return new WP_Error( "get_cat_vote_type" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
     }
@@ -98,6 +86,10 @@ class VoteTypeRestService extends BaseRestService {
     }
 
     function getFormat($data) {
-        return VoteType::getFormat($data);
+        $format = array();
+        foreach ( $data as $d => $a) {
+            $format[$d] = $this->format[$d];
+        }
+        return $format;
     }
 }

@@ -15,13 +15,8 @@
                     <label class="val">{{ctrl.selectedCat.description}}</label>
                 </span>
 
-                <span>
-                    <label class="title">Tipologie voto presenti:</label>
-                    <label class="val">{{ctrl.itemsData.total_count}}</label>
-                </span>
-
                 <span style="margin-left: 40px">
-                    <input type="button" class="btn btn-default btn-sm" value="Crea tipologia voto"
+                    <input type="button" class="btn btn-primary btn-sm" value="Crea tipologia voto"
                            ng-click="ctrl.createItem()">
                 </span>
             </div>
@@ -39,13 +34,13 @@
                             <label class="title">Categoria:</label>
                         </div>
                         <div class="col-md-2">
-                            <bootstrap-select items="ctrl.categories" val="ctrl.filter.category"></bootstrap-select>
+                            <bootstrap-select items="ctrl.categories" val="ctrl.filter.categoryId" on-select="ctrl.onCategoryChange(data)"></bootstrap-select>
                         </div>
                     </div>
 
                     <div class="row pull-right" style="margin-right: 300px">
                         <input type="button" class="btn btn-default btn-sm" value="Cerca tipo voti"
-                                ng-click="ctrl.search()">
+                               ng-disabled="!ctrl.isValidSearch()" ng-click="ctrl.search()">
                         <input type="button" class="btn btn-default btn-sm" value="Pulisci"
                                ng-click="ctrl.clear()">
                     </div>
@@ -93,6 +88,13 @@
                     </table>
                 </div>
 
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-4 page-info">
+                        <span><i>Elementi totali: </i> <b>{{ctrl.itemsData.total_count ? ctrl.itemsData.total_count : "n.d."}} </b></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

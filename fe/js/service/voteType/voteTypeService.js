@@ -54,6 +54,7 @@ angular.module("JRatonApp").service("VoteTypeService", ['VoteTypeResource', '$fi
                 ret.description = item.description.trim();
                 ret.id_category = item.id_category;
                 ret.vote_limit = item.vote_limit;
+                ret.position = item.position ? parseInt(item.position) : 1;
 
                 if (item.id) {
                     ret.id = item.id

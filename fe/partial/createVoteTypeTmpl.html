@@ -33,8 +33,8 @@
                     <label for="InputMessage">Posizione</label>
 
                     <div class="input-group">
-                        <input ng-model="data.title" type="number"
-                               min="1" max="{{ctrl.itemsData.item.length+1}}"
+                        <input ng-model="data.position" type="number"
+                               min="1" max="{{itemsCount+1}}"
                                class="form-control" name="catName"
                                required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
@@ -45,7 +45,7 @@
                     <label for="InputMessage">Voto massimo</label>
 
                     <div class="input-group">
-                        <uib-rating class="form-control" ng-model="rate" max="10"></uib-rating>
+                        <uib-rating class="form-control" ng-model="data.vote_limit" max="10"></uib-rating>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
