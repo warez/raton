@@ -55,3 +55,8 @@ div#preloader {
 label.title {
     color: #0073AA;
 }
+
+input[type="submit"] {
+    margin-left: 10px;
+    margin-right: 10px;
+}

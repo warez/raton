@@ -1,8 +1,8 @@
-angular.module("JRatonApp").controller("ItemController", ['$scope', '$location', 'LoaderService', 'WPPathService',
-    'CategoryUtils', 'ItemService', '$uibModal', '$sessionStorage', 'ModalService', 'itemViewOpt',
+angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderService', 'WPPathService',
+    'CategoryService', 'CategoryUtils', 'VoteTypeService', '$uibModal', '$sessionStorage', 'ModalService', 'itemViewOpt',
 
-    function ($scope, $location, LoaderService, WPPathService, CategoryUtils, ItemService, $uibModal,
-              $sessionStorage, ModalService, itemViewOpt) {
+    function ($scope, LoaderService, WPPathService, CategoryService, CategoryUtils, VoteTypeService,
+              $uibModal, $sessionStorage, ModalService, itemViewOpt) {
 
         var ctrl = this;
         ctrl.mainCtrl = $scope.$parent.mainCtrl;
@@ -11,52 +11,68 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
         ctrl.selectedCat = itemViewOpt.fromCategory ? $sessionStorage["category"] : undefined;
 
         ctrl.itemsData = {};
+        ctrl.categories = [];
+
+        var cleanCategories = function(data) {
+            var ret = [];
+            for(var i = 0; i< data.length; i++) {
+                if(data[i].id == "ROOT")
+                    continue;
+                ret.push( {
+                    value: data[i].id,
+                    label: data[i].title
+                });
+            }
+            return ret;
+        };
+
+        var loadCategories = function() {
+
+            var readTree = function(data) {
+                LoaderService.stop();
+                var categories = CategoryUtils.levelTree(data);
+                ctrl.categories = cleanCategories(categories);
+            };
+
+            LoaderService.start();
+            CategoryService.getCategoryTree({from: -1}).$promise.then(readTree, function(error) {
+                LoaderService.stop();
+                //TODO
+            })
+        };
+
+        var categoriesFromSession = $sessionStorage["categories"];
+        if(!categoriesFromSession)
+            loadCategories();
+
 
         ctrl.filter = {
-            title: '',
-            description: '',
-            request_approve_type: 'a',
-            approved_type: 'a',
-            creationTimeCond: "null",
-            creationTime: null,
-            updateTimeCond: "null",
-            updateTime: null,
-            page: 1,
-            per_page: 10
+            category: null
         };
 
         if(itemViewOpt.fromCategory) {
-            ctrl.filter.from = ctrl.selectedCat.id;
+            ctrl.filter.category = ctrl.selectedCat.id;
         }
 
         ctrl.clear = function() {
-
             ctrl.itemsData.items = [];
-
-            ctrl.filter.title = "";
-            ctrl.filter.description = "";
-            ctrl.filter.request_approve_type = "a";
-            ctrl.filter.approved_type = "a";
-            ctrl.filter.creationTimeCond = "null";
-            ctrl.filter.creationTime = null;
-            ctrl.filter.updateTimeCond = "null";
-            ctrl.filter.updateTime = null;
-            ctrl.filter.page = 1;
         };
 
-        ctrl.search = function(page) {
+        var removeFromItems = function(item) {
+            var index = ctrl.itemsData.indexOf(item);
+            if(index == -1)
+                return;
+
+            ctrl.itemsData.splice(index,1);
+        };
+
+        ctrl.search = function() {
             LoaderService.start();
 
-            if(page)
-                ctrl.filter.page = page;
-
-            ItemService.search(ctrl.filter).$promise.then(function(data) {
+            VoteTypeService.search(ctrl.filter).$promise.then(function(data) {
 
                 LoaderService.stop();
-
                 ctrl.itemsData = angular.copy(data);
-                ctrl.filter.page = data.page;
-                ctrl.per_page = data.per_page;
 
             }, function(error) {
                 LoaderService.stop();
@@ -64,25 +80,11 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
             });
         };
 
-        ctrl.isValidSearch = function() {
-
-            var isTextFilled = ctrl.filter.title.trim().length > 0 ||
-                ctrl.filter.description.trim().length > 0;
-
-            if(isTextFilled)
-                return true;
-
-            return ctrl.filter.request_approve_type != 'a' ||
-                ctrl.filter.approved_type != 'a' ||
-                (ctrl.filter.creationTimeCond != "" && ctrl.filter.creationTime != null) ||
-                (ctrl.filter.updateTimeCond != "" && ctrl.filter.updateTime != null);
-        };
-
         ctrl.createItem = function() {
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: WPPathService.getPartialUrl() + "/createItemTmpl.html",
+                templateUrl: WPPathService.getPartialUrl() + "/createVoteTypeTmpl.html",
                 controller: "CreateItemCtrl",
                 size: 'sm',
                 resolve: {
@@ -116,7 +118,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: WPPathService.getPartialUrl() + "/createItemTmpl.html",
+                templateUrl: WPPathService.getPartialUrl() + "/createVoteTypeTmpl.html",
                 controller: "EditItemCtrl",
                 size: 'sm',
                 resolve: {
@@ -153,7 +155,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
                 ItemService.delete(item).$promise.then(function(data){
 
                     LoaderService.stop();
-                    ctrl.search(1);
+                    removeFromItems(item);
                     //TODO
 
                 }, function(error) {
@@ -166,7 +168,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
                 closeButtonText: 'Annulla',
                 actionButtonText: "Cancella!",
                 headerText: "Attenzione",
-                bodyText: "Sei sicuro di voler cancellare l'articolo?"
+                bodyText: "Sei sicuro di voler cancellare il tipo di voto?"
             };
 
             ModalService.showModal({}, modalOptions).then(function () {
@@ -175,19 +177,17 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
         };
 
-        if(itemViewOpt.fromCategory)
-            ctrl.search();
-
-        ctrl.pageChanged = function() {
-            ctrl.search();
-        }
+        /*if(itemViewOpt.fromCategory)
+            ctrl.search();*/
     }
 
-]).controller('EditItemCtrl', function ($scope, $uibModalInstance, ItemService, item) {
+])
+
+    .controller('EditItemCtrl', function ($scope, $uibModalInstance, ItemService, item) {
 
     $scope.mode = "EDIT";
     $scope.data = item;
-    $scope.title = "Modifica articolo";
+    $scope.title = "Modifica tipo voto";
     $scope.requestApproveDisabled = false;
 
     $scope.ok = function () {
@@ -205,7 +205,9 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
         $uibModalInstance.dismiss('cancel');
     };
 
-}).controller('CreateItemCtrl', function ($scope, $uibModalInstance, ItemService, category) {
+})
+
+    .controller('CreateItemCtrl', function ($scope, $uibModalInstance, ItemService, category) {
 
     $scope.data = {
         id_category: category.id,
@@ -215,7 +217,7 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
     $scope.mode = "CREATE";
     $scope.requestApproveDisabled = true;
-    $scope.title = "Crea articolo";
+    $scope.title = "Crea tipo voto";
 
     $scope.ok = function () {
 

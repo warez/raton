@@ -36,18 +36,20 @@ angular.module("JRatonApp").service("CategoryUtils", [
             return root.build(data.subCats);
         },
 
-        printResponse:function (data) {
+        levelTree: function(data) {
 
-            if(!data[0]) {
-                return data;
-            }
+            var ret = [];
 
-            var ret = "";
+            var manageSubCat = function(obj) {
+                if(obj.cat)
+                    ret.push(obj.cat);
 
-            for(var i = 0; i<17000; i++ ) {
-                ret += data[i];
-            }
+                if(obj.subCats != null)
+                    for(var i = 0; i < obj.subCats.length; i++)
+                        manageSubCat(obj.subCats[i]);
+            };
 
+            manageSubCat(data);
             return ret;
         },
 

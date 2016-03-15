@@ -1,0 +1,100 @@
+<div class="row">
+
+    <div ng-if="ctrl.itemViewOpt.fromCategory" class="col-md-12">
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Categoria selezionata</div>
+            <div class="panel-body">
+
+                <span style="margin-right: 20px">
+                    <label class="title">Nome:</label>
+                    <label class="val">{{ctrl.selectedCat.title}}</label>
+                </span>
+
+                <span style="margin-right: 20px">
+                    <label class="title">Descrizione:</label>
+                    <label class="val">{{ctrl.selectedCat.description}}</label>
+                </span>
+
+                <span>
+                    <label class="title">Tipologie voto presenti:</label>
+                    <label class="val">{{ctrl.itemsData.total_count}}</label>
+                </span>
+
+                <span style="margin-left: 40px">
+                    <input type="button" class="btn btn-default btn-sm" value="Crea tipologia voto"
+                           ng-click="ctrl.createItem()">
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Ricerca tipologia voto</div>
+            <div class="panel-body">
+
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="title">Categoria:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <bootstrap-select items="ctrl.categories" val="ctrl.filter.category"></bootstrap-select>
+                        </div>
+                    </div>
+
+                    <div class="row pull-right" style="margin-right: 300px">
+                        <input type="button" class="btn btn-default btn-sm" value="Cerca tipo voti"
+                                ng-click="ctrl.search()">
+                        <input type="button" class="btn btn-default btn-sm" value="Pulisci"
+                               ng-click="ctrl.clear()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Lista tipo voto</div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <table class="detail-table table table-striped">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrizione</th>
+                            <th width="100px">Limite stelle</th>
+                            <th width="100px">Posizione</th>
+                            <th></th>
+                        </tr>
+
+                        <tr ng-repeat="item in ctrl.itemsData.items">
+                            <td>{{item.title}}</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.vote_limit}}</td>
+                            <td>{{item.position}}</td>
+
+                            <td>
+
+                                <button title="Modifica" type="button" ng-click="ctrl.onEdit(item)"
+                                        class="btn btn-default btn-xs">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </button>
+                                <button title="Elimina" type="button" ng-click="ctrl.onDelete(item)"
+                                        ng-disabled="data.children.length > 0" class="btn btn-default btn-xs">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

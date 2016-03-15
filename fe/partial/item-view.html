@@ -16,7 +16,7 @@
                 </span>
 
                 <span>
-                    <label class="title">Articoli totali:</label>
+                    <label class="title">Articoli presenti:</label>
                     <label class="val">{{ctrl.itemsData.total_count}}</label>
                 </span>
 
@@ -54,7 +54,7 @@
                             <label class="title">Stato approvazione:</label>
                         </div>
                         <div class="col-md-2">
-                            <bootstrap-select items="ctrl.state_approve_items" val="ctrl.filter.request_approve_type"></bootstrap-select>
+                            <bootstrap-select items="ctrl.mainCtrl.state_approve_items" val="ctrl.filter.request_approve_type"></bootstrap-select>
                         </div>
 
                         <div class="col-md-2">
@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <bootstrap-select items="ctrl.enable_state_items" val="ctrl.filter.approved_type"></bootstrap-select>
+                            <bootstrap-select items="ctrl.mainCtrl.enable_state_items" val="ctrl.filter.approved_type"></bootstrap-select>
                         </div>
                     </div>
 
@@ -71,11 +71,11 @@
                             <label class="title">Creato:</label>
                         </div>
                         <div class="col-md-2">
-                            <bootstrap-select items="ctrl.time_items" val="ctrl.filter.creationTimeCond"></bootstrap-select>
+                            <bootstrap-select items="ctrl.mainCtrl.time_items" val="ctrl.filter.creationTimeCond"></bootstrap-select>
                         </div>
                         <div class="col-md-2">
                             <div class="input-group" style="width: 170px;">
-                                <input type="text" class="form-control" uib-datepicker-popup="{{ctrl.DATE_FORMAT}}" ng-model="ctrl.filter.creationTime"
+                                <input type="text" class="form-control" uib-datepicker-popup="{{ctrl.mainCtrl.CONF.DATE_FORMAT}}" ng-model="ctrl.filter.creationTime"
                                        is-open="ctrl.creationTimeOpen" datepicker-options="ctrl.dateOptions"
                                        close-text="Close" />
                                     <span class="input-group-btn">
@@ -90,11 +90,11 @@
                             <label class="title">Modificato:</label>
                         </div>
                         <div class="col-md-2">
-                            <bootstrap-select items="ctrl.time_items" val="ctrl.filter.updateTimeCond"></bootstrap-select>
+                            <bootstrap-select items="ctrl.mainCtrl.time_items" val="ctrl.filter.updateTimeCond"></bootstrap-select>
                         </div>
                         <div class="col-md-2">
                             <div class="input-group" style="width: 170px;">
-                                <input type="text" class="form-control" uib-datepicker-popup="{{ctrl.DATE_FORMAT}}" ng-model="ctrl.filter.updateTime"
+                                <input type="text" class="form-control" uib-datepicker-popup="{{ctrl.mainCtrl.CONF.DATE_FORMAT}}" ng-model="ctrl.filter.updateTime"
                                        is-open="ctrl.updateTimeOpen" datepicker-options="ctrl.dateOptions"
                                        close-text="Close" />
                                 <span class="input-group-btn">
@@ -136,8 +136,8 @@
                         <tr ng-repeat="item in ctrl.itemsData.items">
                             <td>{{item.title}}</td>
                             <td>{{item.description}}</td>
-                            <td>{{item.insert_date | toDate | date : ctrl.DATE_TIME_FORMAT }}</td>
-                            <td>{{item.last_update_date | toDate | date : ctrl.DATE_TIME_FORMAT}}</td>
+                            <td>{{item.insert_date | toDate | date : ctrl.mainCtrl.CONF.DATE_TIME_FORMAT }}</td>
+                            <td>{{item.last_update_date | toDate | date : ctrl.mainCtrl.CONF.DATE_TIME_FORMAT}}</td>
 
                             <td>
                                 <span ng-if="item.request_approve == 'y'"><i class="glyphicon glyphicon-alert" style="color: orange"></i></span>

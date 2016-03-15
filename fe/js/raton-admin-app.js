@@ -42,8 +42,32 @@ app.config(['$routeProvider', 'WPPathServiceProvider',
                     }
                 }
             }).
+            when('/voteType', {
+                templateUrl: WPPathService.getPartialUrl() + "/voteType-view.html",
+                controller: 'VoteTypeController',
+                controllerAs: 'ctrl',
+                resolve: {
+                    itemViewOpt: function() {
+                        return {
+                            fromCategory: false
+                        };
+                    }
+                }
+            }).
+            when('/category/:idCategory/voteType', {
+                templateUrl: WPPathService.getPartialUrl() + "/voteType-view.html",
+                controller: 'VoteTypeController',
+                controllerAs: 'ctrl',
+                resolve: {
+                    itemViewOpt: function() {
+                        return {
+                            fromCategory: true
+                        }
+                    }
+                }
+            }).
             otherwise({
-                redirectTo: WPPathService.getPartialUrl() + "/adminPage.html"
+                redirectTo: "/category"
             });
     }]);
 

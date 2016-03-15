@@ -131,9 +131,13 @@ function registerScriptAndCSS() {
     wp_register_script( 'categoryUtils', plugins_url( '/fe/js/service/category/categoryUtils.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
     wp_register_script( 'itemResource', plugins_url( '/fe/js/service/item/itemResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'itemService', plugins_url( '/fe/js/service/item/itemService.js', __FILE__ ), array( 'angular','raton-app','itemResource'), $raton_version, true );
+    wp_register_script( 'voteTypeResource', plugins_url( '/fe/js/service/voteType/voteTypeResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
+    wp_register_script( 'voteTypeService', plugins_url( '/fe/js/service/voteType/voteTypeService.js', __FILE__ ), array( 'angular','raton-app','voteTypeResource'), $raton_version, true );
 
+    wp_register_script( 'adminMainCtrl', plugins_url( '/fe/js/controller/mainAdminCtrl.js', __FILE__ ), array( 'angular','raton-app','confService'), $raton_version, true );
     wp_register_script( 'categoryCtrl', plugins_url( '/fe/js/controller/categoryCtrl.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
     wp_register_script( 'itemCtrl', plugins_url( '/fe/js/controller/itemCtrl.js', __FILE__ ), array( 'angular','raton-app','itemService'), $raton_version, true );
+    wp_register_script( 'voteTypeCtrl', plugins_url( '/fe/js/controller/voteTypeCtrl.js', __FILE__ ), array( 'angular','raton-app','voteTypeService','categoryService','categoryUtils'), $raton_version, true );
 
     wp_register_script( 'raton-app', plugins_url( '/fe/js/raton-admin-app.js', __FILE__ ),
         array( 'wp-api', 'jquery', 'jquery-ui-core', 'angular', 'angular-resource' , 'angular-animate', 'angular-ui', 'tree-repeat'), $raton_version, true );
@@ -194,9 +198,13 @@ function ratonEnqueueScript() {
     wp_enqueue_script( 'categoryService' );
     wp_enqueue_script( 'itemResource' );
     wp_enqueue_script( 'itemService' );
+    wp_enqueue_script( 'voteTypeResource' );
+    wp_enqueue_script( 'voteTypeService' );
     wp_enqueue_script( 'categoryUtils' );
 
+    wp_enqueue_script( 'adminMainCtrl' );
     wp_enqueue_script( 'categoryCtrl' );
+    wp_enqueue_script( 'voteTypeCtrl' );
     wp_enqueue_script( 'itemCtrl' );
     wp_enqueue_script( 'raton-app' );
 }

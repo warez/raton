@@ -4,6 +4,7 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', '$locati
     function ($scope, $location, LoaderService, WPPathService, CategoryUtils, CategoryService, $uibModal, $sessionStorage, ModalService, CONF) {
 
         var ctrl = this;
+        ctrl.mainCtrl = $scope.$parent.mainCtrl;
 
         ctrl.onShowItem = function(cat) {
             var catCopy = CategoryUtils.copyCategory(cat);
@@ -12,11 +13,11 @@ angular.module("JRatonApp").controller("CategoryController", ['$scope', '$locati
             $location.path('/category/' + catCopy.id + "/items");
         };
 
-        ctrl.onShowFilter = function(cat) {
-            var catCopy = copy(cat);
+        ctrl.onShowVoteType = function(cat) {
+            var catCopy = CategoryUtils.copyCategory(cat);
 
             $sessionStorage["category"] = catCopy;
-            $location.path('/category/' + catCopy.id + "/filter");
+            $location.path('/category/' + catCopy.id + "/voteType");
         };
 
         ctrl.onDelete = function (cat) {

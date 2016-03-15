@@ -1,7 +1,9 @@
 angular.module("JRatonApp").service("CONF", [function () {
 
     var data = {
-        WP_SETTINGS : WP_API_Settings
+        WP_SETTINGS : WP_API_Settings,
+        DATE_TIME_FORMAT: "dd/MM/yyyy HH:mm:ss",
+        DATE_FORMAT: "dd/MM/yyyy"
     };
 
     return data;

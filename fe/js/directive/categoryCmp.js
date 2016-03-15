@@ -11,7 +11,7 @@ angular.module("JRatonApp").directive("categoryComponent", function(WPPathServic
       onAdd: "&",
       onDelete: "&",
       onShowItem: "&",
-      onShowFilter: "&",
+      onShowVoteType: "&",
       onEdit: "&",
       onMove: "&",
       enableMove:"=",
@@ -81,14 +81,24 @@ angular.module("JRatonApp").directive("categoryComponent", function(WPPathServic
         ctrl.val = ctrl.items[index].value;
       };
 
+      var doSelect = function(value) {
+        for(var i = 0; i < ctrl.items.length; i++) {
+          if(ctrl.items[i].value == value) {
+            ctrl.select(i);
+            break;
+          }
+        }
+      };
+
+      $scope.$watch('ctrl.items', function(newValue, oldValue) {
+        if (newValue && ctrl.val) {
+          doSelect(ctrl.val);
+        }
+      }, true);
+
       $scope.$watch('ctrl.val', function(newValue, oldValue) {
         if (newValue) {
-          for(var i = 0; i < ctrl.items.length; i++) {
-            if(ctrl.items[i].value == newValue) {
-              ctrl.select(i);
-              break;
-            }
-          }
+          doSelect(newValue);
         }
       }, false);
 
