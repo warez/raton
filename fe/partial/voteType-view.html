@@ -72,16 +72,25 @@
                             <td>{{item.position}}</td>
 
                             <td>
+                                <span style="margin-left: 10px" class="btn-group" role="group">
+                                    <button title="Modifica" type="button" ng-click="ctrl.onEdit(item)"
+                                            class="btn btn-default btn-xs">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </button>
 
-                                <button title="Modifica" type="button" ng-click="ctrl.onEdit(item)"
-                                        class="btn btn-default btn-xs">
-                                    <i class="glyphicon glyphicon-pencil"></i>
-                                </button>
-                                <button title="Elimina" type="button" ng-click="ctrl.onDelete(item)"
-                                        ng-disabled="data.children.length > 0" class="btn btn-default btn-xs">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </button>
+                                    <button title="Elimina" type="button" ng-click="ctrl.onDelete(item)"
+                                            ng-disabled="data.children.length > 0" class="btn btn-default btn-xs">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
 
+                                    <button ng-disabled="!ctrl.showMoveUp(item)" class="btn btn-default  btn-xs" ng-click="ctrl.onMove(item,'UP')">
+                                        <i class="glyphicon glyphicon-arrow-up"></i>
+                                    </button>
+
+                                    <button ng-disabled="!ctrl.showMoveDown(item)" class="btn btn-default btn-xs" ng-click="ctrl.onMove(item,'DOWN')">
+                                        <i class="glyphicon glyphicon-arrow-down"></i>
+                                    </button>
+                                </span>
                             </td>
                         </tr>
 

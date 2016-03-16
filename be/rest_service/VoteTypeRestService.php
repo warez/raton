@@ -62,6 +62,36 @@ class VoteTypeRestService extends BaseRestService {
         return $filter;
     }
 
+    function move ($request) {
+        try {
+
+            $id = $request->get_param("id");
+            $idOther = $request->get_param("id_other");
+            $idCategory = $request->get_param("id_category");
+            $mode = $request->get_param("mode");
+
+            if($mode == null ||
+                ($mode != "UP" && $mode != "DOWN") ||
+                !is_numeric($id) || intval($id) <= 0 ||
+                !is_numeric($idOther) || intval($idOther) <= 0 ||
+                !is_numeric($idCategory) || intval($idCategory) <= 0)
+                return new WP_Error( "move_vote_type_1", "Invalid params" , array( 'status' => 500 ) );
+
+            $ret = $this->dao->move(
+                intval($id),
+                intval($idOther),
+                intval($idCategory),
+                $mode);
+
+            return $ret;
+
+        } catch (Exception $e) {
+
+            return new WP_Error( "move_vote_type" , __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        }
+    }
+
     function search($request) {
         try {
 

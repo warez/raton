@@ -33,10 +33,11 @@
                     <label for="InputMessage">Posizione</label>
 
                     <div class="input-group">
-                        <input ng-model="data.position" type="number"
-                               min="1" max="{{itemsCount+1}}"
-                               class="form-control" name="catName"
-                               required>
+                        <input ng-disabled="positionDisabled"
+                                ng-model="data.position" type="number"
+                                min="1" max="{{itemsCount+1}}"
+                                class="form-control" name="catName"
+                                required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>

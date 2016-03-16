@@ -12,7 +12,9 @@ angular.module("JRatonApp").service("VoteTypeResource", ['$resource', function (
 
         create: {method: 'POST', params: {}, isArray: false},
 
-        search: {url: resource + '/search/byCategory/:categoryId', method: 'GET', params: {}, isArray: false}
+        search: {url: resource + '/search/byCategory/:categoryId', method: 'GET', params: {}, isArray: false},
+
+        move: {url: resource + '/move', method: 'POST', params: {}, isArray: false}
 
     });
 

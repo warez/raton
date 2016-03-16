@@ -50,8 +50,7 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
         };
 
         var categoriesFromSession = $sessionStorage["categories"];
-        if (!categoriesFromSession)
-            loadCategories();
+
 
         ctrl.onCategoryChange = function (data) {
             ctrl.selectedCat = data.categoryObj;
@@ -61,20 +60,46 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
             categoryId: null
         };
 
-        if (itemViewOpt.fromCategory) {
-            ctrl.filter.categoryId = ctrl.selectedCat.id;
-        }
-
         ctrl.clear = function () {
             ctrl.itemsData.items = [];
         };
 
-        var removeFromItems = function (item) {
-            var index = ctrl.itemsData.indexOf(item);
-            if (index == -1)
-                return;
+        ctrl.showMoveUp = function(item) {
+            return ctrl.itemsData.items.indexOf(item) > 0;
+        };
 
-            ctrl.itemsData.splice(index, 1);
+        ctrl.showMoveDown = function(item) {
+            var items = ctrl.itemsData.items;
+            return items.indexOf(item) < items.length - 1;
+        };
+
+        ctrl.onMove = function(item, mode) {
+            LoaderService.start();
+
+            var other;
+            var items = ctrl.itemsData.items;
+            if(mode == "UP") {
+                other = items[items.indexOf(item) - 1];
+            } else if(mode == "DOWN") {
+                other = items[items.indexOf(item) + 1];
+            }
+
+            VoteTypeService.move(
+                {
+                    id: item.id,
+                    id_category: ctrl.filter.categoryId,
+                    id_other: other.id,
+                    mode: mode
+
+                }).$promise.then(function (data) {
+
+                LoaderService.stop();
+                ctrl.itemsData = angular.copy(data);
+
+            }, function (error) {
+                LoaderService.stop();
+                //TODO
+            });
         };
 
         ctrl.search = function () {
@@ -172,7 +197,7 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
                 VoteTypeService.delete(item).$promise.then(function (data) {
 
                     LoaderService.stop();
-                    removeFromItems(item);
+                    ctrl.search();
                     //TODO
 
                 }, function (error) {
@@ -194,8 +219,20 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
 
         };
 
-        if (itemViewOpt.fromCategory)
-            ctrl.search();
+        ctrl.load = function() {
+
+            if (!categoriesFromSession)
+                loadCategories();
+
+            if (itemViewOpt.fromCategory) {
+                ctrl.filter.categoryId = ctrl.selectedCat.id;
+                ctrl.search();
+            }
+
+        };
+
+        ctrl.load();
+
     }
 
 ])
@@ -206,6 +243,7 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
         $scope.data = item;
         $scope.title = "Modifica tipo voto";
         $scope.itemsCount = parseInt(itemsCount);
+        $scope.positionDisabled = true;
 
         $scope.ok = function () {
 
@@ -237,6 +275,7 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
         $scope.itemsCount = parseInt(itemsCount);
         $scope.mode = "CREATE";
         $scope.title = "Crea tipo voto";
+        $scope.positionDisabled = false;
 
         $scope.ok = function () {
 

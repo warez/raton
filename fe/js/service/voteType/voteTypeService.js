@@ -17,6 +17,10 @@ angular.module("JRatonApp").service("VoteTypeService", ['VoteTypeResource', '$fi
                 return VoteTypeResource.search(data);
             },
 
+            move: function (data) {
+                return VoteTypeResource.move(data);
+            },
+
             delete: function (data) {
                 var data = {id: data.id};
                 return VoteTypeResource.delete(data);
