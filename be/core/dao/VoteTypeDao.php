@@ -21,6 +21,16 @@ class VoteTypeDao extends DaoBase
             parent::testIdPresent($data);
             parent::testCategoryPresent($data);
 
+            $this->updatePositionFrom(
+                $data["position"],
+                $data["id_category"],
+                "+", ">=" );
+
+            $this->updatePositionFrom(
+                $data["position"],
+                $data["id_category"],
+                "-", "<" );
+
             return parent::update($data, $format);
 
         } catch (Exception $e) {
@@ -44,11 +54,11 @@ class VoteTypeDao extends DaoBase
             $setCondOther = " SET position = position ";
 
             if ($mode == "UP") {
-                $setCondMe .= " + 1";
-                $setCondOther .= " - 1";
-            } else if ($mode == "DOWN") {
                 $setCondMe .= " - 1";
                 $setCondOther .= " + 1";
+            } else if ($mode == "DOWN") {
+                $setCondMe .= " + 1";
+                $setCondOther .= " - 1";
             }
 
             $params = array();
@@ -117,6 +127,18 @@ class VoteTypeDao extends DaoBase
 
     }
 
+    function updatePositionFrom($position, $idCateogry, $operation, $operator) {
+
+        global $wpdb;
+
+        $params = array();
+        $params[] = intval($idCateogry);
+        $params[] = intval($position);
+        $updateQuery = $wpdb->prepare(
+            " UPDATE " . $this->tableName ." SET position = position ". $operation . " 1 where id_category = %d and position " . $operator ." %d ", $params);
+        $wpdb->query($updateQuery);
+    }
+
     function delete($id)
     {
         global $wpdb;
@@ -131,12 +153,10 @@ class VoteTypeDao extends DaoBase
                 " SELECT position, id_category FROM " . $this->tableName ." where id = %d ", $params);
             $result = $wpdb->get_results($query, ARRAY_A);
 
-            $params = array();
-            $params[] = $result[0]["id_category"];
-            $params[] = $result[0]["position"];
-            $updateQuery = $wpdb->prepare(
-                " UPDATE " . $this->tableName ." SET position = position - 1 where id_category = %d and position > %d ", $params);
-            $wpdb->query($updateQuery);
+            $this->updatePositionFrom(
+                $result[0]["position"],
+                $result[0]["id_category"],
+                "-", ">" );
 
             return parent::delete($id);
 
@@ -154,6 +174,11 @@ class VoteTypeDao extends DaoBase
         try {
 
             parent::testCategoryPresent($data);
+
+            $this->updatePositionFrom(
+                $data["position"],
+                $data["id_category"],
+                "+", ">=" );
 
             return parent::create($data, $format);
 
