@@ -1,5 +1,6 @@
-angular.module("JRatonApp").controller("MainAdminCtrl", [ 'CONF',
-    function (CONF) {
+angular.module("JRatonApp").controller("MainAdminCtrl", [ 'CONF', 'LoaderService', '$q',
+    'CategoryUtils', 'CategoryService',
+    function (CONF, LoaderService, $q, CategoryUtils, CategoryService) {
 
         var ctrl = this;
         ctrl.CONF = CONF;
@@ -30,5 +31,41 @@ angular.module("JRatonApp").controller("MainAdminCtrl", [ 'CONF',
             {label: "Non approvati", value: 'n'}
         ];
 
+        var cleanCategories = function (data) {
+            var ret = [];
+
+            ret.push({label: "", value: "null", isNullElement: true});
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].id == "ROOT")
+                    continue;
+                ret.push({
+                    value: data[i].id,
+                    label: data[i].title,
+                    categoryObj: data[i]
+                });
+            }
+            return ret;
+        };
+
+        ctrl.loadCategories = function () {
+
+            var deferred = $q.defer();
+
+            var readTree = function (data) {
+                LoaderService.stop();
+                var categories = CategoryUtils.levelTree(data);
+                var categories = cleanCategories(categories);
+                deferred.resolve(categories);
+            };
+
+            LoaderService.start();
+            CategoryService.getCategoryTree({from: -1}).$promise.then(readTree, function (error) {
+                LoaderService.stop();
+                //TODO
+            });
+
+            return deferred.promise;
+        };
     }
 ]);

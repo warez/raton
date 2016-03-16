@@ -7,12 +7,12 @@
 
                 <span style="margin-right: 20px">
                     <label class="title">Nome:</label>
-                    <label class="val">{{ctrl.selectedCat.title}}</label>
+                    <label class="val">{{ctrl.searchedCat.title}}</label>
                 </span>
 
                 <span style="margin-right: 20px">
                     <label class="title">Descrizione:</label>
-                    <label class="val">{{ctrl.selectedCat.description}}</label>
+                    <label class="val">{{ctrl.searchedCat.description}}</label>
                 </span>
 
                 <span style="margin-left: 40px">
@@ -29,6 +29,18 @@
             <div class="panel-body">
 
                 <div class="col-md-10">
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="title">Categoria:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <bootstrap-select items="ctrl.categories" val="ctrl.filter.categoryId" on-select="ctrl.onCategoryChange(data)"></bootstrap-select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px;"></div>
+
                     <div class="row">
                         <div class="col-md-2">
                             <label class="title">Nome:</label>
@@ -80,6 +92,7 @@
                         </div>
                     </div>
 
+
                     <div class="row" style="margin-top: 5px">
                         <div class="col-md-2">
                             <label class="title">Modificato:</label>
@@ -113,7 +126,7 @@
     <div class="col-md-12">
 
         <div class="detail-panel panel panel-default">
-            <div class="panel-heading">Lista articoli</div>
+            <div class="panel-heading">Lista articoli <i>per la categoria</i> <b>{{ctrl.searchedCat.title}}</b></div>
             <div class="panel-body">
                 <div class="row">
                     <table class="detail-table table table-striped">

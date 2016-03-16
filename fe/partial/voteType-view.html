@@ -7,12 +7,12 @@
 
                 <span style="margin-right: 20px">
                     <label class="title">Nome:</label>
-                    <label class="val">{{ctrl.selectedCat.title}}</label>
+                    <label class="val">{{ctrl.searchedCat.title}}</label>
                 </span>
 
                 <span style="margin-right: 20px">
                     <label class="title">Descrizione:</label>
-                    <label class="val">{{ctrl.selectedCat.description}}</label>
+                    <label class="val">{{ctrl.searchedCat.description}}</label>
                 </span>
 
                 <span style="margin-left: 40px">
@@ -52,7 +52,7 @@
     <div class="col-md-12">
 
         <div class="detail-panel panel panel-default">
-            <div class="panel-heading">Lista tipo voto</div>
+            <div class="panel-heading">Lista tipo voto <i>per la categoria</i> <b>{{ctrl.searchedCat.title}}</b> </div>
             <div class="panel-body">
 
                 <div class="row">

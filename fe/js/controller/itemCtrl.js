@@ -25,9 +25,25 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
             per_page: 10
         };
 
-        if(itemViewOpt.fromCategory) {
+        var categoriesFromSession = $sessionStorage["categories"];
+
+        ctrl.onCategoryChange = function (data) {
+            ctrl.selectedCat = data.categoryObj;
             ctrl.filter.from = ctrl.selectedCat.id;
-        }
+        };
+
+        ctrl.load = function() {
+
+            if (!categoriesFromSession)
+                ctrl.mainCtrl.loadCategories().then(function(data) {
+                    ctrl.categories = data;
+                });
+
+            if(itemViewOpt.fromCategory) {
+                ctrl.filter.from = ctrl.selectedCat.id;
+                ctrl.search();
+            }
+        };
 
         ctrl.clear = function() {
 
@@ -52,11 +68,14 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
             ItemService.search(ctrl.filter).$promise.then(function(data) {
 
+
                 LoaderService.stop();
 
                 ctrl.itemsData = angular.copy(data);
                 ctrl.filter.page = data.page;
                 ctrl.per_page = data.per_page;
+
+                ctrl.searchedCat = angular.copy(ctrl.selectedCat);
 
             }, function(error) {
                 LoaderService.stop();
@@ -67,7 +86,8 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
         ctrl.isValidSearch = function() {
 
             var isTextFilled = ctrl.filter.title.trim().length > 0 ||
-                ctrl.filter.description.trim().length > 0;
+                ctrl.filter.description.trim().length > 0 ||
+                (ctrl.filter.categoryId && ctrl.filter.categoryId != "null");
 
             if(isTextFilled)
                 return true;
@@ -175,12 +195,11 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
 
         };
 
-        if(itemViewOpt.fromCategory)
-            ctrl.search();
-
         ctrl.pageChanged = function() {
             ctrl.search();
-        }
+        };
+
+        ctrl.load();
     }
 
 ]).controller('EditItemCtrl', function ($scope, $uibModalInstance, ItemService, item) {

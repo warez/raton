@@ -17,38 +17,6 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
             return ctrl.filter.categoryId && ctrl.filter.categoryId != "null";
         };
 
-        var cleanCategories = function (data) {
-            var ret = [];
-
-            ret.push({label: "", value: "null", isNullElement: true});
-
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].id == "ROOT")
-                    continue;
-                ret.push({
-                    value: data[i].id,
-                    label: data[i].title,
-                    categoryObj: data[i]
-                });
-            }
-            return ret;
-        };
-
-        var loadCategories = function () {
-
-            var readTree = function (data) {
-                LoaderService.stop();
-                var categories = CategoryUtils.levelTree(data);
-                ctrl.categories = cleanCategories(categories);
-            };
-
-            LoaderService.start();
-            CategoryService.getCategoryTree({from: -1}).$promise.then(readTree, function (error) {
-                LoaderService.stop();
-                //TODO
-            })
-        };
-
         var categoriesFromSession = $sessionStorage["categories"];
 
 
@@ -108,6 +76,8 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
             VoteTypeService.search({categoryId: ctrl.filter.categoryId}).$promise.then(function (data) {
 
                 LoaderService.stop();
+
+                ctrl.searchedCat = angular.copy(ctrl.selectedCat);
                 ctrl.itemsData = angular.copy(data);
 
             }, function (error) {
@@ -222,7 +192,9 @@ angular.module("JRatonApp").controller("VoteTypeController", ['$scope', 'LoaderS
         ctrl.load = function() {
 
             if (!categoriesFromSession)
-                loadCategories();
+                ctrl.mainCtrl.loadCategories().then(function(data) {
+                    ctrl.categories = data;
+                });
 
             if (itemViewOpt.fromCategory) {
                 ctrl.filter.categoryId = ctrl.selectedCat.id;
