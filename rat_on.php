@@ -13,7 +13,10 @@ Version: 1.0
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-global $raton_version, $installedVersion, $raton_dir;
+global $raton_version, $installedVersion, $raton_dir, $menu_name, $raton_page_title;
+
+$menu_name = 'Raton User Menu';
+$raton_page_title = "Raton Main User Page";
 
 $installedVersion = null;
 
@@ -218,18 +221,90 @@ function raton_manage_menu() {
     readfile($adminPagePath);
 }
 
+function removeUserData() {
+
+    // Check if the menu exists
+    global $menu_name, $raton_page_title;
+    $menu_exists = wp_get_nav_menu_object( $menu_name );
+
+    if( $menu_exists) {
+        wp_delete_nav_menu($menu_name);
+    }
+
+    $page_exist = get_page_by_title( $raton_page_title );
+    if( $page_exist) {
+        wp_delete_post($page_exist->ID, true);
+    }
+}
+
+function createUserData() {
+
+    global $menu_name, $raton_page_title;
+
+    // Check if the menu exists
+    $menu_exists = wp_get_nav_menu_object( $menu_name );
+
+    // If it doesn't exist, let's create it.
+    if( !$menu_exists){
+        $menu_id = wp_create_nav_menu($menu_name);
+
+        // Set up default menu items
+        wp_update_nav_menu_item($menu_id, 0, array(
+            'menu-item-title' =>  __('Home'),
+            'menu-item-classes' => 'home',
+            'menu-item-url' => home_url( '/' ),
+            'menu-item-status' => 'publish'));
+
+        wp_update_nav_menu_item($menu_id, 0, array(
+            'menu-item-title' =>  __('Crea item'),
+            'menu-item-url' => home_url( '#createItem' ),
+            'menu-item-status' => 'publish'));
+
+        wp_update_nav_menu_item($menu_id, 0, array(
+            'menu-item-title' =>  __('Le mie recensioni'),
+            'menu-item-url' => home_url( '#myReview' ),
+            'menu-item-status' => 'publish'));
+
+        wp_update_nav_menu_item($menu_id, 0, array(
+            'menu-item-title' =>  __('Faq'),
+            'menu-item-url' => home_url( '#faq' ),
+            'menu-item-status' => 'publish'));
+    }
+
+    // Create raton main page post object if no exist
+    $page_exist = get_page_by_title( $raton_page_title );
+
+    // If it doesn't exist, let's create it.
+    if($page_exist == null) {
+
+        $user_id = get_current_user_id();
+        $raton_post = array(
+            'post_title' => $raton_page_title,
+            'post_content' => "",
+            'post_status' => 'publish',
+            'post_author' => $user_id,
+            'post_name' => "ratonmainpost",
+            'post_type' => 'page'
+        );
+
+        wp_insert_post( $raton_post );
+    }
+
+
+}
+
 function raton_activation_hook() {
 
     raton_update_db_check_hook();
-
     Capabilities::addCapabilites();
+    createUserData();
 }
 
 function raton_deactivation_hook() {
 
     Capabilities::removeCapabilites();
-
     deregisterScriptAndCSS();
+    removeUserData();
 }
 
 add_action( 'admin_init', 'registerScriptAndCSS' );
