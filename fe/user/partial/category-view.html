@@ -1,0 +1,22 @@
+<div>
+
+    <div sf-treepeat="node in children of ctrl.treeData">
+
+        <category-component data="node"
+                            template="categoryCmp.html"
+                            on-add="ctrl.onAdd(d,newNode)"
+                            on-delete="ctrl.onDelete(d)"
+                            on-show-item="ctrl.onShowItem(d)"
+                            on-show-vote-type="ctrl.onShowVoteType(d)"
+                            enable-move="true"
+                            on-move="ctrl.onMove(d,op)"
+                            on-edit="ctrl.onEdit(d)"
+                            collapse-button-class="glyphicon-minus"
+                            expand-button-class="glyphicon-plus">
+
+            <div sf-treecurse>This should be removed</div>
+
+        </category-component>
+
+    </div>
+</div>

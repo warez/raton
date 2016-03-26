@@ -117,25 +117,27 @@ function registerScriptAndCSS() {
 
     global $raton_version, $raton_dir;
 
-    wp_register_script( 'bootstrap', plugins_url( '/fe/admin/js/library/bootstrap/bootstrap.js', __FILE__ ), array( 'jquery'), $raton_version, true );
-    wp_register_script( 'angular', plugins_url( '/fe/admin/js/library/angular/angular.js', __FILE__ ), array( 'jquery', 'jquery-ui-core' ), $raton_version, true );
-    wp_register_script( 'angular-resource', plugins_url( '/fe/admin/js/library/angular/angular-resource.js', __FILE__ ), array( 'angular'), $raton_version, true );
-    wp_register_script( 'angular-animate', plugins_url( '/fe/admin/js/library/angular/angular-animate.js', __FILE__ ), array( 'angular'), $raton_version, true );
-    wp_register_script( 'angular-storage', plugins_url( '/fe/admin/js/library/angular/angular-storage.js', __FILE__ ), array( 'angular'), $raton_version, true );
-    wp_register_script( 'angular-route', plugins_url( '/fe/admin/js/library/angular/angular-route.js', __FILE__ ), array( 'angular'), $raton_version, true );
-    wp_register_script( 'tree-repeat', plugins_url( '/fe/admin/js/library/tree-repeat.js', __FILE__ ), array( 'angular'), $raton_version, true );
-    wp_register_script( 'angular-ui', plugins_url( '/fe/admin/js/library/bootstrap/ui-bootstrap-tpls-1.2.4.js', __FILE__ ), array( 'jquery','angular'), $raton_version, true );
+    wp_register_script( 'bootstrap', plugins_url( '/fe/common/js/library/bootstrap/bootstrap.js', __FILE__ ), array( 'jquery'), $raton_version, true );
+    wp_register_script( 'angular', plugins_url( '/fe/common/js/library/angular/angular.js', __FILE__ ), array( 'jquery', 'jquery-ui-core' ), $raton_version, true );
+    wp_register_script( 'angular-resource', plugins_url( '/fe/common/js/library/angular/angular-resource.js', __FILE__ ), array( 'angular'), $raton_version, true );
+    wp_register_script( 'angular-animate', plugins_url( '/fe/common/js/library/angular/angular-animate.js', __FILE__ ), array( 'angular'), $raton_version, true );
+    wp_register_script( 'angular-storage', plugins_url( '/fe/common/js/library/angular/angular-storage.js', __FILE__ ), array( 'angular'), $raton_version, true );
+    wp_register_script( 'angular-route', plugins_url( '/fe/common/js/library/angular/angular-route.js', __FILE__ ), array( 'angular'), $raton_version, true );
+    wp_register_script( 'tree-repeat', plugins_url( '/fe/common/js/library/tree-repeat.js', __FILE__ ), array( 'angular'), $raton_version, true );
+    wp_register_script( 'angular-ui', plugins_url( '/fe/common/js/library/bootstrap/ui-bootstrap-tpls-1.2.4.js', __FILE__ ), array( 'jquery','angular'), $raton_version, true );
+
+    wp_register_script( 'raton-common', plugins_url( '/fe/common/js/raton-common-module.js', __FILE__ ), array( 'angular', 'tree-repeat'), $raton_version, true );
 
     wp_register_script( 'categoryCmp', plugins_url( '/fe/admin/js/directive/categoryCmp.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
-    wp_register_script( 'confService', plugins_url( '/fe/admin/js/service/confService.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
-    wp_register_script( 'loaderService', plugins_url( '/fe/admin/js/service/loaderService.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
-    wp_register_script( 'categoryResource', plugins_url( '/fe/admin/js/service/category/categoryResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
-    wp_register_script( 'categoryService', plugins_url( '/fe/admin/js/service/category/categoryService.js', __FILE__ ), array( 'angular','raton-app','categoryResource'), $raton_version, true );
+    wp_register_script( 'confService', plugins_url( '/fe/common/js/service/confService.js', __FILE__ ), array( 'angular','raton-common'), $raton_version, true );
+    wp_register_script( 'loaderService', plugins_url( '/fe/common/js/service/loaderService.js', __FILE__ ), array( 'angular','raton-common'), $raton_version, true );
+    wp_register_script( 'categoryResource', plugins_url( '/fe/common/js/service/category/categoryResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
+    wp_register_script( 'categoryService', plugins_url( '/fe/common/js/service/category/categoryService.js', __FILE__ ), array( 'angular','raton-app','categoryResource'), $raton_version, true );
     wp_register_script( 'categoryUtils', plugins_url( '/fe/admin/js/service/category/categoryUtils.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
-    wp_register_script( 'itemResource', plugins_url( '/fe/admin/js/service/item/itemResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
-    wp_register_script( 'itemService', plugins_url( '/fe/admin/js/service/item/itemService.js', __FILE__ ), array( 'angular','raton-app','itemResource'), $raton_version, true );
-    wp_register_script( 'voteTypeResource', plugins_url( '/fe/admin/js/service/voteType/voteTypeResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
-    wp_register_script( 'voteTypeService', plugins_url( '/fe/admin/js/service/voteType/voteTypeService.js', __FILE__ ), array( 'angular','raton-app','voteTypeResource'), $raton_version, true );
+    wp_register_script( 'itemResource', plugins_url( '/fe/common/js/service/item/itemResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
+    wp_register_script( 'itemService', plugins_url( '/fe/common/js/service/item/itemService.js', __FILE__ ), array( 'angular','raton-app','itemResource'), $raton_version, true );
+    wp_register_script( 'voteTypeResource', plugins_url( '/fe/common/js/service/voteType/voteTypeResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
+    wp_register_script( 'voteTypeService', plugins_url( '/fe/common/js/service/voteType/voteTypeService.js', __FILE__ ), array( 'angular','raton-app','voteTypeResource'), $raton_version, true );
 
     wp_register_script( 'adminMainCtrl', plugins_url( '/fe/admin/js/controller/mainAdminCtrl.js', __FILE__ ), array( 'angular','raton-app','confService'), $raton_version, true );
     wp_register_script( 'categoryCtrl', plugins_url( '/fe/admin/js/controller/categoryCtrl.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
@@ -143,7 +145,7 @@ function registerScriptAndCSS() {
     wp_register_script( 'voteTypeCtrl', plugins_url( '/fe/admin/js/controller/voteTypeCtrl.js', __FILE__ ), array( 'angular','raton-app','voteTypeService','categoryService','categoryUtils'), $raton_version, true );
 
     wp_register_script( 'raton-app', plugins_url( '/fe/admin/js/raton-admin-app.js', __FILE__ ),
-        array( 'wp-api', 'jquery', 'jquery-ui-core', 'angular', 'angular-resource' , 'angular-animate', 'angular-ui', 'tree-repeat'), $raton_version, true );
+        array( 'wp-api', 'jquery', 'jquery-ui-core', 'angular', 'angular-resource' , 'angular-animate', 'angular-ui', 'tree-repeat', 'raton-common'), $raton_version, true );
 
     wp_register_style("bootstrap",plugins_url( '/fe/admin/css/bootstrap.css', __FILE__ ),array(),$raton_version,"all");
     wp_register_style("bootstrap-theme",plugins_url( '/fe/admin/css/bootstrap-theme.css', __FILE__ ),array('bootstrap'),$raton_version,"all");
@@ -210,6 +212,7 @@ function ratonEnqueueScript() {
     wp_enqueue_script( 'voteTypeCtrl' );
     wp_enqueue_script( 'itemCtrl' );
     wp_enqueue_script( 'raton-app' );
+    wp_enqueue_script( 'raton-common' );
 }
 
 function raton_manage_menu() {

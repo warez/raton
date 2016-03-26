@@ -1,4 +1,4 @@
-angular.module("JRatonApp").service("ItemService", ['ItemResource', '$filter',
+angular.module("JRatonCommon").service("ItemService", ['ItemResource', '$filter',
     function (ItemResource, $filter) {
         return {
             create: function (data) {

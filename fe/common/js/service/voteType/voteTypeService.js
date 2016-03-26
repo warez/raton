@@ -1,4 +1,4 @@
-angular.module("JRatonApp").service("VoteTypeService", ['VoteTypeResource', '$filter',
+angular.module("JRatonCommon").service("VoteTypeService", ['VoteTypeResource', '$filter',
     function (VoteTypeResource, $filter) {
         return {
             create: function (data) {

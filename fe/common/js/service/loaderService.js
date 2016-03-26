@@ -1,4 +1,4 @@
-angular.module("JRatonApp").directive("loader", function() {
+angular.module("JRatonCommon").directive("loader", function() {
     return {
         restrict: "EA",
         scope: {},

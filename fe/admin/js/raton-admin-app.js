@@ -1,4 +1,4 @@
-var app = angular.module("JRatonApp", ["treecp","ngResource","ngRoute","ui.bootstrap", "ngStorage"]);
+var app = angular.module("JRatonApp", ["treecp","ngResource","ngRoute","ui.bootstrap", "ngStorage", "JRatonCommon"]);
 
 app.config(['$resourceProvider','$httpProvider', function($resourceProvider, $httpProvider) {
     // Don't strip trailing slashes from calculated URLs
@@ -72,5 +72,5 @@ app.config(['$routeProvider', 'WPPathServiceProvider',
     }]);
 
 document.addEventListener('DOMContentLoaded', function () {
-    angular.bootstrap(document, ["treecp", "ngStorage", "ngResource", "ngRoute", "JRatonApp","ui.bootstrap"]);
+    angular.bootstrap(document, ["treecp", "ngStorage", "ngResource", "ngRoute", "JRatonApp","ui.bootstrap", "JRatonCommon"]);
 });

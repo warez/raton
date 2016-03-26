@@ -1,4 +1,4 @@
-angular.module("JRatonApp").service("CONF", [function () {
+angular.module("JRatonCommon").service("CONF", [function () {
 
     var data = {
         WP_SETTINGS : WP_API_Settings,

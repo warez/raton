@@ -1,4 +1,4 @@
-angular.module("JRatonApp").service("CategoryService", ['CategoryResource',
+angular.module("JRatonCommon").service("CategoryService", ['CategoryResource',
     function (CategoryResource) {
         return {
             getCategoryTree: function(data) {

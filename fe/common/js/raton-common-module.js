@@ -1,0 +1,1 @@
+var app = angular.module("JRatonCommon", ["ngResource","ui.bootstrap"]);

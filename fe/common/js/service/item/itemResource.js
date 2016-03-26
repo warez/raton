@@ -1,4 +1,4 @@
-angular.module("JRatonApp").service("ItemResource", ['$resource', function ($resource) {
+angular.module("JRatonCommon").service("ItemResource", ['$resource', function ($resource) {
 
     var resource = WP_API_Settings.root + "?rest_route=/raton/v1_0/item";
 
