@@ -152,7 +152,7 @@ function registerScriptAndCSS() {
 
 function raton_admin_menu() {
     /* Add our plugin submenu and administration screen */
-    $page_hook_suffix = add_submenu_page( 'tools.php', // The parent page of this submenu
+    $page_hook_suffix = add_submenu_page( 'options-general.php', // The parent page of this submenu
         __( 'RatingOn', 'ratingoOn' ), // The submenu title
         __( 'Rating On Settings', 'ratingoOn' ), // The screen title
         'manage_options', // The capability required for access to this submenu
@@ -257,17 +257,17 @@ function createUserData() {
 
         wp_update_nav_menu_item($menu_id, 0, array(
             'menu-item-title' =>  __('Crea item'),
-            'menu-item-url' => home_url( '#createItem' ),
+            'menu-item-url' => home_url( './#createItem' ),
             'menu-item-status' => 'publish'));
 
         wp_update_nav_menu_item($menu_id, 0, array(
             'menu-item-title' =>  __('Le mie recensioni'),
-            'menu-item-url' => home_url( '#myReview' ),
+            'menu-item-url' => home_url( './#myReview' ),
             'menu-item-status' => 'publish'));
 
         wp_update_nav_menu_item($menu_id, 0, array(
             'menu-item-title' =>  __('Faq'),
-            'menu-item-url' => home_url( '#faq' ),
+            'menu-item-url' => home_url( './#faq' ),
             'menu-item-status' => 'publish'));
     }
 

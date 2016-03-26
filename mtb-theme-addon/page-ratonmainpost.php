@@ -1,3 +1,7 @@
 <?php
 
-/* Template Name: Raton Main Page*/
+get_header("raton"); ?>
+
+
+<?php
+get_footer();
