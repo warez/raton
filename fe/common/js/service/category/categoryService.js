@@ -40,6 +40,21 @@ angular.module("JRatonCommon").service("CategoryService", ['CategoryResource',
 
             },
 
+            getParentChain: function(data) {
+                var ret = [];
+                ret.push(data.title);
+
+                while(data.parent != null) {
+
+                    if(data.parent.id != 'ROOT')
+                        ret.splice(0,0, data.parent.title);
+
+                    data = data.parent;
+                }
+
+                return ret;
+            },
+
             prepareDBCategory: function(cat, parent) {
 
                 var ret =  {};

@@ -1,22 +1,26 @@
-<div>
+<category-list-component>
 
-    <div sf-treepeat="node in children of ctrl.treeData">
+    <div class="cat-title">
+        <span class="cat-icon">
+            <i class="fa fa-list-ul"></i>
+        </span>
+        <span class="cat-name">
+            Categorie
+        </span>
+    </div>
+
+    <div sf-treepeat="node in children of ctrl.mainCtrl.categoryTree">
 
         <category-component data="node"
                             template="categoryCmp.html"
-                            on-add="ctrl.onAdd(d,newNode)"
-                            on-delete="ctrl.onDelete(d)"
-                            on-show-item="ctrl.onShowItem(d)"
-                            on-show-vote-type="ctrl.onShowVoteType(d)"
-                            enable-move="true"
-                            on-move="ctrl.onMove(d,op)"
-                            on-edit="ctrl.onEdit(d)"
-                            collapse-button-class="glyphicon-minus"
-                            expand-button-class="glyphicon-plus">
+                            on-select="ctrl.onSelect(data)"
+                            collapse-button-class="fa-caret-down"
+                            expand-button-class="fa-caret-right">
 
             <div sf-treecurse>This should be removed</div>
 
         </category-component>
 
     </div>
-</div>
+
+</category-list-component>

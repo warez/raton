@@ -1,0 +1,97 @@
+html, body, h1, h2, h3, h4, h5 { -webkit-font-smoothing:antialiased !important; -moz-osx-font-smoothing: grayscale !important; -webkit-text-size-adjust:100%; font-family:'Open Sans',helvetica,verdana,arial,sans-serif; text-transform:none; }
+
+body { background:#000; color:#222; margin:0; padding:0; }
+
+.wrapper-background2015 { background:#ebebe8; }
+
+.sidebar2015 {padding-right:10px; padding-left:10px; font-size:13px; float:left; width:300px; background:#f5f5f2; }
+
+.corpo-centrale2015 { overflow:auto; }
+
+.wrapper { width:100%; max-width:1280px; padding-top:10px; margin:0 auto; background:transparent; overflow: auto; }
+
+i.fa { font-size:14px; }
+
+.insertion-title { float:left; width:950px; min-height:18px; line-height:18px; background:#333; color:#fff; border-bottom:3px solid #f80; margin:10px 10px 0; padding:6px 0 6px 10px; }
+
+.insertion-title h1 { display:inline-block; font-size:13px; line-height:18px; margin:0; padding:0; color:#fff; text-transform:none; }
+
+.cat-title { width:280px; height:30px; margin-top:10px; line-height:30px; color:#fff; background:#333; border-bottom:3px solid #f80; }
+
+.cat-list { float:left;}
+
+.cat-icon { float:left;  clear:left; width:30px; text-align:center; }
+
+.cat-icon i { }
+
+.cat-name { min-height:30px; width:250px; line-height:30px; }
+
+.cat-name h3 { display:inline-block; }
+
+.cat-item.selected {
+    background: #e5e5e2;
+    border: 1px solid #949491;
+}
+
+.cat-item {
+    cursor: pointer;
+    padding: 6px 0px;
+}
+
+.cat-item:hover {
+    text-decoration:underline;
+}
+
+.base-content {
+    float: left;
+    width: 960px;
+    margin: 10px 10px 0;
+    background: #f5f5f2;
+    text-align: center;
+}
+
+@media (max-width: 1279px) {
+
+    .wrapper {
+        width: 1024px;
+    }
+
+}
+
+
+@media (max-width: 1023px) {
+
+    .wrapper {
+        width: 768px;
+    }
+
+    .sidebar2015 { display:none; }
+}
+
+@media (max-width: 767px) {
+
+    .wrapper {
+        width: 640px;
+    }
+
+    .sidebar2015 { display:none; }
+}
+
+@media (max-width: 639px) {
+
+    .wrapper {
+        width: 480px;
+    }
+
+    .sidebar2015 { display:none; }
+}
+
+
+@media (max-width: 479px) {
+
+    .wrapper {
+        width: 320px;
+    }
+
+    .sidebar2015 { display:none; }
+}

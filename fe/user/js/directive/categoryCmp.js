@@ -1,20 +1,26 @@
-// © Copyright 2014 Thinkster.
-// Shamelessly stolen from
-//   http://www.thinkster.io/pick/JCDDOCEwVX/angularjs-building-zippy
-//
-angular.module("JRatonUserApp").directive("categoryComponent", function(WPPathService){
+angular.module("JRatonUserApp").directive("categoryListComponent", function(WPPathService){
+
+  return {
+    restrict: "E",
+    controller: function () {
+
+      var ctrl = this;
+      this.selectedId = null;
+
+      this.select = function (selectedId) {
+        ctrl.selectedId = selectedId;
+      };
+    }
+  }
+
+}).directive("categoryComponent", function(WPPathService, CategoryService){
   return {
     restrict: "E",
     transclude: true,
+    require: "^categoryListComponent",
     scope: {
       data: "=",
-      onAdd: "&",
-      onDelete: "&",
-      onShowItem: "&",
-      onShowVoteType: "&",
-      onEdit: "&",
-      onMove: "&",
-      enableMove:"=",
+      onSelect: "&",
       expandButtonClass:"@",
       collapseButtonClass:"@"
     },
@@ -22,40 +28,47 @@ angular.module("JRatonUserApp").directive("categoryComponent", function(WPPathSe
         return WPPathService.getPartialUrl() + "/" + attrs.template;
     },
 
-    link: function(scope){
+    link: function(scope, element, attrs, categoryListCtrl){
 
-      scope.isContentVisible = true;
-      scope.parent = null;
+      scope.isContentVisible = scope.data.id == 'ROOT';
 
-      scope.showMoveUp = function(){
-        if(!scope.data || !scope.data.parent)
-          return;
+      scope.categoryListCtrl = categoryListCtrl;
 
-        return scope.data.parent.children &&
-            scope.data.parent.children.indexOf(scope.data) > 0;
+      scope.hasChildren = scope.data && scope.data.children && scope.data.children.length > 0;
+
+      scope.select = function() {
+
+        if(!scope.hasChildren) {
+
+          categoryListCtrl.select(scope.data.id);
+
+          if(attrs["onSelect"]) {
+            var selectedData = CategoryService.prepareDBCategory(scope.data, scope.data.parent);
+            selectedData.parentChain = CategoryService.getParentChain(scope.data);
+            scope.onSelect({data: selectedData});
+          }
+
+        }
+
+        if(scope.hasChildren)
+          scope.isContentVisible = !scope.isContentVisible;
       };
 
-      scope.showMoveDown = function(){
-        if(!scope.data || !scope.data.parent)
-          return;
+      scope.getStyle = function() {
+        if(scope.data.id == 'ROOT' || (scope.data.parent && scope.data.parent.id == 'ROOT') )
+          return "";
 
-        return scope.data.parent.children &&
-          scope.data.parent.children.indexOf(scope.data) !=
-            scope.data.parent.children.length - 1;
+        return "margin-left: 15px";
       };
 
       scope.getClass = function() {
 
-        if(!scope.data || !scope.data.children || scope.data.children.length == 0)
+        if(!scope.hasChildren)
           return "";
         else if(scope.isContentVisible)
           return scope.collapseButtonClass;
         else
           return scope.expandButtonClass;
-      };
-
-      scope.toggleContent = function(){
-        scope.isContentVisible = !scope.isContentVisible;
       };
 
     }

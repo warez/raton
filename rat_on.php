@@ -133,7 +133,7 @@ function registerScriptAndCSS() {
     wp_register_script( 'loaderService', plugins_url( '/fe/common/js/service/loaderService.js', __FILE__ ), array( 'angular','raton-common'), $raton_version, true );
     wp_register_script( 'categoryResource', plugins_url( '/fe/common/js/service/category/categoryResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'categoryService', plugins_url( '/fe/common/js/service/category/categoryService.js', __FILE__ ), array( 'angular','raton-app','categoryResource'), $raton_version, true );
-    wp_register_script( 'categoryUtils', plugins_url( '/fe/admin/js/service/category/categoryUtils.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
+    wp_register_script( 'categoryUtils', plugins_url( '/fe/common/js/service/category/categoryUtils.js', __FILE__ ), array( 'angular','raton-app','categoryService'), $raton_version, true );
     wp_register_script( 'itemResource', plugins_url( '/fe/common/js/service/item/itemResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );
     wp_register_script( 'itemService', plugins_url( '/fe/common/js/service/item/itemService.js', __FILE__ ), array( 'angular','raton-app','itemResource'), $raton_version, true );
     wp_register_script( 'voteTypeResource', plugins_url( '/fe/common/js/service/voteType/voteTypeResource.js', __FILE__ ), array( 'angular','raton-app'), $raton_version, true );

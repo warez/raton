@@ -1,4 +1,4 @@
-angular.module("JRatonApp").service("CategoryUtils", [
+angular.module("JRatonCommon").service("CategoryUtils", [
     'CategoryService', function (CategoryService) {
 
         var node = function(categoryObj) {
