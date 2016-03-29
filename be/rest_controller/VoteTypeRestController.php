@@ -2,7 +2,6 @@
 
 global $raton_dir;
 
-require_once( $raton_dir["CORE"] . "Capabilities.php");
 require_once( $raton_dir["CONTROLLER"] . "BaseRestController.php");
 require_once( $raton_dir["SERVICE"] . "VoteTypeRestService.php");
 
@@ -24,7 +23,7 @@ class VoteTypeRestController extends BaseRestController {
             array(
                 'methods'         => WP_REST_Server::READABLE,
                 'callback'        => array( $this->service, 'search' ),
-                'permission_callback' => array( $this, 'get_item_permissions_check' ),
+                'permission_callback' => array( $this, 'getAllUserCheck' ),
                 'args'            => array(
                     'context'          => array(
                         'default'      => 'view',
@@ -37,7 +36,7 @@ class VoteTypeRestController extends BaseRestController {
             array(
                 'methods'         => WP_REST_Server::EDITABLE,
                 'callback'        => array( $this->service, 'move' ),
-                'permission_callback' => array( $this, 'get_item_permissions_check' ),
+                'permission_callback' => array( $this, 'getAdminUserCheck' ),
                 'args'            => array(
 
                     'context'          => $this->get_context_param(),

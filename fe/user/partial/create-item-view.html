@@ -1,0 +1,87 @@
+<div class="insertion-title">
+    <h1>
+        <span>Crea nuovo articolo</span
+    </h1>
+</div>
+
+
+<div class="add-new2015">
+    <div class="add-new-wrapper2015">
+
+        <div class="add-new-row2015">
+
+            <div class="add-new-label2015">
+
+                Titolo
+                <br><span class="small2015">Breve descrizione dell'oggetto</span>
+
+            </div> <!-- .add-new-label2015 -->
+
+            <div class="add-new-input2015">
+
+                <input class="requiredfield" name="titolo" id="titolo" type="text" value="">
+
+            </div> <!-- .add-new-input2015 -->
+
+        </div> <!-- .add-new-row2015 -->
+
+        <div class="add-new-row2015">
+
+            <div class="add-new-label2015">
+
+                Categoria
+                <br><span class="small2015">Scegli la categoria</span>
+
+            </div> <!-- .add-new-label2015 -->
+
+            <div class="add-new-input2015">
+
+                <input class="requiredfield ui-autocomplete-input" type="text" value="" id="categoria" name="categoria" onclick="this.value=''; showcat();" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+
+            </div> <!-- .add-new-input2015 -->
+
+        </div> <!-- .add-new-row2015 -->
+
+        <div class="add-new-row2015">
+
+            <div class="add-new-label2015">
+
+                Parole chiave
+                <br><span class="small2015">Separa le parole da una virgola</span>
+
+            </div> <!-- .add-new-label2015 -->
+
+            <div class="add-new-input2015">
+
+                <input name="tag" id="tag" type="text" value="" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+
+            </div> <!-- .add-new-input2015 -->
+
+        </div> <!-- .add-new-row2015 -->
+
+
+        <div class="add-new-row-tall2015">
+
+            <div class="add-new-label2015">
+
+                Descrizione
+                <br><span class="small2015">Cerca di essere il più dettagliato possibile</span>
+
+            </div> <!-- .add-new-label2015 -->
+
+            <div class="add-new-textarea2015">
+
+                <textarea id="desc" name="desc" class="requiredfield" rows="7"></textarea>
+
+            </div> <!-- .add-new-textarea2015 -->
+
+        </div> <!-- .add-new-row-tall2015 -->
+
+        <div class="add-new-row-submit2015">
+
+            <input name="Submit1" type="button" value="Crea nuova inserzione" onclick="addNewInsertion();">
+
+        </div> <!-- .add-new-row-submit2015 -->
+
+    </div>
+</div>

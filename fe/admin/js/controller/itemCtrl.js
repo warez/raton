@@ -251,4 +251,4 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
         $uibModalInstance.dismiss('cancel');
     };
 
-});;
+});

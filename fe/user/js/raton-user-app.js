@@ -23,6 +23,11 @@ app.config(['$routeProvider', 'WPPathServiceProvider',
                 controller: 'homeCtrl',
                 controllerAs: 'ctrl'
             }).
+            when('/createItem', {
+                templateUrl: WPPathService.getPartialUrl() + "/create-item-view.html",
+                controller: 'createItemCtrl',
+                controllerAs: 'ctrl'
+            }).
             otherwise({
                 redirectTo: "/home"
             });

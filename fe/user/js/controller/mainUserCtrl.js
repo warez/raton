@@ -5,6 +5,9 @@ angular.module("JRatonUserApp").controller("MainUserCtrl", [ 'CONF', 'LoaderServ
         var ctrl = this;
         ctrl.CONF = CONF;
 
+        ctrl.userMode = CONF.WP_SETTINGS["userMode"];
+        ctrl.isNotLogged = !ctrl.userMode || ctrl.userMode == "GUEST";
+
         ctrl.categoryTree = {};
         ctrl.categories = [];
         ctrl.selectedCat = {};

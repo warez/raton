@@ -34,8 +34,6 @@ $raton_dir = array(
     "FE_HTML" => plugin_dir_path(__FILE__) . "fe/admin/partial/"
 );
 
-require_once($raton_dir["CORE"] . 'Capabilities.php');
-
 /***
  * Esegue il file di update indicato dalla versione
  *
@@ -299,13 +297,11 @@ function createUserData() {
 function raton_activation_hook() {
 
     raton_update_db_check_hook();
-    Capabilities::addCapabilites();
     createUserData();
 }
 
 function raton_deactivation_hook() {
 
-    Capabilities::removeCapabilites();
     deregisterScriptAndCSS();
     removeUserData();
 }

@@ -20,7 +20,7 @@ class BaseRestController extends WP_REST_Controller {
             array(
                 'methods'         => WP_REST_Server::CREATABLE,
                 'callback'        => array( $this->service, 'create' ),
-                'permission_callback' => array( $this, 'create_item_permissions_check' ),
+                'permission_callback' => array( $this, 'getAdminUserCheck' ),
                 'args'            => $this->get_endpoint_args_for_item_schema( true ),
                 'accept_json'     => true
             ),
@@ -30,7 +30,7 @@ class BaseRestController extends WP_REST_Controller {
             array(
                 'methods'         => WP_REST_Server::READABLE,
                 'callback'        => array( $this->service, 'get' ),
-                'permission_callback' => array( $this, 'get_item_permissions_check' ),
+                'permission_callback' => array( $this, 'getAllUserCheck' ),
                 'args'            => array(
                     'context'          => array(
                         'default'      => 'view',
@@ -41,7 +41,7 @@ class BaseRestController extends WP_REST_Controller {
             array(
                 'methods'         => WP_REST_Server::EDITABLE,
                 'callback'        => array( $this->service, 'update' ),
-                'permission_callback' => array( $this, 'update_item_permissions_check' ),
+                'permission_callback' => array( $this, 'getAdminUserCheck' ),
                 'args'            => $this->get_endpoint_args_for_item_schema( false ),
                 'accept_json'     => true
             ),
@@ -49,7 +49,7 @@ class BaseRestController extends WP_REST_Controller {
             array(
                 'methods'  => WP_REST_Server::DELETABLE,
                 'callback' => array( $this->service, 'delete' ),
-                'permission_callback' => array( $this, 'delete_item_permissions_check' ),
+                'permission_callback' => array( $this, 'getAdminUserCheck' ),
                 'args'     => array(
                     'force'    => array(
                         'default'      => false,
@@ -59,44 +59,16 @@ class BaseRestController extends WP_REST_Controller {
         ) );
     }
 
-    /**
-     * Check if a given request has access to get item
-     *
-     * @param WP_REST_Request $request Full data about the request.
-     * @return WP_Error|bool
-     */
-    public function get_item_permissions_check( $request ) {
-        //return true; <--use to make readable by all
-        return current_user_can( Capabilities::GET_ITEM );
+    public function getLoggedUserCheck( $request ) {
+        return is_user_logged_in();
     }
 
-    /**
-     * Check if a given request has access to create items
-     *
-     * @param WP_REST_Request $request Full data about the request.
-     * @return WP_Error|bool
-     */
-    public function create_item_permissions_check( $request ) {
-        return current_user_can( Capabilities::CREATE_ITEM );
+    public function getAllUserCheck( $request ) {
+        return true;
     }
 
-    /**
-     * Check if a given request has access to update a specific item
-     *
-     * @param WP_REST_Request $request Full data about the request.
-     * @return WP_Error|bool
-     */
-    public function update_item_permissions_check( $request ) {
-        return current_user_can( Capabilities::UPDATE_ITEM );
+    public function getAdminUserCheck( $request ) {
+        return is_user_logged_in() && is_super_admin();
     }
 
-    /**
-     * Check if a given request has access to delete a specific item
-     *
-     * @param WP_REST_Request $request Full data about the request.
-     * @return WP_Error|bool
-     */
-    public function delete_item_permissions_check( $request ) {
-        return current_user_can( Capabilities::DELETE_ITEM );
-    }
 }
