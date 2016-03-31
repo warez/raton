@@ -46,8 +46,8 @@ angular.module("JRatonUserApp").controller("insertionCtrl", [ '$scope', 'CONF', 
             ret.title = ctrl.filter.title.trim();
             ret.description = ctrl.filter.description.trim();
             ret.id_category = ctrl.filter.category;
-            ret.approved = false;
-            ret.request_approve = true;
+            ret.approved = "n";
+            ret.request_approve = "y";
 
             ItemService.create(ret).$promise.then(function(data) {
 

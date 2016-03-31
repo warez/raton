@@ -34,7 +34,10 @@ angular.module("JRatonUserApp").directive("categoryListComponent", function(WPPa
 
       scope.categoryListCtrl = categoryListCtrl;
 
-      scope.hasChildren = scope.data && scope.data.children && scope.data.children.length > 0;
+      scope.$watch('data', function(newValue, oldValue) {
+        if (newValue)
+          scope.hasChildren = newValue.children && newValue.children.length > 0;
+      }, false);
 
       scope.select = function() {
 

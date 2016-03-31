@@ -4,6 +4,7 @@ angular.module("JRatonCommon").service("CategoryUtils", [
         var node = function(categoryObj) {
             this.id = categoryObj.id;
             this.title = categoryObj.title;
+            this.itemCount = categoryObj.itemCount;
             this.description = categoryObj.description;
             this.children = [];
         };

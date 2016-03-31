@@ -10,8 +10,11 @@ require_once($raton_dir["MODEL"] . "CategoryForTree.php");
 
 class CategoryDao extends DaoBase {
 
+    private $itemDao;
+
     function __construct() {
 
+        $this->itemDao = new ItemDao();
         parent::__construct("categories", "id");
     }
 
@@ -60,6 +63,8 @@ class CategoryDao extends DaoBase {
         if($parentId != null)
             $where = " where id_parent_category = " . $parentId;
 
+        $countById = $this->itemDao->countItemByCategory();
+
         $query =  " SELECT * FROM " . $this->tableName .
             " " . $where . " ORDER BY id DESC";
 
@@ -68,6 +73,9 @@ class CategoryDao extends DaoBase {
 
         foreach ( $result as $cat ) {
             $ret[$cat->id] = $cat;
+            $cat->itemCount = $countById[$cat->id];
+            if($cat->itemCount == null)
+                $cat->itemCount = 0;
         }
 
         return $ret;

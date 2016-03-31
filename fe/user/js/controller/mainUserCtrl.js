@@ -36,30 +36,20 @@ angular.module("JRatonUserApp").controller("MainUserCtrl", [ '$scope', 'CONF', '
             return ret;
         };
 
-        ctrl.loadCategories = function () {
+        var readTree = function (data) {
+            LoaderService.stop();
 
-            var deferred = $q.defer();
+            var nodeObj = CategoryUtils.buildTree(data);
+            ctrl.categoryTree = nodeObj;
 
-            var readTree = function (data) {
-                LoaderService.stop();
-
-                var nodeObj = CategoryUtils.buildTree(data);
-                ctrl.categoryTree = angular.copy(nodeObj);
-
-                var categories = CategoryUtils.levelTree(data);
-                ctrl.categories = cleanCategories(categories);
-                deferred.resolve( ctrl.categories );
-            };
-
-            LoaderService.start();
-            CategoryService.getCategoryTree({from: -1}).$promise.then(readTree, function (error) {
-                LoaderService.stop();
-                //TODO
-            });
-
-            return deferred.promise;
+            var categories = CategoryUtils.levelTree(data);
+            ctrl.categories = cleanCategories(categories);
         };
 
-        ctrl.loadCategories();
+        LoaderService.start();
+        CategoryService.getCategoryTree({from: -1}).$promise.then(readTree, function (error) {
+            LoaderService.stop();
+            //TODO
+        });
     }
 ]);

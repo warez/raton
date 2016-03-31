@@ -10,6 +10,31 @@ class ItemDao extends DaoBase {
         parent::__construct("items", "id");
     }
 
+    function countItemByCategory() {
+
+        global $wpdb;
+
+        $query = "SELECT id_category, COUNT(*) as count ".
+            "FROM wp_items GROUP BY id_category";
+
+        try {
+
+            $result = $wpdb->get_results($query, OBJECT);
+            $ret = array();
+
+            foreach ( $result as $cat ) {
+                $ret[$cat->id_category] = $cat->count;
+            }
+
+            return $ret;
+
+        } catch(Exception $e) {
+
+            return new WP_Error( "get_item_count" , __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        }
+    }
+
     function update($data, $format) {
 
         try {

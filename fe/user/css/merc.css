@@ -50,6 +50,8 @@ i.fa { font-size:14px; }
 .add-new-row-submit2015 input.disabled { color: #ADABAB;  background: #D8D8D8; }
 .add-new-row-submit2015 input.disabled:hover { cursor:pointer; background: #D0D0D0; }
 
+.insertion-number2015 { color:#f80; }
+
 .small2015 { font-size:11px; color:#999; }
 
 .cat-item.selected {

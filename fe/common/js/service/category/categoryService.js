@@ -61,6 +61,8 @@ angular.module("JRatonCommon").service("CategoryService", ['CategoryResource',
 
                 ret.title = cat.title.trim();
                 ret.description = cat.description.trim();
+                if(cat.itemCount)
+                    ret.itemCount = cat.itemCount;
 
                 if(cat.id) {
                     ret.id = cat.id
