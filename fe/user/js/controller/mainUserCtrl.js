@@ -1,6 +1,6 @@
-angular.module("JRatonUserApp").controller("MainUserCtrl", [ 'CONF', 'LoaderService', '$q',
+angular.module("JRatonUserApp").controller("MainUserCtrl", [ '$scope', 'CONF', 'LoaderService', '$q',
     'CategoryUtils', 'CategoryService',
-    function (CONF, LoaderService, $q, CategoryUtils, CategoryService) {
+    function ($scope, CONF, LoaderService, $q, CategoryUtils, CategoryService) {
 
         var ctrl = this;
         ctrl.CONF = CONF;
@@ -22,7 +22,7 @@ angular.module("JRatonUserApp").controller("MainUserCtrl", [ 'CONF', 'LoaderServ
         var cleanCategories = function (data) {
             var ret = [];
 
-            ret.push({label: "", value: "null", isNullElement: true});
+            ret.push({label: "", value: null, isNullElement: true});
 
             for (var i = 0; i < data.length; i++) {
                 if (data[i].id == "ROOT")
@@ -48,7 +48,7 @@ angular.module("JRatonUserApp").controller("MainUserCtrl", [ 'CONF', 'LoaderServ
 
                 var categories = CategoryUtils.levelTree(data);
                 ctrl.categories = cleanCategories(categories);
-                deferred.resolve( {} );
+                deferred.resolve( ctrl.categories );
             };
 
             LoaderService.start();

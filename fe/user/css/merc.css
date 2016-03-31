@@ -30,6 +30,7 @@ i.fa { font-size:14px; }
 
 .new-insertion2015 { width:280px; font-weight: 700; height:30px; margin-top: 10px; color:#fff; line-height:30px; text-align:center; background:#090; }
 .new-insertion2015:hover { cursor:pointer; background:#080; }
+
 .new-insertion2015.disabled { color: #ADABAB;  background: #D8D8D8; }
 .new-insertion2015.disabled:hover { cursor:pointer; background: #D0D0D0; }
 
@@ -38,13 +39,16 @@ i.fa { font-size:14px; }
 .add-new-row2015 { float:left; width:940px; height:30px; margin:0 10px 10px; }
 .add-new-label2015 { float:left; height:30px; width:320px; line-height:15px; }
 .add-new-input2015 { float:left; height:30px; width:620px; }
-.add-new-input2015 input { height:30px; line-height:30px; width:600px; padding:0 10px; font-size:13px; background: #f7f7f4;}
+.add-new-input2015 input,select { height:30px; line-height:30px; width:600px; padding:0 10px; font-size:13px; background: #f7f7f4;}
 .add-new-row-tall2015 { float:left; width:940px; margin:0 10px 10px; }
 .add-new-textarea2015 { float:left; width:620px; }
 .add-new-textarea2015 textarea { width:600px; background: #f7f7f4;}
 .add-new-row-submit2015 { float:left; width:940px; min-height:30px; margin:10px 10px; text-align:center; }
 .add-new-row-submit2015 input { width:210px; height:30px; font-size:13px; line-height:30px; color:#fff; margin-bottom:10px; background:#090; padding: 0px 10px; text-transform: inherit}
 .add-new-row-submit2015 input:hover { cursor:pointer; background:#080; }
+
+.add-new-row-submit2015 input.disabled { color: #ADABAB;  background: #D8D8D8; }
+.add-new-row-submit2015 input.disabled:hover { cursor:pointer; background: #D0D0D0; }
 
 .small2015 { font-size:11px; color:#999; }
 
