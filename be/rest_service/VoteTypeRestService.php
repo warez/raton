@@ -7,7 +7,6 @@
  */
 
 global $raton_dir;
-require_once($raton_dir["MODEL"] . "VoteType.php");
 require_once($raton_dir["SERVICE"] . "BaseRestService.php");
 require_once( $raton_dir["DAO"] . "VoteTypeDao.php");
 
@@ -19,12 +18,13 @@ class VoteTypeRestService extends BaseRestService {
         "description" => "%s",
         "position" => "%d",
         "vote_limit" => "%d",
-        "id_category" => "%d"
+        "id_category" => "%d",
+        "vote_meta" => "%s"
     );
 
-    function __construct($restController)
+    function __construct()
     {
-        parent :: __construct($restController, new VoteTypeDao());
+        parent :: __construct(new VoteTypeDao());
     }
 
     function prepareForDb($filter) {
@@ -57,6 +57,11 @@ class VoteTypeRestService extends BaseRestService {
         $id_category = parent::getProp("id_category", $filter);
         if($id_category != null) {
             parent::setProp("id_category", $filter, $id_category);
+        }
+
+        $vote_meta = parent::getProp("vote_meta", $filter);
+        if($vote_meta != null) {
+            parent::setProp("vote_meta", $filter, $vote_meta);
         }
 
         return $filter;

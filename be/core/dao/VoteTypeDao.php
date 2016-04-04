@@ -12,6 +12,9 @@ class VoteTypeDao extends DaoBase
         parent::__construct("votes_types", "id");
     }
 
+    function searchByCategory($category) {
+
+    }
 
     function update($data, $format)
     {

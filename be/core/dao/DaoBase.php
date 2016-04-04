@@ -158,6 +158,21 @@ abstract class DaoBase {
 
     }
 
+    function startTransaction() {
+        global $wpdb;
+        $wpdb->query('START TRANSACTION');
+    }
+
+    function rollback() {
+        global $wpdb;
+        $wpdb->query('COMMIT');
+    }
+
+    function commit() {
+        global $wpdb;
+        $wpdb->query('ROLLBACK');
+    }
+
     function update($data, $format) {
 
         global $wpdb;

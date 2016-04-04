@@ -30,6 +30,16 @@ app.config(['$routeProvider', 'WPPathServiceProvider',
                     }
                 }
             }).
+            when('/item/:idItem/reviews', {
+                templateUrl: WPPathService.getPartialUrl() + "/review-view.html",
+                controller: 'ReviewController',
+                controllerAs: 'ctrl',
+                resolve: {
+                    itemViewOpt: function() {
+                        return {}
+                    }
+                }
+            }).
             when('/category/:idCategory/items', {
                 templateUrl: WPPathService.getPartialUrl() + "/item-view.html",
                 controller: 'ItemController',

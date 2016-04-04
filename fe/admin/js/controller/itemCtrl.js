@@ -25,6 +25,11 @@ angular.module("JRatonApp").controller("ItemController", ['$scope', '$location',
             per_page: 10
         };
 
+        ctrl.goToReview = function(item) {
+            $sessionStorage["item"] = item;
+            $location.path('/item/' + item.id + "/reviews");
+        };
+
         var categoriesFromSession = $sessionStorage["categories"];
 
         ctrl.onCategoryChange = function (data) {

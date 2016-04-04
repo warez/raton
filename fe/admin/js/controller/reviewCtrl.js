@@ -1,0 +1,225 @@
+angular.module("JRatonApp").controller("ReviewController", ['$scope', '$location', 'LoaderService', 'WPPathService',
+    'VoteTypeService', 'ReviewService', '$uibModal', '$sessionStorage', 'ModalService', 'itemViewOpt',
+
+    function ($scope, $location, LoaderService, WPPathService, VoteTypeService, ReviewService, $uibModal,
+              $sessionStorage, ModalService, itemViewOpt) {
+
+        var ctrl = this;
+        ctrl.mainCtrl = $scope.$parent.mainCtrl;
+
+        ctrl.selectedItem = $sessionStorage["item"];
+
+        ctrl.reviewsData = {};
+        ctrl.voteTypes = [];
+
+        ctrl.filter = {
+            from: -1,
+            page: 1,
+            per_page: 10
+        };
+
+        ctrl.load = function() {
+
+            ctrl.filter.from = ctrl.selectedItem.id;
+            ctrl.loadVoteType();
+        };
+
+        ctrl.loadVoteType = function() {
+
+            LoaderService.start();
+
+            var filter = { categoryId: ctrl.filter.from };
+            VoteTypeService.search(filter).$promise.then(function(data) {
+
+                LoaderService.stop();
+                ctrl.voteTypes = angular.copy(data);
+
+            }, function(error) {
+                LoaderService.stop();
+                //TODO
+            });
+
+        };
+
+        ctrl.search = function(page) {
+
+            LoaderService.start();
+
+            if(page)
+                ctrl.filter.page = page;
+
+            ReviewService.search(ctrl.filter).$promise.then(function(data) {
+
+                LoaderService.stop();
+
+                ctrl.reviewsData = angular.copy(data);
+                ctrl.filter.page = data.page;
+                ctrl.per_page = data.per_page;
+
+            }, function(error) {
+                LoaderService.stop();
+                //TODO
+            });
+        };
+
+        ctrl.isValidSearch = function() {
+
+            return true;
+        };
+
+        ctrl.createItem = function() {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: WPPathService.getPartialUrl() + "/createReviewTmpl.html",
+                controller: "CreateReviewCtrl",
+                size: 'sm',
+                resolve: {
+                    item: function() {
+                        return ctrl.selectedItem;
+                    },
+                    voteTypes: function() {
+                        return ctrl.voteTypes;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (review) {
+
+                LoaderService.start();
+
+                ReviewService.create(review).$promise.then(function (ret) {
+                    LoaderService.stop();
+                    ctrl.search(1);
+                    //TODO
+
+                }, function (error) {
+
+                    //TODO
+                    LoaderService.stop();
+
+                });
+
+            });
+
+        };
+
+        ctrl.onEdit = function(review) {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: WPPathService.getPartialUrl() + "/createReviewTmpl.html",
+                controller: "EditReviewCtrl",
+                size: 'sm',
+                resolve: {
+                    review: function() {
+                        return review;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (newReview) {
+
+                LoaderService.start();
+
+                ReviewService.update(newReview).$promise.then(function (ret) {
+                    angular.copy(ret, newReview);
+                    LoaderService.stop();
+                    //TODO
+
+                }, function (error) {
+
+                    //TODO
+                    LoaderService.stop();
+
+                });
+
+            });
+
+        };
+
+        ctrl.onDelete = function(review) {
+
+            var doDelete = function() {
+                LoaderService.start();
+                ReviewService.delete(review).$promise.then(function(data){
+
+                    LoaderService.stop();
+                    ctrl.search(1);
+                    //TODO
+
+                }, function(error) {
+                    LoaderService.stop();
+                    //TODO
+                })
+            };
+
+            var modalOptions = {
+                closeButtonText: 'Annulla',
+                actionButtonText: "Cancella!",
+                headerText: "Attenzione",
+                bodyText: "Sei sicuro di voler cancellare la recensione?"
+            };
+
+            ModalService.showModal({}, modalOptions).then(function () {
+                doDelete();
+            });
+
+        };
+
+        ctrl.pageChanged = function() {
+            ctrl.search();
+        };
+
+        ctrl.load();
+    }
+
+]).controller('EditReviewCtrl', function ($scope, $uibModalInstance, ReviewService, review) {
+
+    $scope.mode = "EDIT";
+    $scope.data = review;
+    $scope.title = "Modifica recensione";
+
+    $scope.ok = function () {
+
+        if (!ReviewService.testEditReview($scope.data)) {
+            //TODO
+            return;
+        }
+
+        var itemDB = ReviewService.prepareDBItem($scope.data);
+        $uibModalInstance.close(itemDB);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+}).controller('CreateItemCtrl', function ($scope, $uibModalInstance, ItemService, category) {
+
+    $scope.data = {
+        id_category: category.id,
+        request_approve: 'y',
+        approved: 'n'
+    };
+
+    $scope.mode = "CREATE";
+    $scope.requestApproveDisabled = true;
+    $scope.title = "Crea articolo";
+
+    $scope.ok = function () {
+
+        if (!ItemService.testCreateReview($scope.data)) {
+            //TODO
+            return;
+        }
+
+        var itemDB = ItemService.prepareDBReview($scope.data);
+        $uibModalInstance.close(itemDB);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+});

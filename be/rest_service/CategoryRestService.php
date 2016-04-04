@@ -12,9 +12,9 @@ require_once( $raton_dir["DAO"] . "CategoryDao.php");
 
 class CategoryRestService extends BaseRestService {
 
-    function __construct($restController)
+    function __construct()
     {
-        parent :: __construct($restController, new CategoryDao());
+        parent :: __construct(new CategoryDao());
     }
 
     function prepareForDb($category) {

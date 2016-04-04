@@ -11,7 +11,7 @@ class ItemRestController extends BaseRestController {
 
         parent::__construct($version);
 
-        $this->service = new ItemRestService( $this );
+        $this->service = new ItemRestService();
         $this->base = "item";
     }
 

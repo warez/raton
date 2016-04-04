@@ -7,11 +7,9 @@ abstract class BaseRestService
     public static $DEFAULT_PAGE = 0;
 
     protected $dao = null;
-    protected $restController = null;
 
-    function __construct($restController, $dao)
+    function __construct($dao)
     {
-        $this->restController = $restController;
         $this->dao = $dao;
 
         if($this->dao == null)

@@ -32,9 +32,9 @@ class ItemRestService extends BaseRestService {
         return $format;
     }
 
-    function __construct($restController)
+    function __construct()
     {
-        parent :: __construct($restController, new ItemDao());
+        parent :: __construct(new ItemDao());
     }
 
     function prepareForDb($item) {

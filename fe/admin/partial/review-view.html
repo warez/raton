@@ -1,0 +1,101 @@
+<div class="row">
+
+    <div ng-if="ctrl.itemViewOpt.fromCategory" class="col-md-12">
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Articolo selezionato"</div>
+            <div class="panel-body">
+
+                <span style="margin-right: 20px">
+                    <label class="title">Nome:</label>
+                    <label class="val">{{ctrl.searchedItem.title}}</label>
+                </span>
+
+                <span style="margin-left: 40px">
+                    <input type="button" class="btn btn-primary btn-sm" value="Crea recensione"
+                           ng-click="ctrl.createReview()">
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Ricerca recensione</div>
+            <div class="panel-body">
+
+                <div class="col-md-10">
+                    <div class="row pull-right" style="margin-right: 300px">
+                        <input type="button" class="btn btn-default btn-sm" value="Cerca tipo voti"
+                               ng-disabled="!ctrl.isValidSearch()" ng-click="ctrl.search()">
+                        <input type="button" class="btn btn-default btn-sm" value="Pulisci"
+                               ng-click="ctrl.clear()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="detail-panel panel panel-default">
+            <div class="panel-heading">Lista recensioni <i>per l'articolo</i> <b>{{ctrl.searchedItem.title}}</b> </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <table class="detail-table table table-striped">
+                        <tr>
+                            <th>Review</th>
+                            <th>Data inserimento</th>
+                            <th></th>
+                        </tr>
+
+                        <tr ng-repeat="item in ctrl.reviewsData.items">
+                            <td>{{item.review | limitTo : 70}} ... </td>
+                            <td>{{item.insertDate | toDate | date : ctrl.mainCtrl.CONF.DATE_TIME_FORMAT }}</td>
+
+                            <td>
+                                <span style="margin-left: 10px" class="btn-group" role="group">
+                                    <button title="Modifica" type="button" ng-click="ctrl.onEdit(item)"
+                                            class="btn btn-default btn-xs">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </button>
+
+                                    <button title="Elimina" type="button" ng-click="ctrl.onDelete(item)"
+                                            ng-disabled="data.children.length > 0" class="btn btn-default btn-xs">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+
+                                </span>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+            <div class="panel-footer">
+
+                <div class="row">
+                    <div class="col-md-4 page-info">
+                        <span><i>Elementi totali: </i> <b>{{ctrl.reviewsData.total_count ? ctrl.reviewsData.total_count : "n.d."}} </b></span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <uib-pagination total-items="ctrl.reviewsData.total_count"
+                                            ng-change="ctrl.pageChanged()"
+                                            ng-model="ctrl.filter.page" max-size="10"
+                                            previous-text="&lsaquo;"
+                                            next-text="&rsaquo;"
+                                            last-text="&rsaquo;&rsaquo;"
+                                            first-text="&lsaquo;&lsaquo;"
+                                            class="pagination-sm" boundary-link-numbers="true"
+                                            force-ellipses="true" rotate="false">
+                            </uib-pagination>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

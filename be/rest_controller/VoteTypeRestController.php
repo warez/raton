@@ -11,7 +11,7 @@ class VoteTypeRestController extends BaseRestController {
 
         parent::__construct($version);
 
-        $this->service = new VoteTypeRestService( $this );
+        $this->service = new VoteTypeRestService();
         $this->base = "voteType";
     }
 
@@ -62,6 +62,12 @@ class VoteTypeRestController extends BaseRestController {
 
                     "mode" => array(
                         'description'        => __( 'mode to move.' ),
+                        'type'               => 'string',
+                        'validate_callback'  => 'rest_validate_request_arg'
+                    ),
+
+                    "vote_meta" => array(
+                        'description'        => __( 'meta info for vote type.' ),
                         'type'               => 'string',
                         'validate_callback'  => 'rest_validate_request_arg'
                     )

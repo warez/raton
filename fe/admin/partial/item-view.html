@@ -142,7 +142,7 @@
 
                         <tr ng-repeat="item in ctrl.itemsData.items">
                             <td>{{item.title}}</td>
-                            <td>{{item.description}}</td>
+                            <td>{{item.description | limitTo : 70}} ... </td>
                             <td>{{item.insert_date | toDate | date : ctrl.mainCtrl.CONF.DATE_TIME_FORMAT }}</td>
                             <td>{{item.last_update_date | toDate | date : ctrl.mainCtrl.CONF.DATE_TIME_FORMAT}}</td>
 
@@ -168,6 +168,11 @@
                                 <button title="Elimina" type="button" ng-click="ctrl.onDelete(item)"
                                         ng-disabled="data.children.length > 0" class="btn btn-default btn-xs">
                                     <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+
+                                <button title="Recensioni" type="button" ng-click="ctrl.goToReview(item)"
+                                        class="btn btn-default btn-xs">
+                                    <i class="glyphicon glyphicon-star"></i>
                                 </button>
 
                             </td>
