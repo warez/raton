@@ -21,7 +21,7 @@ class ReviewRestController extends BaseRestController {
 
         register_rest_route( $this->namespace, '/' . $this->base . '/search/byItem/(?P<itemId>[-]?[\d]+)', array(
             array(
-                'methods'         => WP_REST_Server::READABLE,
+                'methods'         => WP_REST_Server::EDITABLE,
                 'callback'        => array( $this->service, 'search' ),
                 'permission_callback' => array( $this, 'getAllUserCheck' ),
                 'args'            => array(

@@ -1,13 +1,13 @@
 <div class="row">
 
-    <div ng-if="ctrl.itemViewOpt.fromCategory" class="col-md-12">
+    <div class="col-md-12">
         <div class="detail-panel panel panel-default">
-            <div class="panel-heading">Articolo selezionato"</div>
+            <div class="panel-heading">Articolo selezionato</div>
             <div class="panel-body">
 
                 <span style="margin-right: 20px">
                     <label class="title">Nome:</label>
-                    <label class="val">{{ctrl.searchedItem.title}}</label>
+                    <label class="val">{{ctrl.selectedItem.title}}</label>
                 </span>
 
                 <span style="margin-left: 40px">
@@ -45,12 +45,19 @@
                         <tr>
                             <th>Review</th>
                             <th>Data inserimento</th>
+                            <th ng-repeat="filter in ctrl.voteTypes.items">
+                                <span title="{{filter.description}}">{{filter.title}}</span>
+                            </th>
                             <th></th>
                         </tr>
 
                         <tr ng-repeat="item in ctrl.reviewsData.items">
                             <td>{{item.review | limitTo : 70}} ... </td>
-                            <td>{{item.insertDate | toDate | date : ctrl.mainCtrl.CONF.DATE_TIME_FORMAT }}</td>
+                            <td>{{item.insert_date | toDate | date : ctrl.mainCtrl.CONF.DATE_TIME_FORMAT }}</td>
+
+                            <td ng-repeat="voteType in ctrl.voteTypes.items">
+                                {{ctrl.getVoteValue(item, voteType)}}
+                            </td>
 
                             <td>
                                 <span style="margin-left: 10px" class="btn-group" role="group">

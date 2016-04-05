@@ -13,14 +13,12 @@ angular.module("JRatonApp").controller("ReviewController", ['$scope', '$location
         ctrl.voteTypes = [];
 
         ctrl.filter = {
-            from: -1,
+            idItem: parseInt(ctrl.selectedItem.id,10),
             page: 1,
             per_page: 10
         };
 
         ctrl.load = function() {
-
-            ctrl.filter.from = ctrl.selectedItem.id;
             ctrl.loadVoteType();
         };
 
@@ -28,7 +26,7 @@ angular.module("JRatonApp").controller("ReviewController", ['$scope', '$location
 
             LoaderService.start();
 
-            var filter = { categoryId: ctrl.filter.from };
+            var filter = { categoryId: ctrl.selectedItem.id_category };
             VoteTypeService.search(filter).$promise.then(function(data) {
 
                 LoaderService.stop();
@@ -62,12 +60,26 @@ angular.module("JRatonApp").controller("ReviewController", ['$scope', '$location
             });
         };
 
+        ctrl.getVoteValue = function(review, voteType) {
+            for(var i = 0; i < ctrl.reviewsData.votes.length; i++) {
+                var vote = ctrl.reviewsData.votes[i];
+
+                if(review.id != vote.review_id ||
+                   voteType.id != vote.id_vote_types)
+                    continue;
+
+                return vote.vote_value;
+            }
+
+            return null;
+        };
+
         ctrl.isValidSearch = function() {
 
             return true;
         };
 
-        ctrl.createItem = function() {
+        ctrl.createReview = function() {
 
             var modalInstance = $uibModal.open({
                 animation: true,

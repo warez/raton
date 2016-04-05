@@ -19,6 +19,7 @@ class ReviewRestService extends BaseRestService {
         "id" => "%d",
         "review" => "%s",
         "id_item" => "%d",
+        "insert_date" => "%d",
         "id_user" => "%d"
     );
 
@@ -50,6 +51,11 @@ class ReviewRestService extends BaseRestService {
             parent::setProp("id_user", $filter, $id_user);
         }
 
+        $insert_date = parent::getProp("insert_date", $filter);
+        if($insert_date != null) {
+            parent::setProp("insert_date", $filter, $insert_date);
+        }
+
         $votes = parent::getProp("votes", $filter);
         if($votes != null) {
             parent::setProp("votes", $filter, $votes);
@@ -59,14 +65,62 @@ class ReviewRestService extends BaseRestService {
     }
 
     function search($request) {
+        global $wpdb;
+
         try {
 
-            return new WP_REST_Response();
+            $dao = $this->dao;
+            $tableName = $dao->getTableName();
 
-        } catch (Exception $e) {
+            $page = $request->get_param("page");
+            $itemPerPage = $request->get_param("per_page");;
+            $itemId = $request->get_param("idItem");
 
-            return new WP_Error( "get_cat_vote_type" , __( $e->getMessage() ), array( 'status' => 500 ) );
+            $page = $page - 1;
+            $firstItem = $page * $itemPerPage;
 
+            $params = array($itemId);
+            $queryCount = $wpdb->prepare(" SELECT count(*) FROM " . $tableName . " where id_item = %d", $params);
+            $retCount = $wpdb->get_var($queryCount);
+
+            $data = array("votes"=> array(), "items"=> array(), "total_count"=>$retCount , "page"=>$page + 1 , "itemPerPage"=>$itemPerPage);
+            if($retCount == 0) {
+                return new WP_REST_Response($data);
+            }
+
+            $params = array($firstItem,$itemPerPage);
+            $query = $wpdb->prepare(
+                " SELECT * FROM " . $tableName . " order by insert_date desc LIMIT %d,%d", $params);
+            $result = $wpdb->get_results($query, OBJECT);
+            if ($result == null) {
+                return new WP_REST_Response($data);
+            } else {
+                $data["items"] = $result;
+            }
+
+            $ids = array_map(create_function('$o', 'return $o->id_item;'), $result);
+            $comma_separated = implode(",", $ids);
+            $query = $wpdb->prepare(
+                "SELECT r.id_user, r.id as 'review_id', v.id_vote_types, v.vote_value
+                FROM wp_reviews AS r
+                LEFT JOIN wp_review_votes AS rv ON r.id = rv.id_review
+                LEFT JOIN wp_votes AS v ON v.id = rv.id_vote
+                where r.id_item in (" . $comma_separated .") GROUP BY r.id_item, v.id_vote_types, r.id_user");
+            $result = $wpdb->get_results($query, OBJECT);
+            if ($result == null) {
+                throw new Exception();
+            } else {
+                $data["votes"] = $result;
+            }
+
+            return new WP_REST_Response($data);
+
+        } catch(Exception $e) {
+
+            return new WP_Error( "search_review" , __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        } finally {
+            ob_clean();
         }
     }
 

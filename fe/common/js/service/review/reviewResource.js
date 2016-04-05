@@ -12,7 +12,7 @@ angular.module("JRatonCommon").service("ReviewResource", ['$resource', function 
 
         create: {method: 'POST', params: {}, isArray: false},
 
-        search: {url: resource + '/search', method: 'POST', params: {}, isArray: false},
+        search: {url: resource + '/search/byItem/:idItem', method: 'POST', params: {idItem:'@idItem'}, isArray: false},
 
     });
 
