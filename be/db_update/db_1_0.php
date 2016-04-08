@@ -16,6 +16,10 @@ last_update_date BIGINT NOT NULL,
 id_category INTEGER NOT NULL,
 approved CHARACTER VARYING(1) NOT NULL DEFAULT 'n',
 request_approve CHARACTER VARYING(1) NOT NULL DEFAULT 'y',
+id_user_create INTEGER NOT NULL,
+name_user_create CHARACTER VARYING(255) CHARACTER SET utf8 NULL DEFAULT '',
+id_user_last_update INTEGER,
+name_user_last_update CHARACTER VARYING(255) CHARACTER SET utf8 NULL DEFAULT '',
 PRIMARY KEY (id)
 ) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
 
@@ -24,6 +28,10 @@ PRIMARY KEY (id)
 title CHARACTER VARYING(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
 description CHARACTER VARYING(512) CHARACTER SET utf8 NULL DEFAULT '',
 id_parent_category INTEGER NULL DEFAULT -1,
+id_user_create INTEGER NOT NULL,
+name_user_create CHARACTER VARYING(255) CHARACTER SET utf8 NULL DEFAULT '',
+id_user_last_update INTEGER,
+name_user_last_update CHARACTER VARYING(255) CHARACTER SET utf8 NULL DEFAULT '',
 PRIMARY KEY (id)
 ) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
 
@@ -32,21 +40,16 @@ PRIMARY KEY (id)
 review CHARACTER VARYING(2048) CHARACTER SET utf8 NULL DEFAULT '',
 insert_date BIGINT NOT NULL,
 id_item INTEGER NOT NULL,
-id_user INTEGER NOT NULL,
-PRIMARY KEY (id)
-) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
-
-"CREATE TABLE " . $wpdb -> prefix . "review_votes (
-        id INTEGER NOT NULL AUTO_INCREMENT,
-id_review INTEGER NOT NULL,
-id_vote INTEGER NOT NULL,
+id_user_create INTEGER NOT NULL,
+name_user_create CHARACTER VARYING(255) CHARACTER SET utf8 NULL DEFAULT '',
 PRIMARY KEY (id)
 ) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
 
 "CREATE TABLE " . $wpdb -> prefix . "votes (
         id INTEGER NOT NULL AUTO_INCREMENT,
-vote_value CHARACTER VARYING(1024) CHARACTER SET utf8 NULL DEFAULT '',
+vote_value CHARACTER VARYING(2048) CHARACTER SET utf8 NULL DEFAULT '',
 id_vote_types INTEGER NOT NULL,
+id_review INTEGER NOT NULL,
 PRIMARY KEY (id)
 ) ENGINE=InnoDB $charset_collate AUTO_INCREMENT=1;",
 
@@ -67,13 +70,11 @@ PRIMARY KEY (id)
 
 "ALTER TABLE " . $wpdb -> prefix . "reviews ADD CONSTRAINT FK_REVIEW_ITEM FOREIGN KEY (id_item) REFERENCES " . $wpdb -> prefix . "items (id);",
 
-"ALTER TABLE " . $wpdb -> prefix . "review_votes ADD CONSTRAINT FK_REVVOTE_REVIEW FOREIGN KEY (id_review) REFERENCES " . $wpdb -> prefix . "reviews (id);",
-
 "ALTER TABLE " . $wpdb -> prefix . "votes_types ADD CONSTRAINT FK_VOTETYPE_VOTE FOREIGN KEY (id_category) REFERENCES " . $wpdb -> prefix . "categories (id);",
 
 "ALTER TABLE " . $wpdb -> prefix . "votes ADD CONSTRAINT FK_VOTE_VOTETYPE FOREIGN KEY (id_vote_types) REFERENCES " . $wpdb -> prefix . "votes_types (id);",
 
-"ALTER TABLE " . $wpdb -> prefix . "review_votes ADD CONSTRAINT FK_REVVOTE_VOTE FOREIGN KEY (id_vote) REFERENCES " . $wpdb -> prefix . "votes (id);");
+"ALTER TABLE " . $wpdb -> prefix . "votes ADD CONSTRAINT FK_VOTE_REVIEW FOREIGN KEY (id_review) REFERENCES " . $wpdb -> prefix . "review (id);");
 
     try {
 

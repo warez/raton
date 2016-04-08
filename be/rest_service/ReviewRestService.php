@@ -9,13 +9,11 @@
 global $raton_dir;
 require_once($raton_dir["SERVICE"] . "BaseRestService.php");
 require_once($raton_dir["SERVICE"] . "VoteRestService.php");
-require_once($raton_dir["SERVICE"] . "ReviewToVoteRestService.php");
 require_once( $raton_dir["DAO"] . "ReviewDao.php");
 
 class ReviewRestService extends BaseRestService {
 
     private $voteRestService;
-    private $reviewToVoteRestService;
 
     private $format = array(
         "id" => "%d",
@@ -29,7 +27,6 @@ class ReviewRestService extends BaseRestService {
     {
         parent :: __construct(new ReviewDao());
         $this->voteRestService = new VoteRestService();
-        $this->reviewToVoteRestService = new ReviewToVoteRestService();
     }
 
     function prepareForDb($filter) {
@@ -149,13 +146,6 @@ class ReviewRestService extends BaseRestService {
                 return $voteOrError;
             }
 
-            $reviewToVoteOrError =
-                $this->reviewToVoteRestService->addReviewToVote($item["id_item"], $voteOrError);
-            if (get_class($reviewToVoteOrError) == "WP_Error") {
-                $this->dao->rollback();
-                return $reviewToVoteOrError;
-            }
-
             $itemOrError = $this->prepareForResponse($itemOrError, $request);
             $this->dao->commit();
             return $itemOrError;
@@ -191,13 +181,6 @@ class ReviewRestService extends BaseRestService {
             if (get_class($voteOrError) == "WP_Error") {
                 $this->dao->rollback();
                 return $voteOrError;
-            }
-
-            $reviewToVoteOrError =
-                $this->reviewToVoteRestService->deleteFromReview($id);
-            if (get_class($reviewToVoteOrError) == "WP_Error") {
-                $this->dao->rollback();
-                return $reviewToVoteOrError;
             }
 
             $this->dao->commit();
