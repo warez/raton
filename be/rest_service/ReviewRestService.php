@@ -9,17 +9,19 @@
 global $raton_dir;
 require_once($raton_dir["SERVICE"] . "BaseRestService.php");
 require_once($raton_dir["SERVICE"] . "VoteRestService.php");
+require_once($raton_dir["SERVICE"] . "ReviewToVoteRestService.php");
 require_once( $raton_dir["DAO"] . "ReviewDao.php");
 
 class ReviewRestService extends BaseRestService {
 
     private $voteRestService;
+    private $reviewToVoteRestService;
 
     private $format = array(
         "id" => "%d",
         "review" => "%s",
-        "id_item" => "%d",
         "insert_date" => "%d",
+        "id_item" => "%d",
         "id_user" => "%d"
     );
 
@@ -27,41 +29,39 @@ class ReviewRestService extends BaseRestService {
     {
         parent :: __construct(new ReviewDao());
         $this->voteRestService = new VoteRestService();
+        $this->reviewToVoteRestService = new ReviewToVoteRestService();
     }
 
     function prepareForDb($filter) {
 
+        $data = array("id"=>null);
+
         $id = parent::getProp("id", $filter);
         if($id != null) {
-            parent::setProp("id", $filter, $id);
+            parent::setProp("id", $data, $id);
         }
 
         $review = parent::getProp("review", $filter);
         if($review != null) {
-            parent::setProp("review", $filter, $review);
+            parent::setProp("review", $data, $review);
         }
 
         $id_item = parent::getProp("id_item", $filter);
         if($id_item != null) {
-            parent::setProp("id_item", $filter, $id_item);
+            parent::setProp("id_item", $data, $id_item);
         }
 
         $id_user = parent::getProp("id_user", $filter);
         if($id_user != null) {
-            parent::setProp("id_user", $filter, $id_user);
+            parent::setProp("id_user", $data, $id_user);
         }
 
         $insert_date = parent::getProp("insert_date", $filter);
         if($insert_date != null) {
-            parent::setProp("insert_date", $filter, $insert_date);
+            parent::setProp("insert_date", $data, $insert_date);
         }
 
-        $votes = parent::getProp("votes", $filter);
-        if($votes != null) {
-            parent::setProp("votes", $filter, $votes);
-        }
-
-        return $filter;
+        return $data;
     }
 
     function search($request) {
@@ -142,14 +142,18 @@ class ReviewRestService extends BaseRestService {
                 return $itemOrError;
             }
 
-            foreach ($item->votes as $voteData) {
-                $voteOrError =
-                    $this->voteRestService->addReviewVote($item, $item->votes);
-                if (get_class($voteOrError) == "WP_Error") {
-                    $this->dao->rollback();
-                    return $voteOrError;
-                }
+            $voteOrError =
+                $this->voteRestService->addReviewVote($jsonItem["votes"]);
+            if (get_class($voteOrError) == "WP_Error") {
+                $this->dao->rollback();
+                return $voteOrError;
+            }
 
+            $reviewToVoteOrError =
+                $this->reviewToVoteRestService->addReviewToVote($item["id_item"], $voteOrError);
+            if (get_class($reviewToVoteOrError) == "WP_Error") {
+                $this->dao->rollback();
+                return $reviewToVoteOrError;
             }
 
             $itemOrError = $this->prepareForResponse($itemOrError, $request);
@@ -159,6 +163,50 @@ class ReviewRestService extends BaseRestService {
         } catch (Exception $e) {
             die();
             return new WP_Error( "create_" + get_class(), __( $e->getMessage() ), array( 'status' => 500 ) );
+
+        } finally {
+            ob_end_clean();
+        }
+    }
+
+    public function delete( $request ) {
+
+        try {
+
+            ob_start();
+            $this->dao->startTransaction();
+
+            $id = $this->getIdFromRequest($request);
+            $ret = $this->dao->delete($id);
+
+            if(is_object($ret) && get_class($ret) == "WP_Error") {
+                $this->dao->rollback();
+                return $ret;
+            }
+
+            if(is_bool($ret) && !$ret)
+                throw new Exception("No item deleted");
+
+            $voteOrError = $this->voteRestService->deleteFromReview($id);
+            if (get_class($voteOrError) == "WP_Error") {
+                $this->dao->rollback();
+                return $voteOrError;
+            }
+
+            $reviewToVoteOrError =
+                $this->reviewToVoteRestService->deleteFromReview($id);
+            if (get_class($reviewToVoteOrError) == "WP_Error") {
+                $this->dao->rollback();
+                return $reviewToVoteOrError;
+            }
+
+            $this->dao->commit();
+            return new WP_REST_Response( array() , 200 );
+
+        } catch (Exception $e) {
+
+            $this->dao->rollback();
+            return new WP_Error( "delete_" + get_class() , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         } finally {
             ob_end_clean();

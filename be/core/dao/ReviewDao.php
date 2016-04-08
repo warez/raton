@@ -2,6 +2,7 @@
 
 global $raton_dir;
 require_once($raton_dir["DAO"] . "DaoBase.php");
+require_once($raton_dir["DAO"] . "ItemDao.php");
 
 //16.00 antonella mula armanda biasci
 
@@ -13,6 +14,7 @@ class ReviewDao extends DaoBase
     function __construct()
     {
         parent::__construct("reviews", "id");
+        $this->itemDao = new ItemDao();
     }
 
     function getTableName() {
@@ -63,9 +65,9 @@ class ReviewDao extends DaoBase
 
         try {
 
-            $itemData = array("id_item" => $data["id_item"]);
+            $itemData = array("id" => $data["id_item"]);
             $existItem = $this->itemDao->testIdPresent($itemData);
-            if($existItem == null)
+            if($existItem != null)
                 return new WP_Error( "create_review" , "Article review not exist" , array( 'status' => 500 ) );
 
             $date = date('YmdHis', time());

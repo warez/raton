@@ -91,7 +91,7 @@ angular.module("JRatonApp").controller("ReviewController", ['$scope', '$location
                         return ctrl.selectedItem;
                     },
                     voteTypes: function() {
-                        return ctrl.voteTypes;
+                        return ctrl.voteTypes.items;
                     }
                 }
             });
@@ -207,26 +207,32 @@ angular.module("JRatonApp").controller("ReviewController", ['$scope', '$location
         $uibModalInstance.dismiss('cancel');
     };
 
-}).controller('CreateItemCtrl', function ($scope, $uibModalInstance, ItemService, category) {
+}).controller('CreateReviewCtrl', function ($scope, $uibModalInstance, ReviewService, item, voteTypes) {
 
     $scope.data = {
-        id_category: category.id,
-        request_approve: 'y',
-        approved: 'n'
+        id_item: item.id,
+        review: '',
+        votes: {}
     };
 
+    $scope.item = item;
+    $scope.voteTypes = voteTypes;
     $scope.mode = "CREATE";
-    $scope.requestApproveDisabled = true;
-    $scope.title = "Crea articolo";
+    $scope.title = "Crea recensione";
+
+    $scope.voteLimits = [];
+
+    for(var i = 0; i < $scope.voteTypes.length; i++) {
+        $scope.voteLimits[ $scope.voteTypes[i]["id"] ] = parseInt($scope.voteTypes[i]["vote_limit"]);
+    }
 
     $scope.ok = function () {
 
-        if (!ItemService.testCreateReview($scope.data)) {
-            //TODO
+        if (!ReviewService.testCreateReview($scope.data)) {
             return;
         }
 
-        var itemDB = ItemService.prepareDBReview($scope.data);
+        var itemDB = ReviewService.prepareDBReview($scope.data);
         $uibModalInstance.close(itemDB);
     };
 

@@ -3,13 +3,13 @@
 global $raton_dir;
 require_once($raton_dir["DAO"] . "DaoBase.php");
 
-class VoteDao extends DaoBase
+class ReviewToVoteDao extends DaoBase
 {
 
     function __construct()
     {
 
-        parent::__construct("votes", "id");
+        parent::__construct("review_votes", "id");
     }
 
     function deleteFromReview($reviewId) {
@@ -29,6 +29,7 @@ class VoteDao extends DaoBase
         }
     }
 
+
     function update($data, $format)
     {
 
@@ -39,7 +40,7 @@ class VoteDao extends DaoBase
 
         } catch (Exception $e) {
 
-            return new WP_Error("update_vote", __($e->getMessage()), array('status' => 500));
+            return new WP_Error("update_review_to_vote", __($e->getMessage()), array('status' => 500));
 
         }
 

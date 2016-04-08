@@ -8,30 +8,32 @@
 
 global $raton_dir;
 require_once($raton_dir["SERVICE"] . "BaseRestService.php");
-require_once( $raton_dir["DAO"] . "VoteDao.php");
+require_once( $raton_dir["DAO"] . "ReviewToVoteDao.php");
 
-class VoteRestService extends BaseRestService {
+class ReviewToVoteRestService extends BaseRestService {
 
     private $format = array(
         "id" => "%d",
-        "vote_value" => "%s",
-        "id_vote_types" => "%d"
+        "id_review" => "%s",
+        "id_vote" => "%d"
     );
 
     function __construct()
     {
-        parent :: __construct(new VoteDao());
+        parent :: __construct(new ReviewToVoteDao());
     }
 
-    function addReviewVote($votes) {
+    function addReviewToVote($reviewId, $votes) {
 
         $ret = array();
 
         foreach ( $votes as $vote) {
 
-            $vote["vote_value"] = json_encode( $vote["vote_value"] );
+            $reviewToVote = array();
+            $reviewToVote["id_review"] = $reviewId;
+            $reviewToVote["id_vote"] = $vote->id;
 
-            $voteOrError = $this->dao->create($vote, $this->format);
+            $voteOrError = $this->dao->create($reviewToVote, $this->format);
             if (get_class($voteOrError) == "WP_Error") {
                 return $voteOrError;
             }
@@ -46,6 +48,7 @@ class VoteRestService extends BaseRestService {
     function deleteFromReview($reviewId) {
         return $this->dao->deleteFromReview($reviewId);
     }
+
 
     function getFormat($data) {
         $format = array();

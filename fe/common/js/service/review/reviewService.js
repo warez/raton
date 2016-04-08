@@ -42,15 +42,14 @@ angular.module("JRatonCommon").service("ReviewService", ['ReviewResource', '$fil
                 ret.review = item.review.trim();
                 ret.id_item = item.id_item;
                 ret.votes = [];
-                for(var i = 0; i < item.votes.length; i++) {
 
-                    var voteValue = { "type" : "string" , "value" : item.votes[i]["vote_value"] };
-
-                    ret.votes.push = {
-                        id_vote_types: item.votes[i]["id_vote_type"],
-                        vote_value: angular.toJson(voteValue)
-                    };
-                }
+                angular.forEach(item.votes, function(value, key) {
+                    var voteValue = { "type" : "star" , "value" : value["vote_value"] , "meta" : [] };
+                    ret.votes.push( {
+                        id_vote_types: key,
+                        vote_value: voteValue
+                    });
+                });
 
                 if (item.id) {
                     ret.id = item.id

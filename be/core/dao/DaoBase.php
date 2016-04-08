@@ -165,12 +165,12 @@ abstract class DaoBase {
 
     function rollback() {
         global $wpdb;
-        $wpdb->query('COMMIT');
+        $wpdb->query('ROLLBACK');
     }
 
     function commit() {
         global $wpdb;
-        $wpdb->query('ROLLBACK');
+        $wpdb->query('COMMIT');
     }
 
     function update($data, $format) {
