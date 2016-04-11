@@ -43,12 +43,67 @@ abstract class BaseRestService
 
     function prepareForDb($item, $op)
     {
-        return $item;
+        $props = array_keys($this->getFormat());
+        $data = $this->copy($item, $props);
+
+        $user = wp_get_current_user();
+        $userName = $user->display_name;
+        $userId = $user->ID;
+        if($op == "CREATE") {
+
+            if (in_array("id_user_create", $props)) {
+                $this->setProp("id_user_create", $data, $userId);
+            }
+
+            if (in_array("name_user_create", $props)) {
+                $this->setProp("name_user_create", $data, $userName);
+            }
+
+            $date = date('YmdHis', time());
+            if (in_array("insert_date", $props)) {
+                $this->setProp("insert_date", $data, $date);
+            }
+
+        }
+
+        if($op == "UPDATE") {
+            if (in_array("id_user_last_update", $props)) {
+                $this->setProp("id_user_last_update", $data, $userId);
+            }
+
+            if (in_array("name_user_last_update", $props)) {
+                $this->setProp("name_user_last_update", $data, $userName);
+            }
+
+            $date = date('YmdHis', time());
+            if (in_array("last_update_date", $props)) {
+                $this->setProp("last_update_date", $data, $date);
+            }
+        }
+
+        return $data;
+    }
+
+    function copy($source, $props = array()) {
+
+        $ret = array();
+
+        foreach($props as $key) {
+
+            $val = $this::getProp($key, $source);
+            if($val != null) {
+                $this::setProp($key, $ret, $val);
+            }
+
+        }
+
+        return $ret;
+
     }
 
     function prepareForResponse($item, $op)
     {
-        return $item;
+        return $this->prepareForDb($item, $op);
     }
 
     function getIdFromRequest($request) {

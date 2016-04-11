@@ -17,46 +17,6 @@ class VoteTypeRestService extends BaseRestService {
         parent :: __construct(new VoteTypeDao());
     }
 
-    function prepareForDb($filter) {
-
-        $id = parent::getProp("id", $filter);
-        if($id != null) {
-            parent::setProp("id", $filter, $id);
-        }
-
-        $title = parent::getProp("title", $filter);
-        if($title != null) {
-            parent::setProp("title", $filter, $title);
-        }
-
-        $description = parent::getProp("description", $filter);
-        if($description != null) {
-            parent::setProp("description", $filter, $description);
-        }
-
-        $position = parent::getProp("position", $filter);
-        if($position != null) {
-            parent::setProp("position", $filter, $position);
-        }
-
-        $vote_limit = parent::getProp("vote_limit", $filter);
-        if($vote_limit != null) {
-            parent::setProp("vote_limit", $filter, $vote_limit);
-        }
-
-        $id_category = parent::getProp("id_category", $filter);
-        if($id_category != null) {
-            parent::setProp("id_category", $filter, $id_category);
-        }
-
-        $vote_meta = parent::getProp("vote_meta", $filter);
-        if($vote_meta != null) {
-            parent::setProp("vote_meta", $filter, $vote_meta);
-        }
-
-        return $filter;
-    }
-
     function move ($request) {
         try {
 
@@ -103,11 +63,6 @@ class VoteTypeRestService extends BaseRestService {
             return new WP_Error( "get_cat_vote_type" , __( $e->getMessage() ), array( 'status' => 500 ) );
 
         }
-    }
-
-    function prepareForResponse($filter, $op) {
-
-        return $this->prepareForDb($filter, $op);
     }
 
     function getFormat() {

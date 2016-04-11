@@ -35,21 +35,6 @@ class ItemRestService extends BaseRestService {
         parent :: __construct(new ItemDao());
     }
 
-    function prepareForDb($item, $op) {
-
-        $id = parent::getProp("id", $item);
-        if($id != null) {
-            parent::setProp("id", $item, $id);
-        }
-
-        $id_parent_category = parent::getProp("id_parent_category", $item);
-        if($id_parent_category != null) {
-            parent::setProp("id_parent_category", $item, $id_parent_category);
-        }
-
-        return $item;
-    }
-
     function search($request) {
 
         try {

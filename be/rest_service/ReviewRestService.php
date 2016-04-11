@@ -21,36 +21,6 @@ class ReviewRestService extends BaseRestService {
         $this->voteRestService = new VoteRestService();
     }
 
-    function prepareForDb($filter, $op) {
-
-        $id = parent::getProp("id", $filter);
-        if($id != null) {
-            parent::setProp("id", $data, $id);
-        }
-
-        $review = parent::getProp("review", $filter);
-        if($review != null) {
-            parent::setProp("review", $data, $review);
-        }
-
-        $id_item = parent::getProp("id_item", $filter);
-        if($id_item != null) {
-            parent::setProp("id_item", $data, $id_item);
-        }
-
-        $id_user = parent::getProp("id_user", $filter);
-        if($id_user != null) {
-            parent::setProp("id_user", $data, $id_user);
-        }
-
-        $insert_date = parent::getProp("insert_date", $filter);
-        if($insert_date != null) {
-            parent::setProp("insert_date", $data, $insert_date);
-        }
-
-        return $data;
-    }
-
     function search($request) {
         global $wpdb;
 
@@ -184,11 +154,6 @@ class ReviewRestService extends BaseRestService {
         } finally {
             ob_end_clean();
         }
-    }
-
-    function prepareForResponse($filter, $op) {
-
-        return $this->prepareForDb($filter, $op);
     }
 
     function getFormat() {
