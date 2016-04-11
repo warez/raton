@@ -17,44 +17,54 @@ class CategoryRestService extends BaseRestService {
         parent :: __construct(new CategoryDao());
     }
 
-    function prepareForDb($category) {
+    function prepareForDb($category, $op) {
+
+        $data = array("id"=>null);
 
         $id = parent::getProp("id", $category);
         if($id != null && $id != -1) {
-            parent::setProp("id", $category, $id);
+            parent::setProp("id", $data, $id);
         } else {
-            parent::setProp("id", $category, null);
+            parent::setProp("id", $data, null);
         }
-
 
         $id_parent_category = parent::getProp("id_parent_category", $category);
         if($id_parent_category != null && $id_parent_category != -1) {
-            parent::setProp("id_parent_category", $category, $id_parent_category);
+            parent::setProp("id_parent_category", $data, $id_parent_category);
         } else {
-            parent::setProp("id_parent_category", $category, null);
+            parent::setProp("id_parent_category", $data, null);
         }
 
-        return $category;
-    }
-
-    function prepareForResponse($category, $request) {
-
-        return $this->prepareForDb($category);
-    }
-
-    private $format = array(
-        "id" => "%d",
-        "title" => "%s",
-        "description" => "%s",
-        "id_parent_category" => "%d"
-    );
-
-    function getFormat($data) {
-        $format = array();
-        foreach ( $data as $d => $a) {
-            $format[$d] = $this->format[$d];
+        $user = wp_get_current_user();
+        if($op == "CREATE") {
+            $data[""] = $user->user_lastname;
+            $data[""] = $user->ID;
         }
-        return $format;
+
+        if($op == "UPDATE") {
+            $data[""] = $user->user_lastname;
+            $data[""] = $user->ID;
+        }
+
+        return $data;
+    }
+
+    function prepareForResponse($category, $op) {
+
+        return $this->prepareForDb($category,$op);
+    }
+
+    function getFormat() {
+        return array(
+            "id" => "%d",
+            "title" => "%s",
+            "description" => "%s",
+            "id_parent_category" => "%d",
+            "id_user_create" => "%d",
+            "name_user_create" => "%s",
+            "id_user_last_update" => "%d",
+            "name_user_last_update" => "%s"
+        );
     }
 
     function getCategoryTree($request) {

@@ -15,23 +15,13 @@ class ReviewRestService extends BaseRestService {
 
     private $voteRestService;
 
-    private $format = array(
-        "id" => "%d",
-        "review" => "%s",
-        "insert_date" => "%d",
-        "id_item" => "%d",
-        "id_user" => "%d"
-    );
-
     function __construct()
     {
         parent :: __construct(new ReviewDao());
         $this->voteRestService = new VoteRestService();
     }
 
-    function prepareForDb($filter) {
-
-        $data = array("id"=>null);
+    function prepareForDb($filter, $op) {
 
         $id = parent::getProp("id", $filter);
         if($id != null) {
@@ -129,9 +119,9 @@ class ReviewRestService extends BaseRestService {
             $this->dao->startTransaction();
 
             $jsonItem = $request->get_json_params();
-            $item = $this->prepareForDb($jsonItem);
+            $item = $this->prepareForDb($jsonItem, "CREATE");
 
-            $format = $this->getFormat($item);
+            $format = $this->getDataFormat($item);
 
             $itemOrError = $this->dao->create($item, $format);
             if (get_class($itemOrError) == "WP_Error") {
@@ -146,7 +136,7 @@ class ReviewRestService extends BaseRestService {
                 return $voteOrError;
             }
 
-            $itemOrError = $this->prepareForResponse($itemOrError, $request);
+            $itemOrError = $this->prepareForResponse($itemOrError, "CREATE");
             $this->dao->commit();
             return $itemOrError;
 
@@ -196,16 +186,19 @@ class ReviewRestService extends BaseRestService {
         }
     }
 
-    function prepareForResponse($filter, $request) {
+    function prepareForResponse($filter, $op) {
 
-        return $this->prepareForDb($filter);
+        return $this->prepareForDb($filter, $op);
     }
 
-    function getFormat($data) {
-        $format = array();
-        foreach ( $data as $d => $a) {
-            $format[$d] = $this->format[$d];
-        }
-        return $format;
+    function getFormat() {
+        return array(
+            "id" => "%d",
+            "review" => "%s",
+            "insert_date" => "%d",
+            "id_item" => "%d",
+            "id_user_create" => "%d",
+            "name_user_create" => "%s"
+        );
     }
 }

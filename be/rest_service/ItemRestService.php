@@ -12,24 +12,22 @@ require_once( $raton_dir["DAO"] . "ItemDao.php");
 
 class ItemRestService extends BaseRestService {
 
-    protected $itemFormat = array(
-        "id" => "%d",
-        "title" => "%s",
-        "description" => "%s",
-        "image" => "%s",
-        "insert_date" => "%d",
-        "last_update_date" => "%d",
-        "id_category" => "%d",
-        "approved" => "%s",
-        "request_approve" => "%s"
-    );
-
-    function getFormat($data) {
-        $format = array();
-        foreach ( $data as $d => $a) {
-            $format[$d] = $this->itemFormat[$d];
-        }
-        return $format;
+    function getFormat() {
+        return array(
+            "id" => "%d",
+            "title" => "%s",
+            "description" => "%s",
+            "image" => "%s",
+            "insert_date" => "%d",
+            "last_update_date" => "%d",
+            "id_category" => "%d",
+            "approved" => "%s",
+            "request_approve" => "%s",
+            "id_user_create" => "%d",
+            "name_user_create" => "%s",
+            "id_user_last_update" => "%d",
+            "name_user_last_update" => "%s"
+        );
     }
 
     function __construct()
@@ -37,7 +35,7 @@ class ItemRestService extends BaseRestService {
         parent :: __construct(new ItemDao());
     }
 
-    function prepareForDb($item) {
+    function prepareForDb($item, $op) {
 
         $id = parent::getProp("id", $item);
         if($id != null) {
@@ -117,9 +115,9 @@ class ItemRestService extends BaseRestService {
 
     }
 
-    function prepareForResponse($item, $request) {
+    function prepareForResponse($item, $op) {
 
-        return $this->prepareForDb($item);
+        return $this->prepareForDb($item, $op);
     }
 
 }

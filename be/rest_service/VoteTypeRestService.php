@@ -12,16 +12,6 @@ require_once( $raton_dir["DAO"] . "VoteTypeDao.php");
 
 class VoteTypeRestService extends BaseRestService {
 
-    private $format = array(
-        "id" => "%d",
-        "title" => "%s",
-        "description" => "%s",
-        "position" => "%d",
-        "vote_limit" => "%d",
-        "id_category" => "%d",
-        "vote_meta" => "%s"
-    );
-
     function __construct()
     {
         parent :: __construct(new VoteTypeDao());
@@ -115,16 +105,20 @@ class VoteTypeRestService extends BaseRestService {
         }
     }
 
-    function prepareForResponse($filter, $request) {
+    function prepareForResponse($filter, $op) {
 
-        return $this->prepareForDb($filter);
+        return $this->prepareForDb($filter, $op);
     }
 
-    function getFormat($data) {
-        $format = array();
-        foreach ( $data as $d => $a) {
-            $format[$d] = $this->format[$d];
-        }
-        return $format;
+    function getFormat() {
+        return array(
+            "id" => "%d",
+            "title" => "%s",
+            "description" => "%s",
+            "position" => "%d",
+            "vote_limit" => "%d",
+            "id_category" => "%d",
+            "vote_meta" => "%s"
+        );
     }
 }

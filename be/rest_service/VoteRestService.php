@@ -12,12 +12,6 @@ require_once( $raton_dir["DAO"] . "VoteDao.php");
 
 class VoteRestService extends BaseRestService {
 
-    private $format = array(
-        "id" => "%d",
-        "vote_value" => "%s",
-        "id_vote_types" => "%d"
-    );
-
     function __construct()
     {
         parent :: __construct(new VoteDao());
@@ -47,11 +41,11 @@ class VoteRestService extends BaseRestService {
         return $this->dao->deleteFromReview($reviewId);
     }
 
-    function getFormat($data) {
-        $format = array();
-        foreach ( $data as $d => $a) {
-            $format[$d] = $this->format[$d];
-        }
-        return $format;
+    function getFormat() {
+        return array(
+            "id" => "%d",
+            "vote_value" => "%s",
+            "id_vote_types" => "%d"
+        );
     }
 }

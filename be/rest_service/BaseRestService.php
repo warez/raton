@@ -41,24 +41,12 @@ abstract class BaseRestService
         return null;
     }
 
-    function prepareCollectionForResponse($items, $request)
-    {
-
-        $ret = array();
-
-        foreach ($items as $item) {
-            $ret[] = $this->prepareForResponse($item, $request);
-        }
-
-        return ret;
-    }
-
-    function prepareForDb($item)
+    function prepareForDb($item, $op)
     {
         return $item;
     }
 
-    function prepareForResponse($item, $request)
+    function prepareForResponse($item, $op)
     {
         return $item;
     }
@@ -70,7 +58,18 @@ abstract class BaseRestService
 
     }
 
-    function getFormat($data) {
+    function getDataFormat($data) {
+        $format = $this->getFormat();
+        $ret = array();
+
+        foreach ( $data as $prop => $val) {
+            $ret[$prop] = $format[$prop];
+        }
+
+        return $ret;
+    }
+
+    function getFormat() {
         return new WP_Error( "get_format_" + get_class() , get_class() . '::getFormat not implemented', array( 'status' => 500 ) );
     }
 
@@ -90,7 +89,7 @@ abstract class BaseRestService
             if (get_class($itemOrError) == "WP_Error")
                 return $itemOrError;
 
-            $itemOrError = $this->prepareForResponse($itemOrError, $request);
+            $itemOrError = $this->prepareForResponse($itemOrError, "GET");
             return $itemOrError;
 
         } catch (Exception $e) {
@@ -113,15 +112,15 @@ abstract class BaseRestService
             ob_start();
 
             $jsonItem = $request->get_json_params();
-            $item = $this->prepareForDb($jsonItem);
+            $item = $this->prepareForDb($jsonItem, "CREATE");
 
-            $format = $this->getFormat($item);
+            $format = $this->getDataFormat($item);
 
             $itemOrError = $this->dao->create($item, $format);
             if (get_class($itemOrError) == "WP_Error")
                 return $itemOrError;
 
-            $itemOrError = $this->prepareForResponse($itemOrError, $request);
+            $itemOrError = $this->prepareForResponse($itemOrError, "CREATE");
             return $itemOrError;
 
         } catch (Exception $e) {
@@ -144,15 +143,15 @@ abstract class BaseRestService
         try {
 
             $jsonItem = $request->get_json_params();
-            $item = $this->prepareForDb($jsonItem);
+            $item = $this->prepareForDb($jsonItem, "UPDATE");
 
-            $format = $this->getFormat($item);
+            $format = $this->getDataFormat($item);
 
             $boolOrError = $this->dao->update($item, $format);
             if(get_class($boolOrError) == "WP_Error")
                 return $boolOrError;
 
-            $itemOrError = $this->prepareForResponse($boolOrError, $request);
+            $itemOrError = $this->prepareForResponse($boolOrError, "UPDATE");
             return $itemOrError;
 
         } catch (Exception $e) {
